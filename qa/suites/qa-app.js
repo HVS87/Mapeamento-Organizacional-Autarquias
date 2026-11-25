@@ -48,7 +48,7 @@ window.__QA_APP = async function(){
     }
     run("closePage")();
     await t("paleta de comandos", () => run("buildPaletteItems")().length > 20);
-    await t("temas (5)", () => { const ids = Object.keys(g("THEMES")); ids.forEach(id => run("applyTheme")(id)); run("applyTheme")(JSON.parse(snap0).theme); return ids.length === 5; });
+    await t("temas (7, com Claro e Escuro)", () => { const ids = Object.keys(g("THEMES")); ids.forEach(id => run("applyTheme")(id)); run("applyTheme")(JSON.parse(snap0).theme); return ids.length === 7 && ids[0] === "claro" && ids[1] === "escuro" && ids.every(id => g("THEMES")[id].css["--fundo"] && g("THEMES")[id].css["--pri-cont"]); });
     await t("níveis de desempenho", () => { run("defineDesempenho")("leve"); const a = g("nivel") === 2; run("defineDesempenho")("auto"); return a; });
     await t("anular e refazer", () => {
       const n0 = g("nodes").length; run("recordHistory")("qa"); run("createNode")({name: "QA Anular", tier: 2, parent: ns[0].id}); run("recordHistory")("qa2");

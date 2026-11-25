@@ -1,14 +1,14 @@
 # 🤝 Contribuir
 
-Obrigado por querer melhorar a Ferramenta de Mapeamento para Autarquias!
+Obrigado por querer melhorar a Mapeamento Organizacional para Autarquias!
 
 ## Como Começar
 
 1. **Fork** o repositório no GitHub
 2. **Clone** para a sua máquina:
    ```bash
-   git clone https://github.com/HVS87/Autarquia-Framework-Mapping-Tool.git
-   cd Autarquia-Framework-Mapping-Tool
+   git clone https://github.com/HVS87/Mapeamento-Organizacional-Autarquias.git
+   cd Mapeamento-Organizacional-Autarquias
    ```
 3. **Edite** os ficheiros:
    - **Lógica da app**: `app.js` (em `/home/claude/` se for o dev local)
@@ -78,8 +78,8 @@ network-framework.html
 ├── <body>
 │   ├── #stage (canvas 3D)
 │   ├── #header (nome da organização + botões)
-│   ├── #panel (painel esquerdo: Nódulos, Agentes, Procedimentos, Grupos)
-│   ├── #detail (painel direito: detalhe de nódulo/tarefa/agente)
+│   ├── #panel (painel esquerdo: Unidades, Pessoas, Procedimentos, Grupos)
+│   ├── #detail (painel direito: detalhe de unidade/tarefa/pessoa)
 │   ├── #stepper (comandos da visita + progresso)
 │   ├── #modal (fluxograma/organograma 2D)
 │   ├── #confirm (confirmações de remoção)

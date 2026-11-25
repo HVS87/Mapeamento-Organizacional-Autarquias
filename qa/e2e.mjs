@@ -66,6 +66,7 @@ try {
   relatar("aplicação (Electron)", await p.avaliar(suite("qa-app.js") + ";window.__QA_APP()"));
   console.log("  a correr: sincronização…");
   relatar("sincronização (Electron" + (rede ? ", com ntfy.sh real" : "") + ")", await p.avaliar(suite("qa-sinc.js") + ";window.__QA_SINC({rede:" + rede + "})"));
+  relatar("estrutura (Electron)", await p.avaliar(suite("qa-estrutura.js") + ";window.__QA_ESTRUTURA()"));
   relatar("esquadria (Electron)", await p.avaliar(suite("qa-varrer.js") + ";window.__QA_VARRER()"));
   /* segundo ecrã */
   await p.avaliar("window.desktop.abrirPalco()");

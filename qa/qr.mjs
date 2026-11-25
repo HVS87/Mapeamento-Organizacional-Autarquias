@@ -14,7 +14,7 @@ const i = html.indexOf("/* QR-INICIO */"), j = html.indexOf("/* QR-FIM */");
 if (i < 0 || j < 0) { console.error("QR: não encontrei o codificador na página"); process.exit(1); }
 const qrMatriz = new Function(html.slice(i, j) + "; return qrMatriz;")();
 
-const PAG = "https://hvs87.github.io/Autarquia-Framework-Mapping-Tool/network-framework.html";
+const PAG = "https://hvs87.github.io/Mapeamento-Organizacional-Autarquias/network-framework.html";
 const casos = ["A", PAG + "#ligar=0123456789ABCDEFGHJKMNPQR",
   PAG + "#ligar=0123456789ABCDEFGHJKMNPQR&s=" + encodeURIComponent("https://ntfy.exemplo.pt"),
   "file:///C:/Program%20Files/Mapeamento/network-framework.html#ligar=ZZZZZYYYYYXXXXXWWWWWVVVVV"];

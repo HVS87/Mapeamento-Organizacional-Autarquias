@@ -1,14 +1,14 @@
 {
-  "name": "mapeamento-autarquias-desktop",
-  "productName": "Ferramenta de Mapeamento para Autarquias",
-  "version": "1.4.0",
+  "name": "mapeamento-organizacional-desktop",
+  "productName": "Mapeamento Organizacional para Autarquias",
+  "version": "1.0.0",
   "description": "Mapeamento em 3D da estrutura orgânica e dos procedimentos da administração local portuguesa — aplicação de secretária.",
   "main": "main.js",
   "author": {
     "name": "HVS87",
     "email": "noreply@github.com"
   },
-  "homepage": "https://github.com/HVS87/Autarquia-Framework-Mapping-Tool",
+  "homepage": "https://github.com/HVS87/Mapeamento-Organizacional-Autarquias",
   "private": true,
   "license": "MIT",
   "scripts": {
@@ -27,8 +27,8 @@
     "jsqr": "^1.4.0"
   },
   "build": {
-    "appId": "pt.autarquias.mapeamento",
-    "productName": "Ferramenta de Mapeamento para Autarquias",
+    "appId": "pt.autarquias.mapeamento-organizacional",
+    "productName": "Mapeamento Organizacional para Autarquias",
     "directories": {
       "output": "dist",
       "buildResources": "build"
@@ -46,37 +46,37 @@
         "nsis"
       ],
       "icon": "build/icon.png",
-      "artifactName": "Mapeamento-Autarquias-${version}-${arch}.${ext}"
+      "artifactName": "Mapeamento-Organizacional-${version}-${arch}.${ext}"
     },
     "portable": {
-      "artifactName": "Mapeamento-Autarquias-${version}-portatil.exe"
+      "artifactName": "Mapeamento-Organizacional-${version}-portatil.exe"
     },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "language": "2070",
-      "shortcutName": "Mapeamento para Autarquias"
+      "shortcutName": "Mapeamento Organizacional"
     },
     "copyright": "HVS87",
     "mac": {
       "icon": "build/icon.png",
       "category": "public.app-category.productivity",
       "identity": null,
-      "artifactName": "Mapeamento-Autarquias-${version}-mac-${arch}.${ext}"
+      "artifactName": "Mapeamento-Organizacional-${version}-mac-${arch}.${ext}"
     },
     "dmg": {
-      "title": "Mapeamento para Autarquias ${version}"
+      "title": "Mapeamento Organizacional ${version}"
     },
     "linux": {
       "icon": "build/icon.png",
       "category": "Office",
       "synopsis": "Mapeamento da estrutura e dos procedimentos de uma autarquia",
       "maintainer": "HVS87 <noreply@github.com>",
-      "artifactName": "Mapeamento-Autarquias-${version}-linux-${arch}.${ext}",
-      "executableName": "mapeamento-autarquias"
+      "artifactName": "Mapeamento-Organizacional-${version}-linux-${arch}.${ext}",
+      "executableName": "mapeamento-organizacional"
     },
     "deb": {
-      "packageName": "mapeamento-autarquias"
+      "packageName": "mapeamento-organizacional"
     },
     "afterPack": "assinar-adhoc.js"
   },

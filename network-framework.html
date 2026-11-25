@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#B8AB88">
-<meta name="description" content="Ferramenta de Mapeamento para Autarquias — rede organizacional interativa em 3D para a administração local portuguesa.">
+<meta name="description" content="Mapeamento Organizacional para Autarquias — rede organizacional interativa em 3D para a administração local portuguesa.">
 <link rel="manifest" href="./manifest.json">
 <!-- O iOS ignora SVG no apple-touch-icon: tem de ser um PNG num endereço real,
      senão o atalho no ecrã principal fica com uma miniatura da página. -->
@@ -15,7 +15,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Mapeamento">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><rect fill='%23B8AB88' width='96' height='96'/><circle cx='48' cy='48' r='24' fill='%23FFFFFF' opacity='0.9'/><circle cx='32' cy='35' r='7' fill='%232E8B62' opacity='0.8'/><circle cx='65' cy='40' r='7' fill='%23E06A8A' opacity='0.8'/><circle cx='48' cy='70' r='7' fill='%238A6115' opacity='0.8'/></svg>">
-<title>Ferramenta de Mapeamento para Autarquias</title>
+<title>Mapeamento Organizacional para Autarquias</title>
 <style>
   :root{
     --bg-deep:#A89A78;
@@ -61,7 +61,7 @@
   }
   #menuBtn{
     display:none;position:fixed;top:14px;right:14px;z-index:17;
-    color:var(--ink);font:inherit;font-size:.78rem;letter-spacing:.06em;
+    color:var(--ink);font:inherit;font-size:.78rem;letter-spacing:.01em;
     padding:8px 13px;cursor:pointer;
   }
   #menuBtn.active{border-color:var(--gold);color:var(--gold)}
@@ -85,7 +85,7 @@
   }
   #tabbar::-webkit-scrollbar{display:none}
   .tab{
-    font:inherit;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;
+    font:inherit;font-size:.68rem;letter-spacing:.01em;text-transform:none;
     color:var(--ink-dim);background:transparent;border:none;
     border-bottom:2px solid transparent;padding:6px 12px 8px;
     cursor:pointer;white-space:nowrap;
@@ -130,7 +130,7 @@
   .fs-excede{color:#E0554F;font-weight:600;border:1px solid rgba(224,85,79,.5);
     border-radius:999px;padding:1px 8px}
   .fey-volta{margin-right:10px}
-  /* Realce de cadeia: pairar num nódulo esbate o que não está a montante nem
+  /* Realce de cadeia: pairar numa unidade esbate o que não está a montante nem
      a jusante, e o que está ganha um fluxo tracejado a correr — o sentido do
      movimento que um procedimento tem. */
   .fey-cadeia .fey-aresta,.fey-cadeia .fey-vert,.fey-cadeia .fey-resp{opacity:.2;transition:opacity .14s}
@@ -280,7 +280,7 @@
   .raiox{border-collapse:collapse;width:100%;font-size:.74rem;min-width:640px}
   .raiox th{position:sticky;top:0;background:var(--panel);color:var(--ink-dim);
     text-align:left;padding:7px 9px;font-size:.66rem;letter-spacing:.05em;
-    text-transform:uppercase;cursor:pointer;white-space:nowrap;border-bottom:1px solid var(--hairline)}
+    text-transform:none;cursor:pointer;white-space:nowrap;border-bottom:1px solid var(--hairline)}
   .raiox th:hover{color:var(--gold)}
   .raiox td{padding:6px 9px;border-bottom:1px solid var(--hairline);color:var(--ink);white-space:nowrap}
   .raiox td.nm{font-weight:600;max-width:220px;overflow:hidden;text-overflow:ellipsis}
@@ -308,7 +308,7 @@
   /* Cartão de retoma */
   #retoma{display:flex;gap:8px;align-items:center;flex-wrap:wrap;
     padding:8px 12px;border-radius:10px;margin-bottom:8px}
-  .ret-tit{font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gold)}
+  .ret-tit{font-size:.68rem;font-weight:700;letter-spacing:.01em;text-transform:none;color:var(--gold)}
   .ret-ver{font-size:.68rem;color:var(--ink-dim)}
   /* ---- palco (segundo ecrã): só a cena, mais nada ---- */
   body.palco header,body.palco #tabbar,body.palco #panel,body.palco #page,
@@ -401,7 +401,7 @@
   .fey-resp:hover text{fill:var(--gold)}
   .fey-done-btn.done{border-color:var(--gold);color:var(--gold)}
 
-  /* ---- Escolha de nódulo / responsável (fluxo de nova tarefa) ---- */
+  /* ---- Escolha de unidade / responsável (fluxo de nova tarefa) ---- */
   #nodePick,#agentPick{position:fixed;inset:0;z-index:48;display:none;background:var(--scrim);
     -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);padding:24px}
   #nodePick.open,#agentPick.open{display:grid;place-items:center}
@@ -419,14 +419,14 @@
   .pk-caixa text{fill:var(--ink);pointer-events:none}
   .pk-caixa.pk-hover rect{stroke:var(--gold);stroke-width:2;fill:rgba(127,127,127,0.16)}
   .pk-caixa.pk-origem rect{stroke:var(--gold);stroke-width:2.4}
-  /* Nódulos que já são etapa de algum procedimento: convergir para eles é o
+  /* Unidades que já são etapa de algum procedimento: convergir para eles é o
      gesto que junta fluxos, e tem de se ver quais são sem abrir listas. */
   .pk-etapa .marca{fill:var(--steel)}
   .pk-caixa.pk-etapa-deste .marca{fill:var(--gold)}
   #npConv{margin-top:8px;flex:none}
   #npConvTog{width:100%;text-align:left}
   #npConvList{margin-top:6px;max-height:26vh;overflow:auto;display:flex;flex-direction:column;gap:3px}
-  #npConvList .conv-grupo{font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;
+  #npConvList .conv-grupo{font-size:.66rem;letter-spacing:.01em;text-transform:none;
     color:var(--ink-dim);margin:6px 0 2px;display:flex;align-items:center;gap:6px}
   #npConvList .conv-item{display:flex;align-items:center;gap:8px;text-align:left;font:inherit;
     font-size:.78rem;color:var(--ink);background:transparent;border:1px solid var(--hairline);
@@ -447,7 +447,7 @@
 
   /* ---- Ramos entre procedimentos, no fluxograma ---- */
   .fc-ramos{margin:0 0 10px;display:flex;flex-direction:column;gap:4px}
-  .ramos-tit{font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;
+  .ramos-tit{font-size:.66rem;letter-spacing:.01em;text-transform:none;
     color:var(--ink-dim);margin:6px 0 2px}
   .ramo{border:1px solid var(--hairline);border-radius:8px;overflow:hidden}
   .ramo-cab{display:flex;align-items:center;gap:8px;width:100%;text-align:left;
@@ -467,11 +467,11 @@
   #apCard{width:min(460px,calc(100vw - 48px));max-height:calc(100vh - 64px);overflow:auto;
     padding:20px;border-radius:14px;animation:confirmIn .2s ease}
   #apList{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
-  .ap-agente{display:flex;align-items:center;gap:8px;text-align:left;font:inherit;font-size:.8rem;
+  .ap-pessoa{display:flex;align-items:center;gap:8px;text-align:left;font:inherit;font-size:.8rem;
     color:var(--ink);background:transparent;border:1px solid var(--hairline);border-radius:8px;
     padding:8px 10px;cursor:pointer}
-  .ap-agente:hover{border-color:var(--gold)}
-  .ap-agente .cat{margin-left:auto;font-size:.68rem;color:var(--ink-dim)}
+  .ap-pessoa:hover{border-color:var(--gold)}
+  .ap-pessoa .cat{margin-left:auto;font-size:.68rem;color:var(--ink-dim)}
 
   /* Num dedo, 26px de altura não são alvo nenhum: em apontadores grossos os
      controlos do cabeçalho e os separadores sobem para 34px. O cabeçalho é
@@ -535,7 +535,7 @@
   body.page-open #detail{z-index:40}
   /* Secções mudadas para a página: o título vira cabeçalho, a lista respira */
   #pageBody>details.page-mode{border-bottom:none}
-  #pageBody>details.page-mode>summary{font-size:.82rem;letter-spacing:.24em;padding:14px 2px 10px;cursor:default}
+  #pageBody>details.page-mode>summary{font-size:.82rem;letter-spacing:.01em;padding:14px 2px 10px;cursor:default}
   #pageBody>details.page-mode>summary::before{display:none}
   #pageBody .row{padding:10px 12px}
   @media (max-width:640px){ #pageBody{padding:8px 12px 14px;height:calc(100% - 8px);border-radius:10px 10px 0 0} }
@@ -568,7 +568,7 @@
     padding:20px;border-radius:14px;animation:confirmIn .2s ease}
   #teCard h3{font-size:.98rem;margin:0 0 10px;font-weight:600}
   .te-grid{display:grid;grid-template-columns:auto 1fr;gap:8px 10px;align-items:center;margin-bottom:12px}
-  .te-grid label{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-dim)}
+  .te-grid label{font-size:.72rem;letter-spacing:.01em;text-transform:none;color:var(--ink-dim)}
   .te-grid input,.te-grid textarea{font:inherit;font-size:.82rem;color:var(--ink);
     background:transparent;border:1px solid var(--hairline);border-radius:7px;padding:6px 8px;min-width:0}
   .te-grid textarea{resize:vertical}
@@ -581,7 +581,7 @@
     flex:none;border:1px solid var(--hairline);background:transparent}
   .estado-ponto.e-validado{background:var(--steel);border-color:var(--steel)}
   .estado-ponto.e-aprovado{background:var(--gold);border-color:var(--gold)}
-  /* Carga por agente: um número pequeno com a cor a subir com o peso. */
+  /* Carga por pessoa: um número pequeno com a cor a subir com o peso. */
   .carga{flex:none;min-width:17px;text-align:center;font-size:.62rem;font-weight:700;
     border-radius:999px;padding:1px 4px;border:1px solid var(--hairline);color:var(--ink-dim)}
   .carga.c-normal{color:var(--steel);border-color:var(--steel)}
@@ -652,7 +652,7 @@
   #orgName{
     background:transparent;border:none;border-bottom:1px solid transparent;
     color:var(--ink);font-family:inherit;font-weight:600;font-size:1.05rem;
-    letter-spacing:.14em;text-transform:uppercase;padding:0 2px 2px;
+    letter-spacing:.01em;text-transform:none;padding:0 2px 2px;
     /* Pára onde a barra de localização começa. Sem isto, a barra — que está
        por cima — tapava a metade direita do campo e não se conseguia lá
        escrever. --wb-w é 0 quando a barra não está à vista. */
@@ -660,19 +660,19 @@
   }
   #orgName:hover{border-bottom-color:var(--hairline)}
   #orgName:focus{outline:none;border-bottom-color:var(--gold)}
-  .brand p{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-dim);margin-top:5px}
+  .brand p{font-size:.72rem;letter-spacing:.01em;text-transform:none;color:var(--ink-dim);margin-top:5px}
   /* As restantes propriedades vêm da regra mais abaixo, que envolve os botões
      em várias linhas; aqui só sobra o afastamento do bloco do título. */
   /* A dica encolhe primeiro: os comandos é que não podem ficar cortados. */
   header .brand{flex:1 1 auto;min-width:0}
   .hint{
-    font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-dim);
+    font-size:.7rem;letter-spacing:.01em;text-transform:none;color:var(--ink-dim);
     text-align:right;line-height:1.7;flex:0 1 auto;min-width:0;
     /* O radar ocupa o canto superior direito; sem esta margem a dica passava
        por baixo dele. --radar-w é 0 quando o radar não está à vista. */
     margin-right:var(--radar-w,0px);
     /* E do lado de dentro fica a barra de localização, que é centrada e cresce
-       com o caminho até ao nódulo escolhido: no máximo ocupa 280px para cada
+       com o caminho até à unidade escolhida: no máximo ocupa 280px para cada
        lado do meio. A dica é ajuda decorativa e é ela que cede — encolhe até
        caber no que sobra, em vez de se sobrepor ao que informa. */
     max-width:calc(50vw - 324px - var(--radar-w,0px));
@@ -732,7 +732,7 @@
   summary{
     list-style:none;cursor:pointer;user-select:none;
     display:flex;align-items:center;gap:8px;
-    font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;
+    font-size:.66rem;letter-spacing:.01em;text-transform:none;
     color:var(--ink-dim);font-weight:600;padding:12px 2px;
   }
   summary::-webkit-details-marker{display:none}
@@ -816,7 +816,7 @@
 
   .foot-note{font-size:.66rem;color:var(--ink-dim);line-height:1.5;margin-top:8px}
   .mini-title{
-    font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;
+    font-size:.62rem;letter-spacing:.01em;text-transform:none;
     color:var(--ink-dim);font-weight:600;margin:12px 0 4px;
   }
 
@@ -827,7 +827,7 @@
   }
   select.dark:focus{outline:none;border-color:var(--steel)}
 
-  /* ---------- Google-style plus ---------- */
+  /* ---------- o sinal de mais, a quatro cores ---------- */
   .add-btn{
     display:flex;align-items:center;gap:11px;width:100%;
     background:rgba(255,255,255,0.03);border:1px dashed rgba(201,214,232,0.3);
@@ -899,11 +899,11 @@
   .d-close:hover{color:var(--ink)}
   .d-close:focus-visible{outline:2px solid var(--steel);outline-offset:2px;border-radius:4px}
   .d-sub{
-    font-size:.64rem;letter-spacing:.18em;text-transform:uppercase;
+    font-size:.64rem;letter-spacing:.01em;text-transform:none;
     color:var(--gold);margin-bottom:10px;
   }
   #detail h4{
-    font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;
+    font-size:.64rem;letter-spacing:.01em;text-transform:none;
     color:var(--ink-dim);font-weight:600;margin:14px 0 6px;
   }
   .d-meta{font-size:.76rem;color:var(--ink-dim);line-height:1.55}
@@ -1047,7 +1047,7 @@
 
   /* Section heading, still used by the tier list in the Organograma 2D */
   .fc-chain-title{
-    font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;
+    font-size:.64rem;letter-spacing:.01em;text-transform:none;
     color:var(--ink-dim);margin:14px 0 8px;align-self:flex-start;
   }
 
@@ -1058,7 +1058,7 @@
     padding:8px 13px;background:rgba(255,255,255,0.03);min-width:200px;
   }
   .org-card .n{font-size:.82rem;font-weight:600;color:var(--ink)}
-  .org-card .t{font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dim);margin:1px 0 4px}
+  .org-card .t{font-size:.6rem;letter-spacing:.01em;text-transform:none;color:var(--ink-dim);margin:1px 0 4px}
   .org-card .p{font-size:.72rem;color:var(--ink)}
   .org-card .p .cat{color:var(--ink-dim)}
   .org-card .s{font-size:.68rem;color:var(--ink-dim);margin-top:2px}
@@ -1073,7 +1073,7 @@
   .tier-list{margin-bottom:14px}
   .tier-row{display:flex;align-items:center;gap:10px;margin:4px 0;min-width:0}
   .tier-row .tier-num{
-    font-size:.62rem;letter-spacing:.12em;color:var(--gold);
+    font-size:.62rem;letter-spacing:.01em;color:var(--gold);
     width:24px;flex:none;font-variant-numeric:tabular-nums;
   }
   /* Largura fixa de 220px + rótulo + contagem + botão passavam dos 338px de
@@ -1112,7 +1112,7 @@
   }
   #stepper .top{display:flex;align-items:center;gap:14px;margin-bottom:7px}
   #stepper .step-num{
-    font-size:.66rem;letter-spacing:.2em;color:var(--gold);white-space:nowrap;
+    font-size:.66rem;letter-spacing:.01em;color:var(--gold);white-space:nowrap;
     font-variant-numeric:tabular-nums;
   }
   #stepper h3{font-size:.92rem;font-weight:600;letter-spacing:.02em}
@@ -1163,7 +1163,7 @@
     padding:10px 12px;max-width:240px;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
   }
   #tip .t-name{font-size:.84rem;font-weight:600}
-  #tip .t-role{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin:2px 0 6px}
+  #tip .t-role{font-size:.66rem;letter-spacing:.01em;text-transform:none;color:var(--gold);margin:2px 0 6px}
   #tip .t-agents{font-size:.74rem;color:var(--ink-dim)}
 
   @media (max-width:980px){
@@ -1373,7 +1373,7 @@
   .alerta-pill.neutro{color:var(--ink-dim);border-color:var(--hairline)}
   body.theme-light .alerta-pill.amarelo{color:#6E4F0A}
   body.theme-light .alerta-pill.vermelho{color:#7A1515}
-  .pelouro-tag{display:inline-block;margin-top:4px;font-size:.6rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:1px 7px;border:1px solid currentColor;border-radius:999px;opacity:.85}
+  .pelouro-tag{display:inline-block;margin-top:4px;font-size:.6rem;font-weight:700;letter-spacing:.01em;text-transform:none;padding:1px 7px;border:1px solid currentColor;border-radius:999px;opacity:.85}
   .pelouro-tag.raiz{opacity:1;box-shadow:0 0 0 1px currentColor inset}
   .pel-card{border:1px solid var(--hairline);border-left-width:4px;border-radius:10px;padding:10px 12px;margin:8px 0}
   .pel-head{display:flex;align-items:center;gap:8px}
@@ -1386,7 +1386,7 @@
   .obj-row.arquivado .row-name{opacity:.6;text-decoration:line-through}
   .valor-tab{width:100%;border-collapse:collapse;font-size:.74rem;margin:6px 0}
   .valor-tab th,.valor-tab td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--hairline);color:var(--ink)}
-  .valor-tab th{color:var(--ink-dim);font-weight:600;font-size:.66rem;letter-spacing:.06em;text-transform:uppercase}
+  .valor-tab th{color:var(--ink-dim);font-weight:600;font-size:.66rem;letter-spacing:.01em;text-transform:none}
   .valor-tab td.num{text-align:right;font-variant-numeric:tabular-nums}
   .alerta-row{padding:6px 0;border-bottom:1px solid var(--hairline);font-size:.78rem;color:var(--ink)}
   .cred-perm{display:block;margin:6px 0;font-size:.78rem;color:var(--ink)}
@@ -1413,14 +1413,14 @@
   .sinc-pill.aviso{color:var(--gold);border-color:var(--gold)}
   .sinc-pill[hidden]{display:none}
   .sinc-passo{border:1px solid var(--hairline);border-radius:10px;padding:10px 12px;margin:8px 0;display:flex;flex-direction:column;gap:6px;align-items:flex-start}
-  .sinc-passo .search-input{width:100%;font-family:ui-monospace,"Cascadia Mono",Consolas,monospace;letter-spacing:.06em}
+  .sinc-passo .search-input{width:100%;font-family:ui-monospace,"Cascadia Mono",Consolas,monospace;letter-spacing:.01em}
   .mini-sub{font-weight:600;font-size:.8rem;color:var(--ink)}
   .sinc-tab th{width:34%}
   .sinc-qr{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;margin-top:8px}
   .sinc-qr-img{flex:0 0 auto}
   .sinc-qr-img svg{display:block;width:176px;height:176px;border-radius:8px}
   .sinc-qr-txt{flex:1 1 200px;min-width:0;display:flex;flex-direction:column;gap:6px;align-items:flex-start}
-  .codigo-sinc{font-family:ui-monospace,"Cascadia Mono",Consolas,monospace;font-size:.95rem;letter-spacing:.06em;color:var(--ink);word-break:break-all;user-select:all}
+  .codigo-sinc{font-family:ui-monospace,"Cascadia Mono",Consolas,monospace;font-size:.95rem;letter-spacing:.01em;color:var(--ink);word-break:break-all;user-select:all}
   .sinc-ligar,.sinc-avancado{margin-top:8px}
   .sinc-ligar>summary,.sinc-avancado>summary{cursor:pointer;color:var(--ink);font-size:.78rem}
   #leitorQR{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.6);padding:16px}
@@ -1453,7 +1453,7 @@
   .obj-tree-row.a-depositar{animation:depositar .35s ease-in forwards;transform-origin:left center}
   .obj-raiz-zona{border:1px dashed var(--hairline);border-radius:8px;padding:6px 10px;font-size:.72rem;color:var(--ink-dim);margin:6px 0}
   .obj-raiz-zona.caixa-aberta{border-color:var(--gold);color:var(--gold)}
-  .repo-row .repo-tipo{font-size:.6rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:1px 6px;border:1px solid currentColor;border-radius:999px;margin-right:8px;flex:none}
+  .repo-row .repo-tipo{font-size:.6rem;font-weight:700;letter-spacing:.01em;text-transform:none;padding:1px 6px;border:1px solid currentColor;border-radius:999px;margin-right:8px;flex:none}
   .repo-row.restrito{opacity:.7}
   .pel-legenda .chip{cursor:default}
 
@@ -1552,7 +1552,7 @@
   #helpCard{width:min(560px,100%);max-height:calc(100vh - 64px);overflow:auto;
     padding:22px;border-radius:14px;animation:confirmIn .2s ease}
   #helpCard h3{font-size:.95rem;margin:0 0 12px;font-weight:600}
-  #helpCard h4{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;
+  #helpCard h4{font-size:.68rem;letter-spacing:.01em;text-transform:none;
     color:var(--gold);margin:16px 0 4px}
   .kbd-row{display:flex;align-items:center;gap:12px;padding:7px 0;
     border-top:1px solid var(--hairline);font-size:.77rem;line-height:1.4}
@@ -1609,7 +1609,7 @@
     padding:0 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none}
   .fc-side{width:288px;flex:none;display:flex;flex-direction:column;gap:7px;
     border:1px solid var(--hairline);border-radius:10px;padding:12px;background:rgba(127,127,127,.05)}
-  .fc-side h5{font-size:.65rem;letter-spacing:.13em;text-transform:uppercase;
+  .fc-side h5{font-size:.65rem;letter-spacing:.01em;text-transform:none;
     color:var(--gold);margin:0 0 3px;font-weight:600}
   .fc-side .field-grid{max-width:none;margin:0}
   .fc-side .btn{width:100%}
@@ -1800,7 +1800,7 @@
     padding:8px 11px;border-radius:8px;border:none;background:none;font:inherit;
     font-size:.78rem;color:var(--ink);cursor:pointer}
   .pal-item.on,.pal-item:hover{background:rgba(127,127,127,.16)}
-  .pal-item .kind{flex:none;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;
+  .pal-item .kind{flex:none;font-size:.58rem;letter-spacing:.01em;text-transform:none;
     color:var(--gold);min-width:74px}
   .pal-item .lbl{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .pal-item .sub{flex:none;font-size:.64rem;color:var(--ink-dim)}
@@ -1812,7 +1812,7 @@
     font-size:1.05rem;font-weight:700;color:var(--ink)}
   .hx-sum{font-size:.78rem;line-height:1.5;color:var(--ink-dim)}
   .hx-group{margin-bottom:12px}
-  .hx-group h4{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;
+  .hx-group h4{font-size:.68rem;letter-spacing:.01em;text-transform:none;
     color:var(--gold);margin:0 0 5px}
   .hx-item{display:flex;align-items:center;gap:9px;width:100%;text-align:left;
     padding:7px 10px;border-radius:8px;border:1px solid var(--hairline);background:none;
@@ -1878,7 +1878,7 @@
   .ra-quick button{font:inherit;font-size:.68rem;padding:4px 10px;border-radius:7px;
     border:1px solid var(--hairline);background:none;color:var(--gold);cursor:pointer}
   .ra-quick button:hover{border-color:var(--gold)}
-  .ra-sec{font-size:.64rem;letter-spacing:.13em;text-transform:uppercase;
+  .ra-sec{font-size:.64rem;letter-spacing:.01em;text-transform:none;
     color:var(--gold);margin:12px 0 2px;font-weight:600}
   .ra-row{display:flex;align-items:center;gap:11px;padding:8px 0;border-top:1px solid var(--hairline)}
   .ra-row.first{border-top:none}
@@ -2078,7 +2078,7 @@
   .vw-bar .vw-note{font-size:.66rem;color:var(--ink-dim);flex:1;min-width:120px}
   .vw-scroll{overflow-x:auto;scrollbar-width:thin;max-width:100%}
 
-  /* ---- Matriz Nó × Procedimento ---- */
+  /* ---- Matriz Unidade × Procedimento ---- */
   table.mx{border-collapse:separate;border-spacing:0;font-size:.68rem}
   table.mx th,table.mx td{padding:4px 6px;text-align:center;white-space:nowrap}
   table.mx th.mxrow{
@@ -2140,7 +2140,7 @@
   .doc h1{font-size:1.15rem;margin:0 0 2px;letter-spacing:.02em}
   .doc .doc-sub{font-size:.72rem;color:#5a616b;margin-bottom:4px}
   .doc .doc-rule{height:2px;background:#15181d;margin:10px 0 18px}
-  .doc h2{font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:#5a616b;margin:20px 0 8px}
+  .doc h2{font-size:.78rem;letter-spacing:.01em;text-transform:none;color:#5a616b;margin:20px 0 8px}
   .doc-tree{font-family:Segoe UI,Helvetica,sans-serif}
   .doc-lvl{margin-left:20px;padding-left:14px;border-left:1px solid #c8ccd2}
   .doc-box{
@@ -2149,10 +2149,10 @@
   }
   .doc-box .dn{font-size:.78rem;font-weight:600}
   .doc-box .dp{font-size:.68rem;color:#3d434b}
-  .doc-box .dc{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#7a808a}
+  .doc-box .dc{font-size:.6rem;letter-spacing:.01em;text-transform:none;color:#7a808a}
   table.doc-t{border-collapse:collapse;width:100%;font-family:Segoe UI,Helvetica,sans-serif;font-size:.7rem}
   table.doc-t th,table.doc-t td{border:1px solid #c8ccd2;padding:4px 8px;text-align:left}
-  table.doc-t th{background:#eef0f3;font-weight:600;font-size:.64rem;letter-spacing:.06em;text-transform:uppercase}
+  table.doc-t th{background:#eef0f3;font-weight:600;font-size:.64rem;letter-spacing:.01em;text-transform:none}
   .doc-foot{margin-top:22px;font-size:.62rem;color:#7a808a;border-top:1px solid #c8ccd2;padding-top:8px}
   /* Num telemóvel, a margem do documento e a indentação por nível somavam-se
      até empurrar a página para o lado. O documento encolhe; o que não encolhe
@@ -2213,7 +2213,7 @@
   /* ---- Comparar cenários ---- */
   .sc-morph{display:flex;align-items:center;gap:10px;margin:4px 0 6px}
   .sc-morph input[type=range]{flex:1;accent-color:var(--gold);min-width:80px}
-  .sc-morph .sc-end{font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-dim)}
+  .sc-morph .sc-end{font-size:.62rem;letter-spacing:.01em;text-transform:none;color:var(--ink-dim)}
 
   /* ---- Colar do Excel ---- */
   .paste-area{
@@ -2233,7 +2233,7 @@
     background:var(--panel);border:1px solid var(--hairline);
     -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
   }
-  .fc-anchor-t{font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:4px}
+  .fc-anchor-t{font-size:.56rem;letter-spacing:.01em;text-transform:none;color:var(--ink-dim);margin-bottom:4px}
   .fc-anchor-svg{display:block}
   .fc-anchor-l{font-size:.55rem;color:var(--ink-dim);margin-top:3px;max-width:150px;line-height:1.35}
   @media (max-width:720px){ .fc-anchor{display:none} }
@@ -2276,7 +2276,7 @@
     display:flex;flex-direction:column;align-items:center;gap:4px;
   }
   #radar{display:block;cursor:pointer;border-radius:50%}
-  #radarWrap .rlbl{font-size:.58rem;color:var(--ink-dim);letter-spacing:.08em}
+  #radarWrap .rlbl{font-size:.58rem;color:var(--ink-dim);letter-spacing:.01em}
   @media (max-width:980px){ #whereBar,#trailMenu,#radarWrap{display:none!important} }
   body.presenting #whereBar,body.presenting #trailMenu,body.presenting #radarWrap{display:none!important}
 
@@ -2363,12 +2363,414 @@
     #paletteCard{animation:none}
     .fc-box.playing{box-shadow:none}
   }
+
+  /* ============================================================
+     ESTRUTURA — barra superior, navegação lateral, janela do palco
+     Uma barra no topo (menu, nome, procura, sincronização, anular, ajuda,
+     definições rápidas, perfil), a navegação à esquerda com «Criar» e os
+     procedimentos à vista, e o conteúdo num cartão de cantos redondos.
+     O palco 3D continua a ocupar o ecrã inteiro por baixo: a moldura
+     (#janela) recorta-lhe a janela e a câmara centra-se nela.
+     Medidas: --jl/--jt/--jr/--jb são as margens da janela.
+  ============================================================ */
+  body{
+    --topo-h:64px;--nav-w:256px;--folha-w:392px;
+    --jl:var(--nav-w);--jt:var(--topo-h);--jr:8px;--jb:8px;
+    --mov-1:120ms;--mov-2:240ms;--mov-3:400ms;
+    --curva:cubic-bezier(.2,0,0,1);--curva-sai:cubic-bezier(.3,0,.8,.15);
+    --raio-cartao:16px;--raio-dialogo:28px;
+    --elev-1:0 1px 2px rgba(0,0,0,.24),0 1px 3px 1px rgba(0,0,0,.12);
+    --elev-2:0 1px 2px rgba(0,0,0,.26),0 2px 6px 2px rgba(0,0,0,.13);
+    --elev-3:0 4px 8px 3px rgba(0,0,0,.14),0 1px 3px rgba(0,0,0,.28);
+    font-family:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+    background:var(--fundo);
+  }
+  html{background:var(--fundo)}
+  body.nav-fina{--nav-w:72px}
+  body.vp-phone{--topo-h:56px;--nav-w:0px;--jr:0px;--jb:64px}
+  body.presenting,body.palco{--jl:0px;--jt:0px;--jr:0px;--jb:0px}
+  body.vp-squat:not(.vp-phone){--topo-h:52px}
+
+  /* ---- superfícies: tonais e opacas, sem vidro ---- */
+  body:not(.palco) #vignette{display:none}
+  .glass,body.theme-light .glass{
+    background-color:var(--sup2);background-image:none;
+    -webkit-backdrop-filter:none;backdrop-filter:none;
+    border:0;border-radius:var(--raio-cartao);box-shadow:var(--elev-2);
+  }
+  #stepper::before,#confirmCard::before,#menuBtn::before,#modalCard::before{display:none}
+  #janela{
+    position:fixed;left:var(--jl);top:var(--jt);right:var(--jr);bottom:var(--jb);
+    border-radius:var(--raio-cartao);box-shadow:0 0 0 200vmax var(--fundo);
+    pointer-events:none;z-index:3;
+    transition:left var(--mov-2) var(--curva),top var(--mov-2) var(--curva),right var(--mov-2) var(--curva),bottom var(--mov-2) var(--curva),border-radius var(--mov-2);
+  }
+  body.palco #janela{display:none}
+  body.presenting #janela{border-radius:0}
+  body.vp-phone #janela{border-radius:var(--raio-cartao) var(--raio-cartao) 0 0}
+
+  /* ---- controlos ---- */
+  .btn{
+    position:relative;overflow:hidden;
+    border-radius:999px;border:1px solid var(--hairline);color:var(--gold);
+    font-size:.78rem;font-weight:500;letter-spacing:0;padding:7px 16px;
+    transition:background var(--mov-1),box-shadow var(--mov-1);
+  }
+  .btn:hover{background:color-mix(in srgb,var(--gold) 9%,transparent)}
+  .btn.primary{background:var(--gold);color:var(--s-pri);border-color:transparent}
+  .btn.primary:hover{background:var(--gold);box-shadow:var(--elev-1)}
+  .btn.tiny{padding:5px 13px;font-size:.74rem}
+  .btn.perigo{color:#B3261E;border-color:currentColor}
+  body:not(.theme-light) .btn.perigo{color:#F2B8B5}
+  .btn:disabled{opacity:.42;cursor:default}
+  .row{border-radius:12px}
+  .chip{border-radius:8px}
+  .mini-title{font-size:.8rem;font-weight:600;letter-spacing:0;color:var(--ink);margin-top:16px}
+  #coachCard,#helpCard{border-radius:var(--raio-dialogo)}
+  body:not(.page-org) #modalCard{border-radius:var(--raio-dialogo)}
+  .onda{position:absolute;border-radius:50%;background:currentColor;opacity:.16;transform:scale(0);
+    animation:onda 520ms var(--curva) forwards;pointer-events:none}
+  @keyframes onda{to{transform:scale(1);opacity:0}}
+
+  /* ---- barra superior ---- */
+  body:not(.palco) header{
+    height:var(--topo-h);padding:0 12px 0 8px;display:flex;flex-wrap:nowrap;
+    align-items:center;justify-content:flex-start;gap:4px;
+    background:var(--fundo);pointer-events:auto;z-index:30;
+    transition:transform var(--mov-2) var(--curva);
+  }
+  body.page-open header,body.page-org header{background:var(--fundo)}
+  body.presenting header{transform:translateY(-110%)}
+  header .brand,header .hint{display:none}
+  .topo-ic,header .btn.icon-round{
+    width:40px;height:40px;flex:none;padding:0;border:0;border-radius:50%;background:transparent;
+    color:var(--ink-dim);display:grid;place-items:center;cursor:pointer;font-size:1.15rem;position:relative;overflow:hidden;
+    transition:background var(--mov-1);
+  }
+  .topo-ic:hover,header .btn.icon-round:hover:not(:disabled){background:color-mix(in srgb,var(--ink) 9%,transparent)}
+  .topo-ic:focus-visible,#buscaBtn:focus-visible,#perfilBtn:focus-visible,#criarBtn:focus-visible,.pilula:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+  #marca{width:18px;height:18px;border-radius:5px;background:var(--gold);transform:rotate(45deg);flex:none;margin:0 10px 0 6px}
+  header #orgName{
+    flex:0 1 auto;width:auto;min-width:60px;max-width:min(300px,24vw);field-sizing:content;
+    font-size:1.05rem;font-weight:500;letter-spacing:0;text-transform:none;color:var(--ink);
+    background:transparent;border:0;border-radius:8px;padding:6px 8px;
+  }
+  header #orgName:hover{background:color-mix(in srgb,var(--ink) 7%,transparent)}
+  #buscaBtn{
+    flex:1 1 auto;min-width:0;max-width:720px;height:46px;margin:0 auto 0 10px;border-radius:999px;border:0;
+    background:var(--sup2);color:var(--ink-dim);display:flex;align-items:center;gap:12px;padding:0 18px;
+    font:inherit;font-size:.86rem;cursor:text;text-align:left;transition:background var(--mov-1),box-shadow var(--mov-1);
+  }
+  #buscaBtn:hover{box-shadow:var(--elev-1)}
+  #buscaBtn .busca-t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #buscaBtn kbd{font:inherit;font-size:.68rem;border:1px solid var(--hairline);border-radius:6px;padding:1px 6px;flex:none}
+  body.vp-phone #buscaBtn kbd,body.vp-touch #buscaBtn kbd{display:none}
+  #perfilBtn{
+    width:36px;height:36px;flex:none;border-radius:50%;border:0;background:var(--gold);color:var(--s-pri);
+    font:inherit;font-weight:600;font-size:.74rem;margin-left:6px;cursor:pointer;transition:box-shadow var(--mov-1);
+  }
+  #perfilBtn:hover{box-shadow:0 0 0 4px color-mix(in srgb,var(--gold) 22%,transparent)}
+  header .sinc-pill{margin:0 4px;flex:none;height:28px;padding:0 11px;font-size:.7rem;letter-spacing:0}
+  #sincLinha{position:absolute;left:0;right:0;bottom:0;height:3px;overflow:hidden;opacity:0;transition:opacity var(--mov-2)}
+  #sincLinha::after{content:"";position:absolute;top:0;left:-40%;width:40%;height:3px;border-radius:2px;background:var(--gold)}
+  body.a-enviar #sincLinha{opacity:1}
+  body.a-enviar #sincLinha::after{animation:correLinha 1.1s linear infinite}
+  @keyframes correLinha{to{left:100%}}
+  body.a-enviar .sinc-pill{animation:pulsaSinc 1.1s ease-in-out infinite}
+  @keyframes pulsaSinc{50%{opacity:.55}}
+
+  /* ---- navegação lateral ---- */
+  body:not(.palco) #tabbar{
+    position:fixed;left:0;top:var(--topo-h);bottom:0;width:var(--nav-w);z-index:29;margin:0;border:0;
+    display:flex;flex-direction:column;gap:2px;padding:6px 12px 16px;overflow:hidden auto;
+    background:var(--fundo);scrollbar-width:none;
+    transition:width var(--mov-2) var(--curva),transform var(--mov-2) var(--curva);
+  }
+  body.presenting #tabbar{transform:translateX(-110%)}
+  body:not(.palco) .tab{
+    display:flex;align-items:center;gap:12px;min-height:40px;flex:none;padding:0 16px;margin:0;
+    border:0;border-radius:999px;background:transparent;color:var(--ink);
+    font-size:.8rem;font-weight:500;letter-spacing:0;text-transform:none;white-space:nowrap;
+    position:relative;z-index:1;overflow:hidden;transition:background var(--mov-1),color var(--mov-1);
+  }
+  body:not(.palco) .tab:hover{background:color-mix(in srgb,var(--ink) 8%,transparent)}
+  body:not(.palco) .tab.on{color:var(--s-pri-cont);border-bottom-color:transparent}
+  body:not(.palco) .tab.on:hover{background:transparent}
+  .tab-ic{display:inline-grid;place-items:center;width:24px;flex:none}
+  .tab-ic svg{width:20px;height:20px}
+  .tab .cont{margin-left:auto;font-size:.7rem;font-weight:600;min-width:20px;height:20px;border-radius:10px;padding:0 6px;
+    display:grid;place-items:center;background:#B3261E;color:#fff}
+  .tab .cont:empty{display:none}
+  #navInd{position:absolute;left:12px;top:0;width:0;height:40px;border-radius:999px;background:var(--pri-cont);z-index:0;pointer-events:none;
+    transition:transform var(--mov-2) var(--curva),width var(--mov-2) var(--curva),height var(--mov-2) var(--curva);will-change:transform}
+  #criarBtn{
+    height:56px;flex:none;width:fit-content;border-radius:16px;border:0;background:var(--criar);color:var(--s-pri-cont);
+    display:flex;align-items:center;gap:12px;padding:0 22px 0 16px;margin:2px 0 12px;position:relative;overflow:hidden;z-index:1;
+    font:inherit;font-size:.86rem;font-weight:500;cursor:pointer;box-shadow:var(--elev-1);
+    transition:box-shadow var(--mov-1),width var(--mov-2) var(--curva),padding var(--mov-2) var(--curva);
+  }
+  #criarBtn:hover{box-shadow:var(--elev-2)}
+  .nav-sep{height:1px;background:var(--hairline);margin:8px 12px;flex:none}
+  .nav-cab{font-size:.7rem;color:var(--ink-dim);padding:4px 16px 2px;white-space:nowrap}
+  #navProcs{display:flex;flex-direction:column;gap:1px;flex:none}
+  .nav-proc{display:flex;align-items:center;gap:12px;min-height:32px;padding:0 16px;border:0;border-radius:999px;background:transparent;
+    color:var(--ink-dim);font:inherit;font-size:.76rem;text-align:left;cursor:pointer;white-space:nowrap;overflow:hidden;position:relative;z-index:1}
+  .nav-proc:hover{background:color-mix(in srgb,var(--ink) 8%,transparent)}
+  .nav-proc .tab-t{overflow:hidden;text-overflow:ellipsis}
+  .nav-proc .cx{width:16px;height:16px;margin:0 4px;border-radius:4px;border:2px solid var(--c);flex:none;display:grid;place-items:center;
+    transition:background var(--mov-1)}
+  .nav-proc.on{color:var(--ink)}
+  .nav-proc.on .cx{background:var(--c)}
+  .nav-proc.on .cx::after{content:"";width:8px;height:4px;border:2px solid #fff;border-top:0;border-right:0;transform:rotate(-45deg) translate(1px,-1px)}
+  .nav-proc.iso{background:var(--pri-cont);color:var(--s-pri-cont)}
+  #navExtra{display:none}
+  body.nav-fina:not(.vp-phone) .tab{padding:0;justify-content:center;width:48px;margin:0 auto}
+  body.nav-fina:not(.vp-phone) .tab-t,body.nav-fina:not(.vp-phone) .tab .cont,body.nav-fina:not(.vp-phone) .nav-cab{display:none}
+  body.nav-fina:not(.vp-phone) #criarBtn{width:48px;height:48px;padding:0;justify-content:center;margin:2px auto 12px}
+  body.nav-fina:not(.vp-phone) .nav-proc{padding:0;justify-content:center;width:48px;margin:0 auto}
+  body.nav-fina:not(.vp-phone) #navInd{left:12px}
+
+  /* telemóvel: a navegação é uma gaveta, e em baixo fica uma barra de destinos */
+  body.vp-phone:not(.palco) #tabbar{
+    top:0;width:304px;max-width:86vw;z-index:62;padding-top:10px;background:var(--sup);
+    border-radius:0 var(--raio-cartao) var(--raio-cartao) 0;box-shadow:var(--elev-3);transform:translateX(-106%);
+  }
+  body.vp-phone.nav-aberta:not(.palco) #tabbar{transform:none}
+  #navScrim{position:fixed;inset:0;background:var(--scrim);z-index:61;opacity:0;pointer-events:none;transition:opacity var(--mov-2)}
+  body.vp-phone.nav-aberta #navScrim{opacity:1;pointer-events:auto}
+  body.vp-phone #navExtra{display:flex;align-items:center;gap:2px;flex:none;flex-wrap:wrap;padding:0 4px 8px}
+  body.vp-phone #navExtra #orgName{flex:1 1 100%;font-size:1rem;font-weight:500;letter-spacing:0;text-transform:none;background:transparent;border:0;padding:6px 8px;color:var(--ink)}
+  #barraBaixo,#fabCriar{display:none}
+  body.vp-phone:not(.palco):not(.presenting) #barraBaixo{
+    display:flex;position:fixed;left:0;right:0;bottom:0;height:64px;background:var(--sup2);z-index:28;
+    padding-bottom:env(safe-area-inset-bottom,0);
+  }
+  #barraBaixo button{flex:1;min-width:0;border:0;background:none;color:var(--ink-dim);font:inherit;font-size:.66rem;font-weight:500;
+    display:flex;flex-direction:column;align-items:center;gap:3px;padding-top:9px;cursor:pointer}
+  #barraBaixo .ic{width:56px;height:28px;border-radius:999px;display:grid;place-items:center;transition:background var(--mov-2) var(--curva)}
+  #barraBaixo .ic svg{width:20px;height:20px}
+  #barraBaixo button.on{color:var(--ink)}
+  #barraBaixo button.on .ic{background:var(--pri-cont);color:var(--s-pri-cont)}
+  body.vp-phone:not(.palco):not(.presenting):not(.detail-open):not(.nav-aberta) #fabCriar{
+    display:grid;place-items:center;position:fixed;right:16px;bottom:calc(80px + env(safe-area-inset-bottom,0px));
+    width:56px;height:56px;border-radius:16px;border:0;background:var(--criar);color:var(--s-pri-cont);
+    z-index:27;box-shadow:var(--elev-3);cursor:pointer;overflow:hidden;
+  }
+
+  /* ---- sobre o palco: vista, caminho, ferramentas ---- */
+  #janelaTopo{
+    position:fixed;left:calc(var(--jl) + 12px);top:calc(var(--jt) + 12px);z-index:13;
+    display:flex;gap:8px;align-items:center;flex-wrap:wrap;pointer-events:none;
+    max-width:calc(100vw - var(--jl) - var(--jr) - 190px);
+    transition:left var(--mov-2) var(--curva);
+  }
+  #janelaTopo>*{pointer-events:auto}
+  .pilula{
+    height:40px;flex:none;border-radius:999px;border:0;background:var(--sup2);color:var(--ink);
+    display:inline-flex;align-items:center;gap:8px;padding:0 16px;position:relative;overflow:hidden;
+    font:inherit;font-size:.8rem;font-weight:500;box-shadow:var(--elev-1);cursor:pointer;transition:box-shadow var(--mov-1);
+  }
+  .pilula:hover{box-shadow:var(--elev-2)}
+  .pilula.so-ic{width:40px;padding:0;justify-content:center}
+  .pilula[aria-pressed="true"]{background:var(--pri-cont);color:var(--s-pri-cont)}
+  body:not(.palco) #whereBar{
+    position:static!important;transform:none!important;height:40px;border-radius:999px;box-shadow:var(--elev-1);
+    font-size:.76rem;padding:0 12px;max-width:min(520px,46vw);
+  }
+  body:not(.palco) #trailMenu{top:calc(var(--jt) + 60px)!important;left:calc(var(--jl) + 190px)!important;transform:none!important}
+  #ferramentas{
+    position:fixed;left:calc(var(--jl) + 12px);top:calc(var(--jt) + 64px);z-index:12;
+    padding:4px;border-radius:24px;background:var(--sup2);box-shadow:var(--elev-1);
+    max-height:calc(100vh - var(--jt) - var(--jb) - 150px);overflow:hidden auto;scrollbar-width:none;
+    transition:left var(--mov-2) var(--curva);
+  }
+  #ferramentas .head-actions{display:flex;flex-direction:column;gap:2px;margin:0;max-width:none;overflow:visible;-webkit-mask-image:none;mask-image:none}
+  #ferramentas .btn{width:40px;height:40px;flex:none;padding:0;border:0;border-radius:50%;display:grid;place-items:center;color:var(--ink-dim);font-size:1.05rem}
+  #ferramentas .btn:hover{background:color-mix(in srgb,var(--ink) 9%,transparent)}
+  #ferramentas .btn[aria-pressed="true"],#ferramentas .btn.on,#ferramentas .btn.active{background:var(--pri-cont);color:var(--s-pri-cont)}
+  #ferramentas .rot,#ferramentas #orgChartBtn,#ferramentas #flowIndexBtn,#ferramentas #viewsBtn{display:none}
+  #ferramentas .btn svg{width:20px;height:20px}
+  #ferramentas .sepv{height:1px;background:var(--hairline);margin:3px 8px}
+  body.page-open #janelaTopo,body.page-org #janelaTopo,body.presenting #janelaTopo,body.palco #janelaTopo,
+  body.page-open #ferramentas,body.page-org #ferramentas,body.presenting #ferramentas,body.palco #ferramentas{display:none}
+  body.vp-squat #ferramentas{display:none}
+  #menuBtn{display:none!important}
+  body:not(.palco) #radarWrap{top:auto!important;bottom:calc(var(--jb) + 12px)!important;right:calc(var(--jr) + 12px)!important;transition:right var(--mov-2) var(--curva)}
+  body.vp-desktop.detail-open:not(.palco) #stepper{left:calc(var(--jl) + (100vw - var(--jl) - var(--jr) - var(--folha-w)) / 2);width:min(560px,calc(100vw - var(--jl) - var(--folha-w) - 220px))}
+  body:not(.palco) #quest{left:calc(var(--jl) + 64px)!important;bottom:calc(var(--jb) + 12px)!important;top:auto!important;border-radius:999px}
+  body:not(.palco) #stepper{left:calc(var(--jl) + (100vw - var(--jl) - var(--jr)) / 2);bottom:calc(var(--jb) + 12px);border-radius:var(--raio-cartao)}
+  body.vp-phone:not(.palco) #stepper{left:8px;right:84px;bottom:calc(var(--jb) + 8px);width:auto;transform:none;padding:8px 12px}
+  body.vp-phone:not(.palco) #stepper .top{flex-wrap:wrap;gap:6px;margin:0}
+  body.vp-phone:not(.palco) #stepper .caption{display:none}
+  body.vp-phone:not(.palco) #quest{display:none!important}
+
+  /* camadas e legenda: o antigo painel, agora um cartão que se abre sobre o palco */
+  body:not(.palco) #panel{
+    display:none;left:calc(var(--jl) + 64px);top:calc(var(--jt) + 64px);width:340px;z-index:14;padding:6px 16px 14px;
+    max-height:calc(100vh - var(--jt) - var(--jb) - 160px);transform-origin:0 0;
+  }
+  body.camadas:not(.page-open):not(.page-org):not(.presenting):not(.palco) #panel{display:block;animation:surge var(--mov-2) var(--curva)}
+  body:not([data-tab]) #panel>details:not(#secLegenda):not(#secProc){display:none}
+  body.vp-phone:not(.palco) #panel{left:8px;right:8px;width:auto;top:calc(var(--jt) + 60px);max-height:calc(100vh - var(--jt) - var(--jb) - 76px)}
+
+  /* ---- ficha: folha lateral a toda a altura ---- */
+  body.vp-desktop:not(.palco) #detail,body.vp-tablet.vp-landscape:not(.palco) #detail{
+    right:calc(var(--jr) + 8px);top:calc(var(--jt) + 8px);bottom:calc(var(--jb) + 8px);width:var(--folha-w);
+    max-height:none;padding:20px;z-index:21;box-shadow:var(--elev-3);animation:folhaEntra var(--mov-2) var(--curva);
+  }
+  body.vp-desktop.detail-open:not(.palco) #radarWrap,body.vp-tablet.vp-landscape.detail-open:not(.palco) #radarWrap{right:calc(var(--jr) + var(--folha-w) + 24px)!important}
+  body.vp-phone:not(.palco) #detail,body.vp-tablet.vp-portrait:not(.palco) #detail{
+    left:0;right:0;bottom:0;width:auto;border-radius:28px 28px 0 0;padding:26px 18px 18px;z-index:40;box-shadow:var(--elev-3);
+    animation:folhaSobe var(--mov-2) var(--curva);
+  }
+  body.vp-phone:not(.palco) #detail::before,body.vp-tablet.vp-portrait:not(.palco) #detail::before{
+    content:"";position:absolute;left:50%;top:10px;width:32px;height:4px;margin-left:-16px;border-radius:2px;background:var(--ink-dim);opacity:.5}
+  #detail.troca>*{animation:trocaFicha var(--mov-2) var(--curva)}
+  #fichaFantasma{position:fixed;z-index:22;border-radius:12px;background:var(--pri-cont);pointer-events:none;
+    transition:left var(--mov-3) var(--curva),top var(--mov-3) var(--curva),width var(--mov-3) var(--curva),height var(--mov-3) var(--curva),opacity var(--mov-3) var(--curva),border-radius var(--mov-3)}
+
+  /* ---- páginas: o cartão do conteúdo ---- */
+  body:not(.palco) #page{
+    left:var(--jl);top:var(--jt);right:var(--jr);bottom:var(--jb);border-radius:var(--raio-cartao);
+    background:var(--sup);overflow:hidden;transition:left var(--mov-2) var(--curva),right var(--mov-2) var(--curva);
+  }
+  body.vp-desktop.page-open.detail-open:not(.palco) #page{right:calc(var(--jr) + var(--folha-w) + 16px)}
+  body.vp-phone:not(.palco) #page{border-radius:var(--raio-cartao) var(--raio-cartao) 0 0}
+  #pageBody{padding:6px 28px 48px}
+  body.vp-phone #pageBody{padding:2px 14px 40px}
+  #pageBody>details{max-width:1120px;margin-left:auto;margin-right:auto}
+  #pageBody>details.page-mode>summary{font-size:1.3rem;font-weight:500;letter-spacing:0;text-transform:none;padding:18px 2px 12px;color:var(--ink)}
+  #pageBody.entra>details{animation:paginaEntra var(--mov-3) var(--curva)}
+  #pageBody.entra .row:nth-child(-n+14){animation:linhaEntra var(--mov-3) var(--curva) backwards}
+  #pageBody.entra .row:nth-child(2){animation-delay:20ms}#pageBody.entra .row:nth-child(3){animation-delay:40ms}
+  #pageBody.entra .row:nth-child(4){animation-delay:60ms}#pageBody.entra .row:nth-child(5){animation-delay:80ms}
+  #pageBody.entra .row:nth-child(6){animation-delay:100ms}#pageBody.entra .row:nth-child(7){animation-delay:120ms}
+  #pageBody.entra .row:nth-child(n+8){animation-delay:140ms}
+  body.page-org:not(.palco) #modal{left:var(--jl);top:var(--jt);right:var(--jr);bottom:var(--jb)}
+  body.page-org:not(.palco) #modalCard{border-radius:var(--raio-cartao);background:var(--sup);box-shadow:none}
+  body:not(.page-org) #modal.open #modalCard{animation:dialogoEntra var(--mov-2) var(--curva)}
+  #coachCard,#helpCard{animation:dialogoEntra var(--mov-3) var(--curva)}
+  /* linhas de tarefa: no telemóvel o título fica por cima e o resto por baixo */
+  #pageBody .task-row{flex-wrap:wrap;row-gap:2px}
+  #pageBody .task-row .t-desc{flex:1 1 calc(100% - 40px);min-width:0;font-size:.86rem}
+  #pageBody .task-row .t-route{flex:1 1 100%;margin-left:22px;text-align:left}
+  /* Definições: um índice que fica à vista enquanto se percorre a página */
+  #defIndice{position:sticky;top:0;z-index:3;display:flex;flex-wrap:wrap;gap:6px;padding:10px 0;background:var(--sup)}
+  #defIndice .chip{cursor:pointer;background:none;font:inherit;font-size:.74rem;color:var(--ink)}
+  #defIndice .chip:hover{background:var(--pri-cont);color:var(--s-pri-cont);border-color:transparent}
+  #panel #defIndice{display:none}
+  #pageBody .mini-title{scroll-margin-top:64px}
+  #pageBody #secDefinicoes .sec-body{max-width:820px}
+
+  /* ---- avisos: em baixo, à esquerda, a subir ---- */
+  body:not(.palco) #toasts{
+    top:auto;bottom:calc(var(--jb) + 16px);left:calc(var(--jl) + 16px);transform:none;
+    align-items:flex-start;flex-direction:column-reverse;width:min(440px,calc(100vw - var(--jl) - 32px));z-index:95;
+  }
+  body.vp-phone:not(.palco) #toasts{left:12px;bottom:calc(var(--jb) + 12px);width:calc(100vw - 24px)}
+  .toast,body.theme-light .toast{
+    background-color:var(--ink);color:var(--fundo);border-radius:8px;box-shadow:var(--elev-3);padding:12px 16px;font-size:.8rem;
+    animation:avisoEntra var(--mov-2) var(--curva) both;
+  }
+  .toast.out{animation:avisoSai var(--mov-1) var(--curva-sai) forwards}
+  .toast .btn{color:var(--pri-cont);border:0;padding:4px 10px;font-weight:600}
+  .toast .btn:hover{background:rgba(127,127,127,.25)}
+  .toast .tmsg{color:inherit}
+
+  /* ---- menus e folhas ---- */
+  .menu-pop{
+    position:fixed;z-index:96;min-width:232px;max-width:calc(100vw - 16px);max-height:calc(100vh - 16px);overflow:auto;
+    padding:8px 0;border-radius:12px;background-color:var(--sup2);box-shadow:var(--elev-3);
+    transform-origin:var(--ox,0) var(--oy,0);animation:menuAbre var(--mov-2) var(--curva);
+  }
+  .menu-pop button{
+    display:flex;align-items:center;gap:14px;width:100%;min-height:44px;padding:0 18px 0 14px;border:0;background:none;
+    color:var(--ink);font:inherit;font-size:.82rem;text-align:left;cursor:pointer;position:relative;overflow:hidden;
+    animation:itemEntra var(--mov-2) var(--curva) backwards;animation-delay:calc(var(--i,0) * 16ms + 40ms);
+  }
+  .menu-pop button:hover,.menu-pop button:focus-visible{background:color-mix(in srgb,var(--ink) 9%,transparent);outline:none}
+  .menu-pop button.on{background:var(--pri-cont);color:var(--s-pri-cont)}
+  .menu-pop button svg{flex:none;color:var(--ink-dim)}
+  .menu-pop .mt{flex:1;min-width:0}
+  .menu-pop .mn{font-size:.7rem;color:var(--ink-dim)}
+  .menu-pop .sep{height:1px;background:var(--hairline);margin:6px 0}
+  .menu-pop .cab{padding:8px 18px 6px;font-size:.72rem;color:var(--ink-dim)}
+  .menu-pop .cab b{display:block;font-size:.9rem;color:var(--ink);font-weight:500}
+  body.vp-phone .menu-pop.de-baixo{left:0!important;right:0;top:auto!important;bottom:0;max-width:none;border-radius:28px 28px 0 0;
+    padding:20px 0 calc(16px + env(safe-area-inset-bottom,0px));animation:folhaSobe var(--mov-2) var(--curva)}
+  #rapidas{
+    position:fixed;right:8px;top:calc(var(--topo-h) + 0px);bottom:8px;width:min(360px,calc(100vw - 16px));z-index:80;
+    background:var(--sup2);border-radius:var(--raio-cartao);box-shadow:var(--elev-3);padding:18px 20px;overflow:auto;
+    transform:translateX(calc(100% + 24px));visibility:hidden;
+    transition:transform var(--mov-2) var(--curva),visibility 0s linear var(--mov-2);
+  }
+  #rapidas.aberta{transform:none;visibility:visible;transition:transform var(--mov-2) var(--curva)}
+  #rapidas h3{font-size:1.05rem;font-weight:500;color:var(--ink);margin:0 0 4px;display:flex;align-items:center}
+  #rapidas h3 button{margin-left:auto}
+  #rapidas .mini-title{margin:18px 0 8px}
+  #rapidas .grelha-temas{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .tema-cartao{border:2px solid transparent;border-radius:12px;padding:0;background:none;cursor:pointer;font:inherit;font-size:.68rem;color:var(--ink);display:grid;gap:4px}
+  .tema-cartao i{display:block;height:44px;border-radius:10px;border:1px solid var(--hairline);position:relative;overflow:hidden}
+  .tema-cartao i::after{content:"";position:absolute;left:8px;top:8px;width:36%;height:8px;border-radius:4px;background:var(--b)}
+  .tema-cartao i::before{content:"";position:absolute;right:8px;bottom:8px;width:18px;height:18px;border-radius:6px;background:var(--a)}
+  .tema-cartao.on i{outline:2px solid var(--gold);outline-offset:2px}
+  .segmentos{display:flex;flex-wrap:wrap;border:1px solid var(--hairline);border-radius:999px;overflow:hidden;width:fit-content;max-width:100%}
+  .segmentos button{flex:1 1 auto;border:0;border-right:1px solid var(--hairline);background:none;color:var(--ink);font:inherit;font-size:.74rem;padding:8px 14px;cursor:pointer;white-space:nowrap;transition:background var(--mov-1)}
+  .segmentos button:last-child{border-right:0}
+  .segmentos button.on{background:var(--pri-cont);color:var(--s-pri-cont);font-weight:500}
+
+  /* ---- densidade compacta ---- */
+  body.densa .tab{min-height:34px}
+  body.densa #navInd{height:34px}
+  body.densa .row,body.densa #pageBody .row{padding-top:5px;padding-bottom:5px}
+  body.densa .menu-pop button{min-height:36px}
+  body.densa #pageBody>details.page-mode>summary{padding:12px 2px 8px}
+
+  /* ---- estados vazios: um convite, não um pedido de desculpa ---- */
+  .vazio{display:flex;flex-direction:column;align-items:center;gap:10px;padding:36px 16px 28px;text-align:center}
+  .vazio-fig{position:relative;width:96px;height:84px}
+  .vazio-fig span{position:absolute;width:38px;height:38px;border-radius:9px;background:var(--sup2);border:2px solid var(--hairline);
+    animation:cuboCai 3.6s var(--curva) infinite both}
+  .vazio-fig span:nth-child(1){left:6px;bottom:0}
+  .vazio-fig span:nth-child(2){left:52px;bottom:0;animation-delay:.18s}
+  .vazio-fig span:nth-child(3){left:29px;bottom:42px;animation-delay:.36s;background:var(--pri-cont);border-color:var(--gold)}
+  .vazio-t{font-size:1.05rem;font-weight:500;color:var(--ink)}
+  .vazio-s{font-size:.8rem;color:var(--ink-dim);max-width:420px;line-height:1.5}
+  @keyframes cuboCai{0%,6%{transform:translateY(-70px);opacity:0}18%{transform:translateY(5px);opacity:1}24%,86%{transform:none;opacity:1}96%,100%{transform:none;opacity:0}}
+
+  /* ---- validar uma tarefa: o ponto enche, o visto desenha-se, a linha risca-se ---- */
+  .estado-ponto{transition:background var(--mov-2),border-color var(--mov-2),transform var(--mov-2) var(--curva)}
+  .task-row.acabou-de-validar .estado-ponto{animation:pontoValida 620ms var(--curva)}
+  .task-row.acabou-de-validar .t-desc{background:linear-gradient(currentColor,currentColor) no-repeat 0 55%/0 1.5px;animation:riscaTexto 520ms 160ms var(--curva) forwards}
+  @keyframes pontoValida{0%{transform:scale(1)}40%{transform:scale(1.9)}100%{transform:scale(1)}}
+  @keyframes riscaTexto{to{background-size:100% 1.5px}}
+  .proc-avanco{height:4px;border-radius:2px;background:var(--hairline);overflow:hidden;margin:2px 0 6px}
+  .proc-avanco i{display:block;height:4px;border-radius:2px;background:var(--gold);transition:width var(--mov-3) var(--curva)}
+
+  /* ---- movimento ---- */
+  @keyframes folhaEntra{from{transform:translateX(28px);opacity:0}}
+  @keyframes folhaSobe{from{transform:translateY(40px);opacity:0}}
+  @keyframes trocaFicha{from{transform:translateY(8px);opacity:0}}
+  @keyframes surge{from{transform:scale(.94);opacity:0}}
+  @keyframes menuAbre{from{transform:scale(.72);opacity:0;border-radius:24px}}
+  @keyframes itemEntra{from{transform:translateY(-6px);opacity:0}}
+  @keyframes paginaEntra{from{transform:translateY(14px);opacity:0}}
+  @keyframes linhaEntra{from{transform:translateY(10px);opacity:0}}
+  @keyframes dialogoEntra{from{transform:scale(.92);opacity:0}}
+  @keyframes avisoEntra{from{transform:translateY(24px);opacity:0}}
+  @keyframes avisoSai{to{transform:translateY(8px);opacity:0}}
+  @media (prefers-reduced-motion:reduce){
+    .onda{display:none}
+    #janela,#tabbar,header,#navInd,#rapidas,#fichaFantasma{transition:none!important}
+    .vazio-fig span{animation:none}
+  }
+  body.movimento-reduzido .onda{display:none}
 </style>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  "name": "Ferramenta de Mapeamento para Autarquias",
+  "name": "Mapeamento Organizacional para Autarquias",
   "description": "3D interactive organizational network visualization for Portuguese municipal administration",
   "applicationCategory": "BusinessApplication",
   "operatingSystem": "Web (cross-platform)",
@@ -2400,20 +2802,20 @@
   <button id="wbBack" title="Voltar" aria-label="Voltar">‹</button>
   <button id="wbFwd" title="Avançar" aria-label="Avançar">›</button>
   <span class="wb-path" id="wbPath">Rede completa</span>
-  <span class="wb-addr" id="wbAddr" role="button" tabindex="0" title="Copiar ligação para este nódulo"></span>
+  <span class="wb-addr" id="wbAddr" role="button" tabindex="0" title="Copiar ligação para esta unidade"></span>
   <button id="wbTrail" title="Sítios por onde passou">Trilho</button>
 </div>
 <div id="trailMenu" class="glass" role="menu" aria-label="Trilho"></div>
 
 <div id="radarWrap" class="glass">
   <canvas id="radar" width="132" height="132" role="img"
-    aria-label="Radar da estrutura — clique para ir a um nódulo"></canvas>
+    aria-label="Radar da estrutura — clique para ir a uma unidade"></canvas>
   <span class="rlbl">RADAR</span>
 </div>
 
 <div id="emptyHint" class="glass" aria-hidden="true">
   <div class="eh-t">Rede vazia — só o Executivo</div>
-  <div class="eh-s">Abra o separador <b>Nódulos</b> e crie a primeira divisão para começar a construir o organograma.</div>
+  <div class="eh-s">Abra o separador <b>Unidades</b> e crie a primeira divisão para começar a construir o organograma.</div>
 </div>
 
 <header>
@@ -2432,7 +2834,7 @@
   </nav>
   <div class="brand">
     <input id="orgName" value="Organização" maxlength="48" aria-label="Nome da organização">
-    <p>Executivo · Coordenação · Processos · Agentes</p>
+    <p>Executivo · Coordenação · Processos · Pessoas</p>
     <button type="button" id="sincPill" class="sinc-pill" hidden></button>
     <div class="head-actions">
       <button class="btn tiny icon-round" id="undoBtn" title="Anular (Ctrl+Z)" aria-label="Anular" disabled>↶</button>
@@ -2441,7 +2843,7 @@
       <button class="btn tiny" id="flowIndexBtn" title="Abrir a lista de fluxogramas dos procedimentos">Fluxogramas</button>
       <button class="btn tiny" id="viewsBtn" title="Outras vistas da mesma informação (V)">Vistas</button>
       <button class="btn tiny" id="contBtn" title="Modo continuidade — quem assegura o quê quando alguém falta" aria-pressed="false">Continuidade</button>
-      <button class="btn tiny icon-round" id="linkBtn" title="Modo ligar — arraste de um nódulo para outro para criar uma tarefa (L)" aria-label="Modo ligar" aria-pressed="false">⇢</button>
+      <button class="btn tiny icon-round" id="linkBtn" title="Modo ligar — arraste de uma unidade para outra para criar uma tarefa (L)" aria-label="Modo ligar" aria-pressed="false">⇢</button>
       <button class="btn tiny" id="healthBtn" title="Estado da rede — problemas estruturais detetados">Estado</button>
       <button class="btn tiny" id="resetViewBtn" title="Recentrar a câmara na vista inicial">Recentrar</button>
       <button class="btn tiny icon-round" id="peekBtn" title="Espreitar o todo — mantenha premido (ou segure Espaço)" aria-label="Espreitar o todo"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
@@ -2452,7 +2854,7 @@
       <button class="btn tiny icon-round" id="helpBtn" title="Ajuda e atalhos de teclado" aria-label="Ajuda e atalhos">?</button>
     </div>
   </div>
-  <div class="hint">Arraste para rodar · Roda do rato para aproximar<br>Clique num nódulo ou num arco de tarefa para ver e editar</div>
+  <div class="hint">Arraste para rodar · Roda do rato para aproximar<br>Clique numa unidade ou num arco de tarefa para ver e editar</div>
 </header>
 
 <aside id="panel" class="glass" aria-label="Painel de controlo">
@@ -2467,10 +2869,10 @@
       <div class="mini-title" style="margin-top:8px">Chave de codificação</div>
       <div id="codeKey"></div>
 
-      <div class="mini-title" style="margin-top:8px">Cor dos nódulos</div>
-      <div class="seg" id="colorModeSeg" role="group" aria-label="Modo de cor dos nódulos">
+      <div class="mini-title" style="margin-top:8px">Cor das unidades</div>
+      <div class="seg" id="colorModeSeg" role="group" aria-label="Modo de cor das unidades">
         <button type="button" data-cmode="struct" class="on" title="Cor por ramo da hierarquia">Estrutura</button>
-        <button type="button" data-cmode="load" title="Cor por número de tarefas que tocam o nódulo">Carga</button>
+        <button type="button" data-cmode="load" title="Cor por número de tarefas que tocam a unidade">Carga</button>
         <button type="button" data-cmode="team" title="Cor por dimensão da equipa">Equipa</button>
       </div>
       <div class="heat-scale" id="heatScale" style="display:none">
@@ -2496,7 +2898,7 @@
         <span class="density-val" id="densityVal">todos os níveis</span>
       </div>
       <div class="legend-row"><span class="swatch line" style="background:var(--gold);opacity:.7"></span>Ligação hierárquica<span class="legend-note">vertical</span></div>
-      <div class="legend-row"><span class="swatch" style="background:#fff;width:5px;height:5px"></span>Agente (em órbita)<span class="legend-note">por nódulo</span></div>
+      <div class="legend-row"><span class="swatch" style="background:#fff;width:5px;height:5px"></span>Pessoa (em órbita)<span class="legend-note">por unidade</span></div>
       <div class="legend-row"><span class="swatch" style="background:#FFD84D;width:6px;height:6px"></span>Pulso de tarefa (pisca)<span class="legend-note">origem → destino</span></div>
     </div>
   </details>
@@ -2543,10 +2945,10 @@
             <rect x="6" y="6" width="2" height="2" fill="var(--gp-b)"/>
           </svg>
         </span>
-        Novo nódulo
+        Nova unidade
       </button>
       <div id="nodeList"></div>
-      <div class="foot-note">Clique num nódulo para abrir o painel dele — é lá que se edita o nome, o nível, os agentes e as tarefas. Arraste um nódulo para cima de outro para o colocar sob esse nódulo na hierarquia.</div>
+      <div class="foot-note">Clique numa unidade para abrir o painel dela — é lá que se edita o nome, o nível, as pessoas e as tarefas. Arraste uma unidade para cima de outro para o colocar sob essa unidade na hierarquia.</div>
     </div>
   </details>
 
@@ -2561,10 +2963,10 @@
             <rect x="6" y="6" width="2" height="2" fill="var(--gp-b)"/>
           </svg>
         </span>
-        Novo agente
+        Nova pessoa
       </button>
       <div id="agentList"></div>
-      <div class="foot-note">Clique num agente para abrir o painel dele — é lá que estão o nome, a categoria e as tarefas atribuídas. Arraste um agente para o cabeçalho de um nódulo (ou para outro agente) para o mudar para esse nódulo. ★ assinala o responsável de cada nódulo.</div>
+      <div class="foot-note">Clique numa pessoa para abrir o painel dela — é lá que estão o nome, a categoria e as tarefas atribuídas. Arraste uma pessoa para o cabeçalho de uma unidade (ou para outra pessoa) para o mudar para essa unidade. ★ assinala o responsável de cada unidade.</div>
     </div>
   </details>
 
@@ -2572,7 +2974,7 @@
     <summary>Pelouros</summary>
     <div class="sec-body">
       <div id="pelouroList"></div>
-      <div class="foot-note">Um Pelouro junta nódulos (e tudo o que está hierarquicamente abaixo deles) sob um responsável do Executivo. Os procedimentos pertencem ao Pelouro onde têm origem. Um nódulo pode ser destacado para outro Pelouro no painel do nódulo.</div>
+      <div class="foot-note">Um Pelouro junta unidades (e tudo o que está hierarquicamente abaixo delas) sob um responsável do Executivo. Os procedimentos pertencem ao Pelouro onde têm origem. Uma unidade pode ser destacada para outro Pelouro no painel da unidade.</div>
     </div>
   </details>
 
@@ -2588,7 +2990,7 @@
     <summary>Repositórios</summary>
     <div class="sec-body">
       <div id="repoList"></div>
-      <div class="foot-note">Documentos, multimédia, atas e minutas, ligados a procedimentos, tarefas, nódulos e pessoas. Cada repositório tem uma credencial mínima de acesso: abaixo dela vê-se que existe, mas não se abre.</div>
+      <div class="foot-note">Documentos, multimédia, atas e minutas, ligados a procedimentos, tarefas, unidades e pessoas. Cada repositório tem uma credencial mínima de acesso: abaixo dela vê-se que existe, mas não se abre.</div>
     </div>
   </details>
 
@@ -2596,7 +2998,7 @@
     <summary>Tarefas</summary>
     <div class="sec-body">
       <div id="taskListAll"></div>
-      <div class="foot-note">Clique numa tarefa para abrir o painel dela — descrição, responsável, duração e pontas editam-se lá. Crie tarefas no modo ligar (L) — arraste de um nódulo para outro — ou dentro de um fluxograma.</div>
+      <div class="foot-note">Clique numa tarefa para abrir o painel dela — descrição, responsável, duração e pontas editam-se lá. Crie tarefas no modo ligar (L) — arraste de uma unidade para outra — ou dentro de um fluxograma.</div>
     </div>
   </details>
 
@@ -2613,9 +3015,11 @@
       <div id="alertasRow"></div>
       <div class="mini-title">Tema</div>
       <div id="themeRow">
+        <button class="theme-btn" data-theme="claro" title="Claro — neutro, segue o sistema"><span class="tdot" style="background:linear-gradient(135deg,#F3F6FB,#0B57D0)"></span>Claro</button>
+        <button class="theme-btn" data-theme="escuro" title="Escuro — neutro, segue o sistema"><span class="tdot" style="background:linear-gradient(135deg,#131314,#A8C7FA)"></span>Escuro</button>
         <button class="theme-btn" data-theme="nocturno" title="Navy profundo com dourado"><span class="tdot" style="background:linear-gradient(135deg,#0A1424,#E8B44C)"></span>Noturno</button>
         <button class="theme-btn" data-theme="lisboa" title="Índigo com azulejo e amarelo de elétrico"><span class="tdot" style="background:linear-gradient(135deg,#10163A,#3E7CB1 55%,#F4C542)"></span>Meia-noite em Lisboa</button>
-        <button class="theme-btn on" data-theme="calcada" title="Modo claro — pedra, areia e basalto"><span class="tdot" style="background:linear-gradient(135deg,#B8AB88,#775212 60%,#3A3122)"></span>Calçada</button>
+        <button class="theme-btn" data-theme="calcada" title="Modo claro — pedra, areia e basalto"><span class="tdot" style="background:linear-gradient(135deg,#B8AB88,#775212 60%,#3A3122)"></span>Calçada</button>
         <button class="theme-btn" data-theme="verde" title="Verde institucional"><span class="tdot" style="background:linear-gradient(135deg,#0B241A,#2E8B62 60%,#D9C36A)"></span>Verde Institucional</button>
         <button class="theme-btn" data-theme="contraste" title="Alto contraste — cores seguras para daltonismo (Okabe–Ito)"><span class="tdot" style="background:linear-gradient(135deg,#000000,#0072B2 45%,#F0E442)"></span>Alto Contraste</button>
       </div>
@@ -2658,8 +3062,8 @@
       <div class="mini-title">Qualidade do levantamento</div>
       <div id="qualidadeRow"></div>
       <div class="setup-btns">
-        <button class="btn" id="pasteImportBtn" title="Criar nódulos em massa a partir de colunas coladas do Excel">Colar do Excel</button>
-        <button class="btn" id="newDatasetBtn">Nova rede</button>
+        <button class="btn" id="pasteImportBtn" title="Criar unidades em massa a partir de colunas coladas do Excel">Colar do Excel</button>
+        <button class="btn perigo" id="newDatasetBtn">Nova rede</button>
         <button class="btn" id="exportBtn">Guardar dataset</button>
         <button class="btn" id="importBtn">Abrir dataset</button>
         <button class="btn" id="pdfBtn">Exportar PDF</button>
@@ -2679,8 +3083,8 @@
       </details>
       <div class="mini-title" style="margin-top:12px">Procedimentos avulsos e modelos</div>
       <div class="setup-btns">
-        <button class="btn" id="procExpBtn" title="Guardar UM procedimento num ficheiro, com os nódulos identificados por nome — para partilhar entre câmaras">Exportar um procedimento</button>
-        <button class="btn" id="procImpBtn" title="Trazer um procedimento de um ficheiro — os nódulos em falta são criados">Importar procedimento</button>
+        <button class="btn" id="procExpBtn" title="Guardar UM procedimento num ficheiro, com as unidades identificadas por nome — para partilhar entre câmaras">Exportar um procedimento</button>
+        <button class="btn" id="procImpBtn" title="Trazer um procedimento de um ficheiro — as unidades em falta são criadas">Importar procedimento</button>
         <button class="btn" id="modelosBtn" title="Começar a partir de um procedimento-tipo: licenciamento, atendimento, contratação">Modelos de procedimentos-tipo</button>
         <input type="file" id="procImpFile" accept=".json,application/json" hidden>
       </div>
@@ -2706,7 +3110,7 @@
 <div id="palette" role="dialog" aria-modal="true" aria-label="Paleta de comandos">
   <div id="paletteCard" class="glass">
     <input id="paletteInput" type="text" autocomplete="off" spellcheck="false"
-      placeholder="Procurar nódulos, agentes, procedimentos, grupos — ou executar uma ação…"
+      placeholder="Procurar unidades, pessoas, procedimentos, grupos — ou executar uma ação…"
       aria-label="Procurar ou executar comando">
     <div id="paletteList" role="listbox"></div>
   </div>
@@ -2714,20 +3118,20 @@
 
 <div id="reassign" role="dialog" aria-modal="true" aria-labelledby="raTitle">
   <div id="reassignCard" class="glass">
-    <h3 id="raTitle">Remover agente</h3>
+    <h3 id="raTitle">Remover pessoa</h3>
     <div class="sub" id="raSub"></div>
     <div class="ra-quick" id="raQuick"></div>
     <div id="raBody"></div>
     <div class="card-btns">
       <button class="btn" id="raCancel">Cancelar</button>
-      <button class="btn primary" id="raConfirm">Remover agente</button>
+      <button class="btn primary" id="raConfirm">Remover pessoa</button>
     </div>
   </div>
 </div>
 
 <div id="coach" role="dialog" aria-modal="true" aria-labelledby="coachTitle">
   <div id="coachCard" class="glass">
-    <h3 id="coachTitle">Bem-vindo à Ferramenta de Mapeamento para Autarquias</h3>
+    <h3 id="coachTitle">Bem-vindo ao Mapeamento Organizacional para Autarquias</h3>
     <div class="sub">Uma rede 3D da estrutura da autarquia. Quatro formas de a explorar:</div>
     <div class="coach-step">
       <span class="coach-ico" aria-hidden="true">🖱️</span>
@@ -2735,15 +3139,15 @@
     </div>
     <div class="coach-step">
       <span class="coach-ico" aria-hidden="true">👆</span>
-      <span class="coach-txt"><b>Clique</b> numa esfera (nódulo) ou num arco (tarefa) para inspecionar e editar.</span>
+      <span class="coach-txt"><b>Clique</b> numa esfera (unidade) ou num arco (tarefa) para inspecionar e editar.</span>
     </div>
     <div class="coach-step">
       <span class="coach-ico" aria-hidden="true">⇧</span>
-      <span class="coach-txt"><b>Shift+clique</b> num arco isola todo o procedimento; <b>duplo clique</b> num nódulo ativa o modo de foco.</span>
+      <span class="coach-txt"><b>Shift+clique</b> num arco isola todo o procedimento; <b>duplo clique</b> numa unidade ativa o modo de foco.</span>
     </div>
     <div class="coach-step">
       <span class="coach-ico" aria-hidden="true">☰</span>
-      <span class="coach-txt">O <b>painel</b> gere nódulos, agentes, procedimentos e grupos — e exporta tudo.</span>
+      <span class="coach-txt">A <b>barra da esquerda</b> leva a unidades, pessoas, procedimentos e tarefas; <b>Criar</b> acrescenta o que faltar e a <b>procura</b> no topo encontra tudo.</span>
     </div>
     <div class="privacidade-host"></div>
     <div class="card-btns">
@@ -2759,10 +3163,10 @@
     <h4>Navegação 3D</h4>
     <div class="kbd-row"><kbd>Arrastar</kbd><span>Rodar a câmara em torno da rede</span></div>
     <div class="kbd-row"><kbd>Roda / Pinça</kbd><span>Aproximar e afastar</span></div>
-    <div class="kbd-row"><kbd>Clique</kbd><span>Selecionar um nódulo ou uma tarefa</span></div>
+    <div class="kbd-row"><kbd>Clique</kbd><span>Selecionar uma unidade ou uma tarefa</span></div>
     <div class="kbd-row"><kbd>Shift + clique</kbd><span>Isolar todo o procedimento de uma tarefa</span></div>
-    <div class="kbd-row"><kbd>Duplo clique</kbd><span>Modo de foco — destaca o nódulo e esbate o resto</span></div>
-    <div class="kbd-row"><kbd>Passar o rato</kbd><span>Realça o nódulo e as suas ligações diretas</span></div>
+    <div class="kbd-row"><kbd>Duplo clique</kbd><span>Modo de foco — destaca a unidade e esbate o resto</span></div>
+    <div class="kbd-row"><kbd>Passar o rato</kbd><span>Realça a unidade e as suas ligações diretas</span></div>
     <h4>Teclado</h4>
     <div class="kbd-row"><kbd data-atalho="cenaAnterior">←</kbd><span>Cena anterior do tour</span></div>
     <div class="kbd-row"><kbd data-atalho="cenaSeguinte">→</kbd><span>Cena seguinte do tour</span></div>
@@ -2782,8 +3186,8 @@
     <div class="kbd-row"><kbd>Esc</kbd><span>Fechar janelas e libertar o foco</span></div>
     <div class="kbd-row"><kbd>Tab</kbd><span>Percorrer os controlos do painel</span></div>
     <h4>Gestão</h4>
-    <div class="kbd-row"><kbd>Arrastar nódulo</kbd><span>Reorganizar a hierarquia no Organograma 2D</span></div>
-    <div class="kbd-row"><kbd>Arrastar agente</kbd><span>Transferir para outro nódulo</span></div>
+    <div class="kbd-row"><kbd>Arrastar unidade</kbd><span>Reorganizar a hierarquia no Organograma 2D</span></div>
+    <div class="kbd-row"><kbd>Arrastar pessoa</kbd><span>Transferir para outra unidade</span></div>
     <div class="kbd-row"><kbd>Botões laterais</kbd><span>Voltar / avançar no histórico de seleção</span></div>
     <div class="card-btns">
       <button class="btn" id="helpReplay">Rever introdução</button>
@@ -2814,11 +3218,11 @@
   </div>
 </div>
 
-<!-- Escolha de nódulo no organograma simplificado (fluxo de nova tarefa) -->
+<!-- Escolha de unidade no organograma simplificado (fluxo de nova tarefa) -->
 <div id="nodePick" role="dialog" aria-modal="true" aria-labelledby="npTitle">
   <div id="npCard" class="glass">
-    <h3 id="npTitle">Nova tarefa — escolha o nódulo de origem</h3>
-    <div class="sub" id="npSub">Clique num nódulo do organograma.</div>
+    <h3 id="npTitle">Nova tarefa — escolha a unidade de origem</h3>
+    <div class="sub" id="npSub">Clique numa unidade do organograma.</div>
     <div id="npScroll"></div>
     <div id="npConv" hidden>
       <button class="btn tiny" id="npConvTog" aria-expanded="false" aria-controls="npConvList">
@@ -2860,7 +3264,7 @@
       <label>Responsável</label>
       <button class="btn tiny" id="teResp" title="Alterar ou anular o responsável"></button>
       <label>Destino</label>
-      <button class="btn tiny" id="teDest" title="Mudar o nódulo de chegada desta tarefa"></button>
+      <button class="btn tiny" id="teDest" title="Mudar a unidade de chegada desta tarefa"></button>
       <label>Estado</label>
       <button class="btn tiny" id="teEstado" title="Estado do levantamento — clique para avançar: por confirmar, validado pelo serviço, aprovado"></button>
       <label for="teLink">Referência</label>
@@ -3119,7 +3523,7 @@ let agentCounter=0;
 const agents=[];
 /* O palco é avisado de cada coisa nova (ver NASCIMENTOS NO PALCO). Calado
    durante importações — uma enxurrada não é uma festa — e enquanto um
-   nódulo novo cria o seu próprio responsável. */
+   unidade nova cria o seu próprio responsável. */
 let palcoMudo=false,criandoNodulo=false;
 function palcoAnuncia(tipo,obj){
   if(!booted||!obj||palcoMudo||ehPalco)return;
@@ -4031,7 +4435,7 @@ function buildNodeVisual(n){
   const titular=primaryOf(n.id);
   const sub=continuityOn&&prim&&titular&&prim!==titular;
   const lbl=textSprite(nmShow,
-    prim?((sub?"⇢ ":"★ ")+prim.name):(continuityOn&&list.length?"sem cobertura":(list.length+" agentes")));
+    prim?((sub?"⇢ ":"★ ")+prim.name):(continuityOn&&list.length?"sem cobertura":(list.length+" pessoas")));
   lbl.position.y=rad+0.62;
   if(n.tier>=2)lbl.scale.multiplyScalar(0.92);
   g.add(lbl);
@@ -4373,7 +4777,7 @@ function leastLoaded(tier,excludeId){
 let customNodeCounter=0;
 function createNode(opts){
   opts=opts||{};
-  // O ramo por omissão também tem de ser limitado: "+ Novo nódulo" não passa
+  // O ramo por omissão também tem de ser limitado: "+ Nova unidade" não passa
   // argumentos, e num dataset de um ou dois níveis o 2 fixo apontava para um
   // TIER[2] inexistente — nodePos devolvia NaN e o node desaparecia do mundo.
   const tier=Math.max(0,Math.min(TIER.length-1,
@@ -4388,7 +4792,7 @@ function createNode(opts){
     angle=(p?p.angle:0)+(sibs%2?1:-1)*Math.ceil(sibs/2)*0.22+0.11;
   }
   const n={id:opts.id||("x"+(++customNodeCounter)+"_"+Date.now().toString(36)),
-    name:opts.name||"Novo Nódulo",tier,angle,parent,custom:true};
+    name:opts.name||"Nova Unidade",tier,angle,parent,custom:true};
   n.pos=nodePos(n);
   n._nomeInicial=n.name;
   if(booted&&!palcoMudo)n._novo=true;   // em construção até ter nome (ver contextoEdicao)
@@ -4415,7 +4819,7 @@ function changeNodeTier(n,newTier){
   // Demoting the last apex would leave the organisation headless — and would be a
   // back door to deleting the Executivo, which must never be possible.
   if(n.tier===0&&newTier!==0&&nodes.filter(x=>x.tier===0).length<=1){
-    flash("O Executivo tem de permanecer no topo. Crie outro nódulo de topo antes de o mover.",{type:"err"});
+    flash("O Executivo tem de permanecer no topo. Crie outra unidade de topo antes de o mover.",{type:"err"});
     return;
   }
   n.tier=newTier;
@@ -4787,7 +5191,7 @@ function renderFallbackSVG(){
       fill:n.tier<=1?ink:dim,"font-family":"Segoe UI,Helvetica,sans-serif",
       "font-size":n.tier<=1?"11":"9"}));
     const ttl=document.createElementNS(NS,"title");
-    ttl.textContent=n.name+" · "+k+" agente(s)";
+    ttl.textContent=n.name+" · "+k+" pessoa(s)";
     grp.append(ttl);
     grp.style.cursor="pointer";
     grp.addEventListener("click",()=>selectNode(n));
@@ -4827,8 +5231,8 @@ if(glRetry)glRetry.onclick=()=>{
 ============================================================ */
 const QUEST_KEY="of.quest.v1";
 const QUEST_STEPS=[
-  {k:"node",  t:"Criar um nódulo"},
-  {k:"agent", t:"Adicionar um agente"},
+  {k:"node",  t:"Criar uma unidade"},
+  {k:"agent", t:"Adicionar uma pessoa"},
   {k:"resp",  t:"Definir um responsável"},
   {k:"task",  t:"Desenhar um procedimento"},
   {k:"export",t:"Exportar o resultado"}
@@ -4954,7 +5358,7 @@ function updateWhereBar(){
   if(wbBack)wbBack.disabled=!navStack.length;
   if(wbFwd)wbFwd.disabled=!fwdStack.length;
   if(!sel){
-    wbPath.textContent="Rede completa · "+nodes.length+" nódulos";
+    wbPath.textContent="Rede completa · "+nodes.length+" unidades";
     wbAddr.textContent="";
     return;
   }
@@ -4995,7 +5399,7 @@ if(wbTrail)wbTrail.onclick=()=>{
     if(!nodes.includes(n)||seen.has(n.id))return false;
     seen.add(n.id);return true;
   }).slice(0,10);
-  if(!list.length)trailMenu.append(el("div","empty-note","Ainda não visitou nenhum nódulo."));
+  if(!list.length)trailMenu.append(el("div","empty-note","Ainda não visitou nenhuma unidade."));
   list.forEach(n=>{
     const b=el("button",null,nodeAddress(n)+"  ·  "+n.name);
     b.onclick=()=>{trailMenu.classList.remove("open");locateNode(n);};
@@ -5090,7 +5494,7 @@ function renderCodeKey(){
     cell.append(dot,el("span",null,String(v)));
     sizes.append(cell);
   });
-  row1.append(sizes,el("span",null,"agentes → tamanho"));
+  row1.append(sizes,el("span",null,"pessoas → tamanho"));
   host.append(row1);
   // 2. ramos (modo estrutura) ou rampa (modos de calor)
   if(colorMode==="struct"){
@@ -5135,7 +5539,7 @@ function renderCodeKey(){
       (colorMode==="team"?"agentes":"tarefas")+" · mediana "+med+" · máximo "+hi));
   }
   // 3. o dourado
-  host.append(el("div","ck-row","★ dourado = responsável do nódulo"));
+  host.append(el("div","ck-row","★ dourado = responsável da unidade"));
 }
 
 /* ============================================================
@@ -5753,9 +6157,9 @@ function comecarArrasto(){
   if(svg){svg.removeAttribute("width");svg.removeAttribute("height");
     svg.setAttribute("preserveAspectRatio","xMidYMid meet");}
   const T=document.getElementById("npTitle"),S=document.getElementById("npSub");
-  if(dragAtivo.tipo==="agenteLote"){T.textContent="Largar "+dragAtivo.rotulo+" em…";S.textContent="Solte sobre o nódulo onde as pessoas selecionadas passam a trabalhar.";}
-  else if(dragAtivo.tipo==="agente"){T.textContent="Largar “"+dragAtivo.rotulo+"” em…";S.textContent="Solte sobre o nódulo onde a pessoa passa a trabalhar.";}
-  else if(dragAtivo.tipo==="tarefa"){T.textContent="Novo destino de “"+dragAtivo.rotulo+"”";S.textContent="Solte sobre o nódulo de chegada da tarefa.";}
+  if(dragAtivo.tipo==="agenteLote"){T.textContent="Largar "+dragAtivo.rotulo+" em…";S.textContent="Solte sobre a unidade onde as pessoas selecionadas passam a trabalhar.";}
+  else if(dragAtivo.tipo==="agente"){T.textContent="Largar “"+dragAtivo.rotulo+"” em…";S.textContent="Solte sobre a unidade onde a pessoa passa a trabalhar.";}
+  else if(dragAtivo.tipo==="tarefa"){T.textContent="Novo destino de “"+dragAtivo.rotulo+"”";S.textContent="Solte sobre a unidade de chegada da tarefa.";}
   else{T.textContent="Mudar “"+dragAtivo.rotulo+"” de lugar";S.textContent="Solte sobre o novo superior hierárquico.";}
   nodePickEl.classList.add("open");
 }
@@ -5947,13 +6351,13 @@ stage.addEventListener("wheel",e=>{
 ============================================================ */
 const scenes=[
   {title:"A rede completa",
-   caption:"Quatro níveis — Executivo (o vértice branco), Coordenação Geral, Setorial e Operacional — com uma cor por ramo. Os pontos em órbita são os agentes de cada nódulo; o dourado é o responsável.",
+   caption:"Quatro níveis — Executivo (o vértice branco), Coordenação Geral, Setorial e Operacional — com uma cor por ramo. Os pontos em órbita são as pessoas de cada unidade; o dourado é o responsável.",
    cam:{phi:1.05,radius:31,targetY:2.6,auto:0.07},show:{hier:true,procs:true,isolate:null}},
-  {title:"Nódulos e agentes",
-   caption:"Cada nódulo tem um agente responsável (★, em funções) e a restante equipa. Clique numa esfera para lhe mudar o nível, a equipa e as tarefas.",
+  {title:"Unidades e pessoas",
+   caption:"Cada unidade tem uma pessoa responsável (★, em funções) e a restante equipa. Clique numa esfera para lhe mudar o nível, a equipa e as tarefas.",
    cam:{phi:1.22,radius:18,targetY:2.0,auto:0.10},show:{hier:false,procs:false,isolate:null}},
   {title:"Quem responde a quem",
-   caption:"As ligações douradas sobem: a Coordenação Operacional responde à Setorial, esta à Geral, e a Geral ao Executivo. Arraste um nódulo para outro no separador Nódulos para redesenhar a hierarquia.",
+   caption:"As ligações douradas sobem: a Coordenação Operacional responde à Setorial, esta à Geral, e a Geral ao Executivo. Arraste uma unidade para outra no separador Unidades para redesenhar a hierarquia.",
    cam:{phi:0.92,radius:24,targetY:4.4,auto:0.05},show:{hier:true,procs:false,isolate:null}},
   {title:"Procedimentos",
    caption:"Por baixo da estrutura, cada arco é uma tarefa com sentido (o cone aponta da origem para o destino). Os arcos à mesma profundidade formam um procedimento — clique num, no painel, para abrir o fluxograma.",
@@ -5961,8 +6365,8 @@ const scenes=[
   {title:"Tarefas com sentido",
    caption:"As correntes douradas percorrem cada tarefa da origem ao destino. Clique num arco para editar a descrição, quem responde, a duração — ou até as pontas e o procedimento a que pertence.",
    cam:{phi:1.32,radius:15,targetY:-2.2,auto:0.06},show:{hier:false,procs:true,isolate:null}},
-  {title:"Agentes e responsabilidade",
-   caption:"As equipas vivem nos nódulos: a esfera dourada é quem está em funções, e as tarefas que saem daí são atribuídas a agentes desse mesmo nódulo. Arraste agentes entre nódulos no separador Agentes.",
+  {title:"Pessoas e responsabilidade",
+   caption:"As equipas vivem nas unidades: a esfera dourada é quem está em funções, e as tarefas que saem daí são atribuídas a pessoas dessa mesma unidade. Arraste pessoas entre unidades no separador Pessoas.",
    cam:{phi:1.12,radius:14,targetY:3.0,auto:0.08},show:{hier:true,procs:false,isolate:null}},
   {title:"Fluxogramas e organograma",
    caption:"Cada procedimento desdobra-se num fluxograma 2D que pode ir estendendo passo a passo, e o botão Organograma 2D mapeia a hierarquia inteira — ambos regressam a estes painéis 3D.",
@@ -6165,13 +6569,13 @@ let focusNodesOnProcs=true;
 (function(){
   const row=el("div","row");
   row.style.color="var(--gold)";
-  const lblSpan=el("span","row-name","Só mostrar nódulos ativos");
-  lblSpan.title="Quando procedimentos estão visíveis, esbate os nódulos inativos — um nódulo hierárquico conta como ativo se algum nódulo abaixo dele estiver ativo";
+  const lblSpan=el("span","row-name","Só mostrar unidades ativas");
+  lblSpan.title="Quando procedimentos estão visíveis, esbate as unidades inativas — uma unidade hierárquica conta como ativa se alguma unidade abaixo dela estiver ativa";
   const sw=el("button","switch on");
   sw.style.color="var(--gold)";
   sw.setAttribute("role","switch");
   sw.setAttribute("aria-checked","true");
-  sw.setAttribute("aria-label","Mostrar apenas nódulos ativos nos procedimentos visíveis");
+  sw.setAttribute("aria-label","Mostrar apenas unidades ativas nos procedimentos visíveis");
   sw.onclick=()=>{
     focusNodesOnProcs=!focusNodesOnProcs;
     sw.classList.toggle("on",focusNodesOnProcs);
@@ -6396,7 +6800,7 @@ function updateLayerCounts(){
       // Row tooltip doubles as a preview of the procedure's shape
       const st=procStats(p);
       p._nameEl.title="Abrir fluxograma de “"+p.name+"”\n"+
-        p.tasks.length+" tarefa(s) · "+st.graph.ids.length+" nódulo(s)"+
+        p.tasks.length+" tarefa(s) · "+st.graph.ids.length+" unidade(s)"+
         (st.forks?(" · "+st.forks+" ramificação(ões)"):"")+
         "\nCaminho crítico: "+fmtDays(st.total);
     }
@@ -6522,7 +6926,7 @@ document.getElementById("addGroupBtn").onclick=()=>{
 const nodeList=document.getElementById("nodeList");
 let nodeSearch="";
 nodeList.parentNode.insertBefore(
-  makeTabSearch("Pesquisar nódulos…",v=>{nodeSearch=v;renderNodeList();}),
+  makeTabSearch("Pesquisar unidades…",v=>{nodeSearch=v;renderNodeList();}),
   nodeList
 );
 function renderNodeList(){
@@ -6611,7 +7015,7 @@ function renderNodeList(){
   if(flatQ){
     const hits=nodes.filter(n=>n.name.toLowerCase().includes(flatQ))
       .sort((a,b)=>a.tier-b.tier||a.name.localeCompare(b.name));
-    if(!hits.length)nodeList.append(el("div","empty-note","Nenhum nódulo com esse nome."));
+    if(!hits.length)nodeList.append(el("div","empty-note","Nenhuma unidade com esse nome."));
     hits.forEach(n=>addRow(n,0,true));
     return;
   }
@@ -6711,7 +7115,7 @@ const agentList=document.getElementById("agentList");
 let agentGroupMode="node";
 let agentSearch="";
 agentList.parentNode.insertBefore(
-  makeTabSearch("Pesquisar agentes…",v=>{agentSearch=v;renderAgentsTab();}),
+  makeTabSearch("Pesquisar pessoas…",v=>{agentSearch=v;renderAgentsTab();}),
   agentList
 );
 /* Duplo clique numa linha de unidade ou de pessoa renomeia no sítio. */
@@ -6745,7 +7149,7 @@ agentList.addEventListener("dblclick",e=>{
 });
 /* ---- Seleção múltipla de pessoas ----
    Ctrl+clique seleciona; arrastar uma linha selecionada leva o grupo todo
-   para o nódulo onde se largar. */
+   para a unidade onde se largar. */
 const selAgentes=new Set();
 function syncSelAgentes(){
   document.querySelectorAll("#agentList .row[data-aid]").forEach(r=>{
@@ -7048,7 +7452,7 @@ function nodeDropHeader(n,expanded,count){
   h.append(tg);
 
   const nm=el("span","nm",n.name+" · "+TIER[n.tier].label);
-  nm.title="Abrir painel do nódulo";
+  nm.title="Abrir painel da unidade";
   nm.setAttribute("role","link");nm.tabIndex=0;
   nm.onclick=()=>selectNode(n);
   nm.onkeydown=e=>{if(e.key==="Enter")selectNode(n);};
@@ -7076,7 +7480,7 @@ function renderAgentsTab(){
   if(typeof window.recalcSimAus==="function")window.recalcSimAus();
   agentList.innerHTML="";
   const tog=el("div","layer-pick");
-  [["node","Por nódulo"],["category","Por categoria"]].forEach(([m,lbl])=>{
+  [["node","Por unidade"],["category","Por categoria"]].forEach(([m,lbl])=>{
     const b=el("button",agentGroupMode===m?"sel":"",lbl);
     b.style.color="var(--steel)";
     b.onclick=()=>{agentGroupMode=m;renderAgentsTab();};
@@ -7088,7 +7492,7 @@ function renderAgentsTab(){
   if(aq){
     const hits=agents.filter(a=>a.name.toLowerCase().includes(aq))
       .sort((x,y)=>x.name.localeCompare(y.name));
-    if(!hits.length)agentList.append(el("div","empty-note","Nenhum agente com esse nome."));
+    if(!hits.length)agentList.append(el("div","empty-note","Nenhuma pessoa com esse nome."));
     hits.forEach(a=>{
       const n=byId(a.nodeId);
       agentList.append(agentRowBtn(a,a.category+(n?(" · "+n.name):"")));
@@ -7103,7 +7507,7 @@ function renderAgentsTab(){
       agentList.append(nodeDropHeader(n,expanded,list.length));
       if(expanded){
         if(!list.length){
-          const em=el("div","empty-note","— arraste um agente para aqui —");
+          const em=el("div","empty-note","— arraste uma pessoa para aqui —");
           em.style.fontSize=".64rem";
           agentList.append(em);
         }
@@ -7430,14 +7834,14 @@ function openReassign(a,imp){
   if(imp.tasks.length)bits.push("tem "+imp.tasks.length+" tarefa(s) atribuída(s)");
   return openReassignPanel({
     title:"Remover “"+a.name+"”",
-    sub:"Este agente "+bits.join(" e ")+". Escolha quem assume cada responsabilidade antes de o remover.",
-    confirm:"Remover agente",
+    sub:"Esta pessoa "+bits.join(" e ")+". Escolha quem assume cada responsabilidade antes de o remover.",
+    confirm:"Remover pessoa",
     build:(body,quick)=>{
     const taskSels=[];
     let primarySel=null;
 
     if(imp.isPrimary){
-      body.append(el("div","ra-sec","Responsável do nódulo"));
+      body.append(el("div","ra-sec","Responsável da unidade"));
       const cands=agentsOf(imp.node.id).filter(x=>x!==a);
       const row=el("div","ra-row first");
       const what=el("div","ra-what");
@@ -7449,7 +7853,7 @@ function openReassign(a,imp){
           .concat(cands.map(x=>({label:x.name+" ("+x.category+")",value:x.id}))),cands[0].id,()=>{});
         row.append(primarySel);
       }else{
-        row.append(el("div","ra-none","Sem outros agentes neste nódulo"));
+        row.append(el("div","ra-none","Sem outras pessoas nesta unidade"));
       }
       body.append(row);
     }
@@ -7473,7 +7877,7 @@ function openReassign(a,imp){
           row.append(sel);
           taskSels.push({t,sel});
         }else{
-          row.append(el("div","ra-none","Sem outros agentes na origem"));
+          row.append(el("div","ra-none","Sem outras pessoas na origem"));
           taskSels.push({t,sel:null});
         }
         body.append(row);
@@ -7511,14 +7915,14 @@ function nodeImpact(n){
 }
 function openNodeReassign(n,imp){
   const bits=[];
-  if(imp.agents.length)bits.push(imp.agents.length+" agente(s)");
+  if(imp.agents.length)bits.push(imp.agents.length+" pessoa(s)");
   if(imp.tasks.length)bits.push(imp.tasks.length+" tarefa(s)");
-  if(imp.kids.length)bits.push(imp.kids.length+" subnódulo(s)");
+  if(imp.kids.length)bits.push(imp.kids.length+" subunidade(s)");
   const others=nodes.filter(m=>m!==n);
   return openReassignPanel({
     title:"Remover “"+n.name+"”",
-    sub:"Este nódulo tem "+bits.join(", ")+". Nada é movido automaticamente — escolha o destino de cada item.",
-    confirm:"Remover nódulo",
+    sub:"Esta unidade tem "+bits.join(", ")+". Nada é movido automaticamente — escolha o destino de cada item.",
+    confirm:"Remover unidade",
     build:(body,quick)=>{
       const agRows=[],tkRows=[],kidRows=[];
       const nodeOpts=list=>list.map(m=>({label:m.name+" (T"+m.tier+")",value:m.id}));
@@ -7555,7 +7959,7 @@ function openNodeReassign(n,imp){
       }
 
       if(imp.agents.length){
-        body.append(el("div","ra-sec","Agentes ("+imp.agents.length+")"));
+        body.append(el("div","ra-sec","Pessoas ("+imp.agents.length+")"));
         const host=el("div");body.append(host);
         let offer=null;
         imp.agents.forEach((a,i)=>{
@@ -7603,7 +8007,7 @@ function openNodeReassign(n,imp){
       }
 
       if(imp.kids.length){
-        body.append(el("div","ra-sec","Subnódulos ("+imp.kids.length+")"));
+        body.append(el("div","ra-sec","Subunidades ("+imp.kids.length+")"));
         const host=el("div");body.append(host);
         let offer=null;
         imp.kids.forEach((m,i)=>{
@@ -7611,7 +8015,7 @@ function openNodeReassign(n,imp){
           const row=el("div","ra-row undecided"+(i===0?" first":""));
           const what=el("div","ra-what");
           what.append(el("div","t",m.name));
-          what.append(el("div","s","Nível "+m.tier+" · "+agentsOf(m.id).length+" agente(s)"));
+          what.append(el("div","s","Nível "+m.tier+" · "+agentsOf(m.id).length+" pessoa(s)"));
           row.append(what);
           if(cands.length){
             const sel=mkSelect([{label:"— escolher novo pai…",value:""}].concat(nodeOpts(cands)),"",v=>{
@@ -7627,7 +8031,7 @@ function openNodeReassign(n,imp){
           }
           host.append(row);
         });
-        offer=makeBulkOffer(body,kidRows,"subnódulo");
+        offer=makeBulkOffer(body,kidRows,"subunidade");
       }
 
       const up=(n.parent&&byId(n.parent))?n.parent:null;
@@ -7657,9 +8061,9 @@ function openNodeReassign(n,imp){
           return false;
         }
         const missing=[]
-          .concat(agRows.filter(r=>!r.sel.value).map(r=>"agente “"+r.a.name+"”"))
+          .concat(agRows.filter(r=>!r.sel.value).map(r=>"pessoa “"+r.a.name+"”"))
           .concat(tkRows.filter(r=>!r.sel.value).map(r=>"tarefa “"+shortDesc(r.t)+"”"))
-          .concat(kidRows.filter(r=>r.sel&&!r.sel.value).map(r=>"subnódulo “"+r.m.name+"”"));
+          .concat(kidRows.filter(r=>r.sel&&!r.sel.value).map(r=>"subunidade “"+r.m.name+"”"));
         if(missing.length){
           flash("Falta escolher destino para "+missing.length+" item(ns): "+
             missing.slice(0,2).join(", ")+(missing.length>2?"…":""),{type:"err",duration:6000});
@@ -7691,7 +8095,7 @@ function applyNodeRemoval(n,plan){
     // Mudar um sub-node de sítio pode aprofundar a subárvore de outro e
     // invalidar uma escolha que era legal quando o painel foi construído.
     // Sem esta rede, esse filho ficava agarrado ao node que se está a remover
-    // — e a remoção falhava depois de as tarefas e os agentes já terem mudado.
+    // — e a remoção falhava depois de as tarefas e as pessoas já terem mudado.
     if(to&&reparentNode(x.m,to))return;
     const alt=nodes.find(o=>o!==n&&o!==x.m&&canReparent(x.m,o));
     if(alt)reparentNode(x.m,alt);
@@ -7717,7 +8121,7 @@ async function removeNodeInteractive(n){
       {type:"err",duration:6000});
     return false;
   }
-  if(nodes.length<=1){flash("Não é possível remover o único nódulo.",{type:"err"});return false;}
+  if(nodes.length<=1){flash("Não é possível remover a única unidade.",{type:"err"});return false;}
   const imp=nodeImpact(n);
   // A sub-node whose own subtree is too deep to fit under any remaining node has
   // nowhere to go — typically when removing the apex. Say so up front instead of
@@ -7725,23 +8129,23 @@ async function removeNodeInteractive(n){
   const stuck=imp.kids.filter(m=>!nodes.some(o=>o!==n&&canReparent(m,o)));
   if(stuck.length){
     flash("Não é possível remover “"+n.name+"”: "+
-      (stuck.length===1?("“"+stuck[0].name+"” não tem"):(stuck.length+" subnódulos não têm"))+
-      " outro nódulo onde encaixar. Mova-os ou crie um nível antes.",{type:"err",duration:7000});
+      (stuck.length===1?("“"+stuck[0].name+"” não tem"):(stuck.length+" subunidades não têm"))+
+      " outra unidade onde encaixar. Mova-as ou crie um nível antes.",{type:"err",duration:7000});
     return false;
   }
   if(!imp.agents.length&&!imp.tasks.length&&!imp.kids.length){
-    if(!(await askConfirm("Apagar o nódulo “"+n.name+"”? Esta ação não pode ser desfeita.",
+    if(!(await askConfirm("Apagar a unidade “"+n.name+"”? Esta ação não pode ser desfeita.",
       {yes:"Apagar",danger:true})))return false;
     const ok=deleteNode(n);
-    flash(ok?"Nódulo removido.":"Não foi possível remover o nódulo.",ok?undefined:{type:"err"});
+    flash(ok?"Unidade removida.":"Não foi possível remover a unidade.",ok?undefined:{type:"err"});
     return ok;
   }
   const plan=await openNodeReassign(n,imp);
   if(!plan)return false;
   const ok=applyNodeRemoval(n,plan);
-  if(!ok){flash("Não foi possível remover o nódulo.",{type:"err"});return false;}
+  if(!ok){flash("Não foi possível remover a unidade.",{type:"err"});return false;}
   const moved=(plan.agents||[]).length,kept=(plan.tasks||[]).filter(x=>x.to).length;
-  flash("Nódulo removido"+(moved?(" · "+moved+" agente(s) transferido(s)"):"")+
+  flash("Unidade removida"+(moved?(" · "+moved+" pessoa(s) transferida(s)"):"")+
     (kept?(" · "+kept+" tarefa(s) religada(s)"):"")+".");
   return true;
 }
@@ -7773,17 +8177,17 @@ async function removeAgentInteractive(a){
   const imp=agentImpact(a);
   if(!imp.tasks.length&&!imp.isPrimary){
     const where=imp.node?(" de “"+imp.node.name+"”"):"";
-    if(!(await askConfirm("Remover o agente “"+a.name+"”"+where+"? Nada depende dele.",
+    if(!(await askConfirm("Remover a pessoa “"+a.name+"”"+where+"? Nada depende dele.",
       {yes:"Remover",danger:true})))return false;
     applyAgentRemoval(a,null);
-    flash("Agente removido.");
+    flash("Pessoa removida.");
     return true;
   }
   const plan=await openReassign(a,imp);
   if(!plan)return false;
   applyAgentRemoval(a,plan);
   const moved=plan.tasks.filter(x=>x.to).length;
-  flash("Agente removido"+(moved?(" · "+moved+" tarefa(s) reatribuída(s)"):"")+".");
+  flash("Pessoa removida"+(moved?(" · "+moved+" tarefa(s) reatribuída(s)"):"")+".");
   return true;
 }
 if(reassignEl)reassignEl.addEventListener("pointerdown",e=>{
@@ -7849,7 +8253,7 @@ function buildCrumbs(n){
   while(cur&&guard++<12){chain.unshift(cur);cur=cur.parent?byId(cur.parent):null;}
   if(chain.length<2)return null;
   const wrap=el("div","crumbs");
-  wrap.setAttribute("aria-label","Hierarquia acima deste nódulo");
+  wrap.setAttribute("aria-label","Hierarquia acima desta unidade");
   chain.forEach((m,i)=>{
     if(i)wrap.append(el("span","sep","›"));
     if(m===n){
@@ -7870,7 +8274,7 @@ function renderNodeDetail(head,closeBtn){
   const n=selected.node;
   const titleIn=el("input","d-title-input");
   titleIn.value=n.name;titleIn.maxLength=40;
-  titleIn.setAttribute("aria-label","Nome do nódulo");
+  titleIn.setAttribute("aria-label","Nome da unidade");
   titleIn.addEventListener("change",()=>{
     const v=titleIn.value.trim();
     if(!v){titleIn.value=n.name;return;}
@@ -7923,13 +8327,13 @@ function renderNodeDetail(head,closeBtn){
     const name=el("button","row-name"+(a.absent?" absent":""),a.name);
     name.style.background="none";name.style.border="none";
     name.style.font="inherit";name.style.cursor="pointer";name.style.padding="0";
-    name.title=a.absent?(a.name+" está ausente — abrir painel"):"Abrir painel do agente";
+    name.title=a.absent?(a.name+" está ausente — abrir painel"):"Abrir painel da pessoa";
     name.setAttribute("aria-label","Abrir o painel de "+a.name);
     name.onclick=()=>selectAgent(a);
     const cat=el("span","count",a.category);
     row.draggable=true;
     row.style.cursor="grab";
-    row.title="Arraste para outro nódulo (esfera, lista de nódulos) para transferir";
+    row.title="Arraste para outra unidade (esfera, lista de unidades) para transferir";
     row.addEventListener("dragstart",e=>{
       dragPayload={kind:"agent",id:a.id};
       e.dataTransfer.effectAllowed="move";
@@ -7937,7 +8341,7 @@ function renderNodeDetail(head,closeBtn){
     });
     row.addEventListener("dragend",()=>{dragPayload=null;});
     const del=el("button","icon-btn","✕");
-    del.title="Remover agente";
+    del.title="Remover pessoa";
     del.setAttribute("aria-label","Remover "+a.name);
     del.onclick=e=>{
       e.stopPropagation();
@@ -7947,7 +8351,7 @@ function renderNodeDetail(head,closeBtn){
     detail.append(row);
   });
   const addA=el("button","add-btn compact");
-  addA.innerHTML=`<span class="gplus small" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 14 14"><rect x="6" y="0" width="2" height="6" fill="var(--gp-a)"/><rect x="8" y="6" width="6" height="2" fill="var(--gp-b)"/><rect x="6" y="8" width="2" height="6" fill="var(--gp-c)"/><rect x="0" y="6" width="6" height="2" fill="var(--gp-d)"/><rect x="6" y="6" width="2" height="2" fill="var(--gp-b)"/></svg></span>Adicionar agente`;
+  addA.innerHTML=`<span class="gplus small" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 14 14"><rect x="6" y="0" width="2" height="6" fill="var(--gp-a)"/><rect x="8" y="6" width="6" height="2" fill="var(--gp-b)"/><rect x="6" y="8" width="2" height="6" fill="var(--gp-c)"/><rect x="0" y="6" width="6" height="2" fill="var(--gp-d)"/><rect x="6" y="6" width="2" height="2" fill="var(--gp-b)"/></svg></span>Adicionar pessoa`;
   addA.onclick=()=>{
     const isFirst=agentsOf(n.id).length===0;
     addAgent(n.id,isFirst,isFirst?PRIMARY_CAT_BY_TIER[Math.min(n.tier,PRIMARY_CAT_BY_TIER.length-1)]:"Técnico Superior");
@@ -7988,16 +8392,16 @@ function renderNodeDetail(head,closeBtn){
       detail.append(row);
     });
   });
-  if(!any)detail.append(el("div","empty-note","Nenhuma tarefa liga este nódulo."));
+  if(!any)detail.append(el("div","empty-note","Nenhuma tarefa liga esta unidade."));
 
   // New task
-  detail.append(el("h4",null,"Nova tarefa a partir deste nódulo"));
+  detail.append(el("h4",null,"Nova tarefa a partir desta unidade"));
   if(!pendingTarget){
     const wrap=el("div","search-wrap");
     const input=el("input","search-input");
-    input.type="text";input.placeholder="Procurar nódulo de destino…";
+    input.type="text";input.placeholder="Procurar unidade de destino…";
     input.value=searchQuery;
-    input.setAttribute("aria-label","Procurar o nódulo de destino");
+    input.setAttribute("aria-label","Procurar a unidade de destino");
     const results=el("div","search-results");
     function renderResults(){
       results.innerHTML="";
@@ -8012,7 +8416,7 @@ function renderNodeDetail(head,closeBtn){
           results.append(hit);
         });
       if(!results.children.length)
-        results.append(el("div","empty-note","Nenhum nódulo com esse nome."));
+        results.append(el("div","empty-note","Nenhuma unidade com esse nome."));
     }
     input.addEventListener("input",()=>{searchQuery=input.value;renderResults();});
     wrap.append(input);
@@ -8024,7 +8428,7 @@ function renderNodeDetail(head,closeBtn){
     chosen.innerHTML=`<span class="swatch" style="background:${hex(pendingTarget.color)}"></span>
       ${esc(n.name)} → <b>${esc(pendingTarget.name)}</b>`;
     const clear=el("button","clear","✕");
-    clear.setAttribute("aria-label","Limpar o nódulo escolhido");
+    clear.setAttribute("aria-label","Limpar a unidade escolhida");
     clear.onclick=()=>{pendingTarget=null;searchQuery="";renderDetail();};
     chosen.append(clear);
     detail.append(chosen);
@@ -8121,7 +8525,7 @@ function renderNodeDetail(head,closeBtn){
   const isApex=isApexNode(n);
   const encumbered=hasAgents||hasKids||hasTasks;
   const deletable=nodes.length>1&&!isApex;
-  const delBtn=el("button","btn tiny",(encumbered&&deletable)?"Apagar nódulo…":"Apagar nódulo");
+  const delBtn=el("button","btn tiny",(encumbered&&deletable)?"Apagar unidade…":"Apagar unidade");
   delBtn.style.marginTop="16px";
   delBtn.style.borderColor=deletable?"#E0554F":"var(--hairline)";
   delBtn.style.color=deletable?"#E0554F":"var(--ink-dim)";
@@ -8130,12 +8534,12 @@ function renderNodeDetail(head,closeBtn){
   delBtn.title=isApex
     ?"O Executivo é permanente — pode renomeá-lo e mudar a equipa, mas não removê-lo"
     :(!deletable
-      ?"Não é possível remover o único nódulo"
+      ?"Não é possível remover a única unidade"
       :(encumbered
         ?("Abre um painel para reatribuir "+
-          [hasAgents?"agentes":null,hasTasks?"tarefas":null,hasKids?"subnódulos":null]
+          [hasAgents?"agentes":null,hasTasks?"tarefas":null,hasKids?"subunidades":null]
             .filter(Boolean).join(", ")+" antes de apagar")
-        :"Apagar este nódulo"));
+        :"Apagar esta unidade"));
   delBtn.onclick=()=>removeNodeInteractive(n);
   detail.append(delBtn);
   if(isApex)detail.append(el("div","foot-note",
@@ -8148,7 +8552,7 @@ function renderAgentDetail(head,closeBtn){
 
   const titleIn=el("input","d-title-input");
   titleIn.value=a.name;titleIn.maxLength=30;
-  titleIn.setAttribute("aria-label","Nome do agente");
+  titleIn.setAttribute("aria-label","Nome da pessoa");
   titleIn.addEventListener("change",()=>{
     const v=titleIn.value.trim();
     if(!v){titleIn.value=a.name;return;}
@@ -8161,7 +8565,7 @@ function renderAgentDetail(head,closeBtn){
   head.append(titleIn,closeBtn);
   detail.append(head);
 
-  const subLine=el("div","d-sub",a.primary&&n?("Responsável — "+n.name):"Agente de apoio");
+  const subLine=el("div","d-sub",a.primary&&n?("Responsável — "+n.name):"Pessoa de apoio");
   if(a.absent){
     const cover=coverFor(a);
     subLine.append(el("span","cont-tag"+(cover?" cover":""),
@@ -8181,7 +8585,7 @@ function renderAgentDetail(head,closeBtn){
     const opts=substituteOptions(a);
     contRow.append(el("label",null,"Quem assegura"));
     if(!opts.length){
-      contRow.append(el("div","empty-note","Sem ninguém disponível nos nódulos vizinhos."));
+      contRow.append(el("div","empty-note","Sem ninguém disponível nas unidades vizinhas."));
     }else{
       const sel=mkSelect([{label:"— ninguém —",value:""}].concat(opts.map(o=>{
         const on=byId(o.nodeId);
@@ -8202,7 +8606,7 @@ function renderAgentDetail(head,closeBtn){
 
   renderCredencial(a);
 
-  detail.append(el("h4",null,"Nódulo onde está"));
+  detail.append(el("h4",null,"Unidade onde está"));
   if(n){
     const row=el("button","conn-row");
     row.style.color=hex(n.color);
@@ -8214,7 +8618,7 @@ function renderAgentDetail(head,closeBtn){
     row.onclick=()=>selectNode(n);
     detail.append(row);
   }else{
-    detail.append(el("div","empty-note","Sem nódulo atribuído."));
+    detail.append(el("div","empty-note","Sem unidade atribuída."));
   }
 
   detail.append(el("h4",null,"Tarefas à sua responsabilidade"));
@@ -8235,7 +8639,7 @@ function renderAgentDetail(head,closeBtn){
       detail.append(row);
     });
   });
-  if(!any)detail.append(el("div","empty-note","Nenhuma tarefa atribuída a este agente."));
+  if(!any)detail.append(el("div","empty-note","Nenhuma tarefa atribuída a esta pessoa."));
   renderReposDe("agente",a.id);
 }
 
@@ -8592,10 +8996,10 @@ function computeHoverKin(){
 }
 /* ---- realce estrutural da SELEÇÃO ----
    O pairar mostra a vizinhança imediata; a seleção mostra a ESTRUTURA:
-   um nódulo acende a linhagem inteira (para cima e para baixo), uma tarefa
-   acende o procedimento todo (nódulos e arcos), um grupo acende a união dos
+   uma unidade acende a linhagem inteira (para cima e para baixo), uma tarefa
+   acende o procedimento todo (unidades e arcos), um grupo acende a união dos
    seus procedimentos — e o resto recua, para o olhar ficar onde se está.
-   nos = ids de nódulos acesos; procs = índices de procedimentos acesos
+   nos = ids de unidades acesas; procs = índices de procedimentos acesos
    (null = acender arcos que toquem na linhagem). */
 let selKin=null;
 function computeSelKin(sel){
@@ -8662,7 +9066,7 @@ stage.addEventListener("pointermove",e=>{
     tip.querySelector(".t-role").textContent="Nível "+n.tier+" · "+TIER[n.tier].label;
     tip.querySelector(".t-agents").textContent=
       (prim?("★ "+prim.name+" ("+prim.category+") · "):"")+
-      agentsOf(n.id).length+" agente(s) · clique para editar";
+      agentsOf(n.id).length+" pessoa(s) · clique para editar";
     tip.style.display="block";
   }else if(hit&&hit.type==="task"){
     const t=hit.task,p=processes[t.proc];
@@ -8871,13 +9275,13 @@ function procWarnings(p){
   const g=procGraph(p);
   const w=[];
   if(g.cyclic)w.push({sev:"warn",msg:"O fluxo tem um ciclo — volta a um passo anterior."});
-  if(g.tasks.length&&!g.starts.length)w.push({sev:"warn",msg:"Não há passo inicial: todos os nódulos recebem entrada."});
+  if(g.tasks.length&&!g.starts.length)w.push({sev:"warn",msg:"Não há passo inicial: todas as unidades recebem entrada."});
   if(g.starts.length>1)w.push({sev:"info",msg:g.starts.length+" pontos de partida independentes."});
   p.tasks.forEach(t=>{
     if(!t.agent)return;
     const a=agentById(t.agent);
     if(!a)w.push({sev:"warn",msg:"“"+shortDesc(t)+"” tem um responsável que já não existe.",task:t});
-    else if(a.nodeId!==t.a)w.push({sev:"warn",msg:"O responsável de “"+shortDesc(t)+"” já não pertence ao nódulo de origem.",task:t});
+    else if(a.nodeId!==t.a)w.push({sev:"warn",msg:"O responsável de “"+shortDesc(t)+"” já não pertence à unidade de origem.",task:t});
   });
   return w;
 }
@@ -9074,7 +9478,7 @@ function renderFlowchart(p){
   const MODES=[{k:"flow",l:"Fluxo"},{k:"lanes",l:"Pistas"},{k:"gantt",l:"Cronograma"}];
   const nextMode=MODES[(Math.max(0,MODES.findIndex(m=>m.k===fcMode))+1)%MODES.length];
   const modeBtn=el("button","btn tiny","Ver: "+nextMode.l);
-  modeBtn.title="Alternar entre fluxo ramificado, pistas por nódulo e cronograma";
+  modeBtn.title="Alternar entre fluxo ramificado, pistas por unidade e cronograma";
   modeBtn.onclick=()=>{fcMode=nextMode.k;renderFlowchart(p);};
   const feyBtn=el("button","btn tiny","Diagrama");
   feyBtn.title="Vista de interações — bifurcações e convergências, com zoom";
@@ -9103,7 +9507,7 @@ function renderFlowchart(p){
   /* ---- stats ---- */
   const chips=el("div","fc-chips");
   chips.append(el("span","fc-chip",g.tasks.length+" tarefa(s)"));
-  chips.append(el("span","fc-chip",g.ids.length+" nódulo(s)"));
+  chips.append(el("span","fc-chip",g.ids.length+" unidade(s)"));
   if(st.forks)chips.append(el("span","fc-chip",st.forks+" ramificação(ões)"));
   if(st.joins)chips.append(el("span","fc-chip",st.joins+" convergência(s)"));
   if(g.tasks.length){
@@ -9243,7 +9647,7 @@ function renderFlowchart(p){
       box.append(el("div","n",n?abbrev(n.name):"?"));
       const prim=n?primaryOf(n.id):null;
       box.append(el("div","a",prim?("★ "+prim.name):"sem responsável"));
-      box.title=(n?n.name:"?")+" — abrir painel do nódulo";
+      box.title=(n?n.name:"?")+" — abrir painel da unidade";
       box.onclick=()=>selectNode(n);
       plane.append(box);
       const fork=el("button","fc-mini","⑂");
@@ -9368,11 +9772,11 @@ function renderFlowchart(p){
   function buildInsertForm(t){
     const oldB=t.b;
     side.append(el("h5",null,"Inserir passo"));
-    side.append(el("div","side-note","Divide “"+shortDesc(t)+"” em dois passos, passando por um nódulo intermédio."));
+    side.append(el("div","side-note","Divide “"+shortDesc(t)+"” em dois passos, passando por uma unidade intermédia."));
     const fg=el("div","field-grid");
-    fg.append(el("label",null,"Nódulo intermédio"));
+    fg.append(el("label",null,"Unidade intermédia"));
     let midId="";
-    fg.append(mkSelect([{label:"— escolher nódulo…",value:""}]
+    fg.append(mkSelect([{label:"— escolher unidade…",value:""}]
       .concat(nodes.filter(m=>m.id!==t.a&&m.id!==oldB).map(m=>({label:m.name+" (T"+m.tier+")",value:m.id}))),
       "",v=>{midId=v;}));
     fg.append(el("label",null,"Nome do novo passo"));
@@ -9384,7 +9788,7 @@ function renderFlowchart(p){
     side.append(fg);
     const go=el("button","btn primary","Inserir");
     go.onclick=()=>{
-      if(!midId){flash("Escolha o nódulo intermédio.",{type:"err"});return;}
+      if(!midId){flash("Escolha a unidade intermédia.",{type:"err"});return;}
       const tail=createTask(idx,midId,oldB,d.value.trim()||undefined,
         (primaryOf(midId)||{}).id||null,du.value.trim()||undefined);
       // Só religar a original quando a segunda metade existir de facto
@@ -9407,7 +9811,7 @@ function renderFlowchart(p){
     if(fcNewFrom){
       const n=byId(fcNewFrom);
       side.append(el("div","side-note",
-        "Nova saída a partir de “"+(n?n.name:"?")+"”. Um nódulo pode ter várias tarefas de saída — é assim que o fluxo ramifica."));
+        "Nova saída a partir de “"+(n?n.name:"?")+"”. Uma unidade pode ter várias tarefas de saída — é assim que o fluxo ramifica."));
     }
     const fg=el("div","field-grid");
     fg.append(el("label",null,"Origem"));
@@ -9565,7 +9969,7 @@ function renderFlowIndex(){
 
 /* ============================================================
    VISTA DE INTERAÇÕES — diagrama à Feynman
-   Os nódulos são vértices, as tarefas são linhas com seta; o tempo corre da
+   As unidades são vértices, as tarefas são linhas com seta; o tempo corre da
    esquerda para a direita. Bifurcações são vértices com várias linhas de
    saída, convergências com várias de entrada — o procGraph já era um DAG,
    isto é a vista que finalmente o mostra como tal. Todo o procedimento tem
@@ -9633,7 +10037,7 @@ function renderFeyPrefsUI(){
   host.append(presets);
   [["resp","Responsáveis nas tarefas"],["dur","Durações junto ao responsável"],
    ["anim","Fluxo animado ao pairar"],["denso","Espaçamento compacto"],
-   ["gargalos","Modo gargalos — espessura pela duração"],["gente","Equipas nos nódulos"]]
+   ["gargalos","Modo gargalos — espessura pela duração"],["gente","Equipas nas unidades"]]
   .forEach(([k,rot])=>{
     const row=el("div","row");
     row.append(el("span","row-name",rot));
@@ -10455,7 +10859,7 @@ function renderFeynman(p){
   if(feyProcId!==p.id){feyVB=null;feyProcId=p.id;}
   const svg=svgEl("svg",{id:"feySvg",role:"img","aria-label":"Diagrama de interações de "+p.name},wrap);
 
-  /* Setas das tarefas: uma por COR — as arestas herdam a cor do nódulo de
+  /* Setas das tarefas: uma por COR — as arestas herdam a cor da unidade de
      origem, para se ver de que serviço parte cada passo sem ler um rótulo. */
   const defs=svgEl("defs",{},svg);
   const setasPorCor={};
@@ -10468,12 +10872,12 @@ function renderFeynman(p){
     setasPorCor[cor]=idm;
     return idm;
   }
-  /* Registos por tarefa e por nódulo, para o realce de cadeia ao pairar. */
+  /* Registos por tarefa e por unidade, para o realce de cadeia ao pairar. */
   const grpPorTarefa={},gvPorNo={};
   const trPorTarefa={};
   let gradN=0;
   const maxDur=Math.max(1,...p.tasks.map(t=>parseDuration(t.duration)||0));
-  /* Chegadas de OUTROS procedimentos a cada nódulo (ramos convergentes) —
+  /* Chegadas de OUTROS procedimentos a cada unidade (ramos convergentes) —
      alimenta o distintivo ⇉ dos vértices. */
   const rrP=ramosDe(p);
   const chegadasNo={};
@@ -10608,7 +11012,7 @@ function renderFeynman(p){
     stats.append(chip);
   }
   // ---- arestas (tarefas) — em arco, com as paralelas separadas ----
-  /* Índice de cada tarefa entre as que ligam o MESMO par de nódulos: é o que
+  /* Índice de cada tarefa entre as que ligam o MESMO par de unidades: é o que
      permite curvá-las para lados alternados em vez de as pousar em cima umas
      das outras. */
   const paresVistos={};
@@ -10743,7 +11147,7 @@ function renderFeynman(p){
     grpPorTarefa[t.id]=gAg?[ga,gAg,menos]:[ga,menos];
   });
 
-  // ---- vértices (nódulos) ----
+  // ---- vértices (unidades) ----
   L.g.ids.forEach(id=>{
     const n=byId(id);const q=L.pos[id];
     if(!n||!q)return;
@@ -10825,7 +11229,7 @@ function renderFeynman(p){
       bg.addEventListener("click",e=>{e.stopPropagation();saltar();});
       bg.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();saltar();}});
     }
-    /* Equipas nos nódulos (preferência): as iniciais de quem lá trabalha. */
+    /* Equipas nas unidades (preferência): as iniciais de quem lá trabalha. */
     if(FEY_PREFS.gente){
       const eq=agentsOf(id).slice(0,3);
       eq.forEach((a2,k)=>{
@@ -10838,7 +11242,7 @@ function renderFeynman(p){
           .textContent=(a2.name.match(/\b\p{L}/gu)||["?"]).slice(0,2).join("").toUpperCase();
       });
     }
-    /* Pairar num nódulo ilumina tudo o que está a montante e a jusante e
+    /* Pairar numa unidade ilumina tudo o que está a montante e a jusante e
        esbate o resto — "o que depende disto?" sem um clique. */
     gv.addEventListener("pointerenter",()=>{
       const ns=new Set([id]),ts=new Set();
@@ -10946,7 +11350,7 @@ function renderFeynman(p){
   let vb=(feyVB&&feyProcId===p.id)?feyVB:
     (vbValido(feyVBs[p.id],L)?{...feyVBs[p.id]}:fit());
   /* Minimapa: o "onde estou" quando o diagrama está ampliado. Pontos nas
-     cores dos nódulos, retângulo dourado a marcar a janela, clique salta. */
+     cores das unidades, retângulo dourado a marcar a janela, clique salta. */
   const mini=el("div");mini.id="feyMini";mini.hidden=true;
   const miniSvg=svgEl("svg",{viewBox:"0 0 "+L.W+" "+L.H,"aria-hidden":"true"},mini);
   L.g.ids.forEach(id2=>{const q2=L.pos[id2],n2=byId(id2);
@@ -11096,7 +11500,7 @@ function renderFeynman(p){
    O organograma simplificado abre por cima do diagrama: escolhe-se a origem
    (se ainda não veio escolhida), depois o destino — com uma linha elástica da
    origem ao cursor e as caixas a acender à passagem. Escolhido o destino,
-   pergunta-se quem do nódulo de ORIGEM fica responsável; "sem responsável"
+   pergunta-se quem da unidade de ORIGEM fica responsável; "sem responsável"
    cria a tarefa assinalada a amarelo.
 ============================================================ */
 const nodePickEl=document.getElementById("nodePick");
@@ -11114,8 +11518,8 @@ function startAddTask(p,origem){
   buildNodePick();
   nodePickEl.classList.add("open");
 }
-/* "+ Novo agente": o mesmo organograma simplificado, mas a escolha é uma só —
-   o nódulo onde o agente entra. Criado, abre-se logo o painel dele para dar
+/* "+ Nova pessoa": o mesmo organograma simplificado, mas a escolha é uma só —
+   a unidade onde a pessoa entra. Criada, abre-se logo o painel dela para dar
    o nome a sério. */
 function startAddAgent(){
   npState={modo:"agente"};
@@ -11127,17 +11531,17 @@ function npTitulos(){
   const T=document.getElementById("npTitle"),S=document.getElementById("npSub");
   if(!npState)return;
   if(npState.modo==="agente"){
-    T.textContent="Novo agente — escolha o nódulo";
-    S.textContent="Clique no nódulo onde o agente vai trabalhar.";
+    T.textContent="Nova pessoa — escolha a unidade";
+    S.textContent="Clique na unidade onde a pessoa vai trabalhar.";
   }else if(npState.modo==="retarget"){
     T.textContent="Novo destino da tarefa";
-    S.textContent="De “"+npState.origem.name+"” até… clique no novo nódulo de chegada.";
+    S.textContent="De “"+npState.origem.name+"” até… clique na nova unidade de chegada.";
   }else if(!npState.origem){
-    T.textContent="Nova tarefa — escolha o nódulo de origem";
-    S.textContent="Clique no nódulo de onde a tarefa parte.";
+    T.textContent="Nova tarefa — escolha a unidade de origem";
+    S.textContent="Clique na unidade de onde a tarefa parte.";
   }else{
-    T.textContent="Nova tarefa — escolha o nódulo de destino";
-    S.textContent="De “"+npState.origem.name+"” até… clique no nódulo de chegada.";
+    T.textContent="Nova tarefa — escolha a unidade de destino";
+    S.textContent="De “"+npState.origem.name+"” até… clique na unidade de chegada.";
   }
 }
 function buildNodePick(){
@@ -11198,7 +11602,7 @@ function buildNodePick(){
   });
 
   /* Quatro tamanhos por profundidade — grande, médio, pequeno, mínimo — para
-     que o topo da hierarquia se leia primeiro. Pairar promove: o nódulo sob o
+     que o topo da hierarquia se leia primeiro. Pairar promove: a unidade sob o
      cursor sobe a grande e os subalternos dele sobem um nível, em tempo real;
      a transição CSS faz o resto parecer contínuo. */
   const NIVEIS=[1.14,0.95,0.78,0.62];
@@ -11240,7 +11644,7 @@ function buildNodePick(){
     svgEl("text",{x:2,y:-1,"text-anchor":"middle","font-size":10},g).textContent=nome;
     svgEl("text",{x:2,y:11,"text-anchor":"middle","font-size":8,opacity:0.7},g)
       .textContent=nodeAddress(n);
-    /* Ponto no canto: este nódulo já é etapa de algum procedimento. A dourado
+    /* Ponto no canto: esta unidade já é etapa de algum procedimento. A dourado
        quando é do procedimento em causa — aí, apontar-lhe é convergir. */
     const eta=etapasDe(n.id);
     if(eta.length){
@@ -11269,8 +11673,8 @@ function buildNodePick(){
 /* ============================================================
    RAMOS ENTRE PROCEDIMENTOS
    Derivados das tarefas, não guardados à parte: um procedimento cujo fluxo
-   desagua num nódulo deste é um ramo CONVERGENTE; um que arranque de um
-   nódulo deste é um ramo DIVERGENTE. Sendo derivado, não há segunda fonte
+   desagua numa unidade deste é um ramo CONVERGENTE; um que arranque de um
+   unidade deste é um ramo DIVERGENTE. Sendo derivado, não há segunda fonte
    de verdade a apodrecer quando se apaga uma tarefa.
 ============================================================ */
 function ramosDe(p){
@@ -11286,7 +11690,7 @@ function ramosDe(p){
   return {convergentes:conv,divergentes:div};
 }
 const ramoAberto={};    // "idProc|idRamo" -> true quando expandido
-/* Em que procedimentos este nódulo já é etapa, e por que tarefas lá chega. */
+/* Em que procedimentos esta unidade já é etapa, e por que tarefas lá chega. */
 function etapasDe(nodeId){
   const out=[];
   processes.forEach(p=>{
@@ -11308,7 +11712,7 @@ function montaConvergencia(){
   const origemId=npState.modo==="retarget"?npState.t.a:npState.origem.id;
   const excluir=npState.modo==="retarget"?npState.t.b:null;
   const pAtual=npState.p||null;
-  /* As etapas de um procedimento, sem repetir nódulos e sem oferecer a origem
+  /* As etapas de um procedimento, sem repetir unidades e sem oferecer a origem
      nem o destino que já lá está. */
   const etapasDoProc=(pp)=>{
     const vistos=new Set(),itens=[];
@@ -11555,7 +11959,7 @@ function openAgentPick(st){
     lista.append(el("div","empty-note","“"+st.origem.name+"” não tem ninguém na equipa — a tarefa fica sem responsável."));
   }
   eq.forEach(a=>{
-    const b=el("button","ap-agente");
+    const b=el("button","ap-pessoa");
     b.append(el("span",null,(a.primary?"★ ":"")+a.name));
     b.append(el("span","cat",a.category));
     b.onclick=()=>apChoose(a.id);
@@ -12090,7 +12494,7 @@ function renderTaskListAll(){
       row.append(el("span","t-route",
         (A?abbrev(A.name):"?")+" → "+(B?abbrev(B.name):"?")
         +(ag?(" · "+ag.name):"")
-        +(t.duration?(" · "+t.duration+" dia"+(t.duration===1?"":"s")):"")));
+        +(t.duration?(" · "+(/^\s*\d+([.,]\d+)?\s*$/.test(String(t.duration))?t.duration+" dia"+(+t.duration===1?"":"s"):t.duration)):"")));
       if(selTarefas.has(p.id+"|"+t.id))row.classList.add("sel");
       row.onclick=e=>{
         if(e.ctrlKey||e.metaKey||e.shiftKey){
@@ -12108,7 +12512,7 @@ function renderTaskListAll(){
   if(!total){
     host.append(el("div","foot-note",
       filtroTarefas.k==="tudo"
-        ?"Ainda não há tarefas. Crie a primeira no modo ligar (L) — arraste de um nódulo para outro — ou dentro de um fluxograma."
+        ?"Ainda não há tarefas. Crie a primeira no modo ligar (L) — arraste de uma unidade para outra — ou dentro de um fluxograma."
         :"Nada nesta fatia. Escolha outro filtro, ou “Tudo”."));
   }
 }
@@ -12166,14 +12570,14 @@ function renderOrgChart(){
     inp.addEventListener("keydown",e=>{if(e.key==="Enter")inp.blur();});
     row.append(inp);
     const nCount=nodes.filter(n=>n.tier===i).length;
-    const cnt=el("span","count",nCount+" nódulos");
+    const cnt=el("span","count",nCount+" unidades");
     row.append(cnt);
     const del=el("button","icon-btn","✕");
     const deletable=nCount===0&&TIER.length>2;
     del.disabled=!deletable;
     del.style.opacity=deletable?"":"0.22";
     del.style.cursor=deletable?"pointer":"default";
-    del.title=deletable?"Apagar nível (sem nódulos)":(nCount?"Só é possível apagar níveis sem nódulos":"São necessários pelo menos 2 níveis");
+    del.title=deletable?"Apagar nível (sem unidades)":(nCount?"Só é possível apagar níveis sem unidades":"São necessários pelo menos 2 níveis");
     del.setAttribute("aria-label","Apagar nível "+i);
     del.onclick=()=>deleteTier(i);
     row.append(del);
@@ -12202,7 +12606,7 @@ function renderOrgChart(){
 
   function agentSpan(a,cls){
     const s=el("span",cls||"org-agent",a.name);
-    s.title="Abrir painel do agente";
+    s.title="Abrir painel da pessoa";
     s.setAttribute("role","link");s.tabIndex=0;
     const go=()=>selectAgent(a);
     s.onclick=e=>{e.stopPropagation();go();};
@@ -12212,7 +12616,7 @@ function renderOrgChart(){
   function buildCard(n,kids){
     const card=el("div","org-card");
     card.style.cursor="pointer";
-    card.title="Abrir painel do nódulo · arraste para reorganizar";
+    card.title="Abrir painel da unidade · arraste para reorganizar";
     // O organograma 2D inteiro era intocável pelo teclado: cartões clicáveis
     // sem foco nem ativação. Cada um passa a ser um alvo a sério.
     clickable(card,"Abrir "+n.name,()=>selectNode(n));
@@ -12256,7 +12660,7 @@ function renderOrgChart(){
     if(pel){
       const tg=el("div","pelouro-tag"+(pel.nodes.includes(n.id)?" raiz":""),pel.name);
       tg.style.color=corLegivel(corPelouro(pel));
-      tg.title=(pel.nodes.includes(n.id)?"Raiz do pelouro":"Pelouro herdado do nódulo acima")+(pel.resp&&agentById(pel.resp)?" · responsável: "+agentById(pel.resp).name:"");
+      tg.title=(pel.nodes.includes(n.id)?"Raiz do pelouro":"Pelouro herdado da unidade acima")+(pel.resp&&agentById(pel.resp)?" · responsável: "+agentById(pel.resp).name:"");
       card.append(tg);
     }
 
@@ -12617,7 +13021,7 @@ function mostraDiff(titulo,linhas){
   linhas.forEach(l=>host.append(el("div",null,l)));
   dlg.classList.add("open");
 }
-/* ---- procedimentos avulsos: um procedimento num ficheiro, nódulos por NOME ---- */
+/* ---- procedimentos avulsos: um procedimento num ficheiro, unidades por NOME ---- */
 function chaveNome(s){
   return String(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();
 }
@@ -12625,7 +13029,7 @@ document.getElementById("procExpBtn").onclick=async()=>{
   const ops=processes.slice(0,24).map(p2=>({k:p2.id,label:p2.name+" — "+p2.tasks.length+" tarefa(s)"}));
   if(!ops.length){flash("Não há procedimentos para exportar.");return;}
   const r=await askOpcoes("Exportar qual procedimento?",
-    "O ficheiro identifica os nódulos por nome, para viajar entre organizações.",ops);
+    "O ficheiro identifica as unidades por nome, para viajar entre organizações.",ops);
   const p2=r&&layerById(r);
   if(!p2)return;
   const cfg={format:"procedimento-autarquias",version:1,exported:new Date().toISOString(),
@@ -12726,7 +13130,7 @@ const MODELOS_PROC=[
 ];
 document.getElementById("modelosBtn").onclick=async()=>{
   const r=await askOpcoes("Modelos de procedimentos-tipo",
-    "Importa uma cadeia pronta a adaptar — os nódulos em falta são criados por nome.",
+    "Importa uma cadeia pronta a adaptar — as unidades em falta são criadas por nome.",
     MODELOS_PROC.map((m,i)=>({k:String(i),label:m.name+" — "+m.tasks.length+" passos, prazo "+m.prazo+" dias"})));
   if(r===null||r===undefined)return;
   importarProcedimento(MODELOS_PROC[+r],"modelo");
@@ -12841,7 +13245,7 @@ importFile.onchange=()=>{
         cfg.agents.forEach(ca=>{
           if(!ca||!byId(ca.nodeId))return;
           agents.push({id:ca.id||("a"+(++agentCounter)),
-            name:String(ca.name||"Agente").slice(0,30),
+            name:String(ca.name||"Pessoa").slice(0,30),
             category:CATEGORIES.includes(ca.category)?ca.category:"Técnico Superior",
             nodeId:ca.nodeId,primary:!!ca.primary,absent:!!ca.absent,
             subst:typeof ca.subst==="string"?ca.subst:null});
@@ -13175,7 +13579,7 @@ function showTourEnd(){
   tourEndSeen=true;
   // Os números reais, para se perceber ao certo o que está em cima da mesa
   const st=document.getElementById("teStats");
-  if(st)st.textContent=nodes.length+" nódulos · "+agents.length+" agentes · "+
+  if(st)st.textContent=nodes.length+" unidades · "+agents.length+" pessoas · "+
     processes.length+" procedimentos";
   rememberFocus();
   tourEndEl.classList.add("open");
@@ -13232,7 +13636,7 @@ if(tourEndEl){
     // "Cancelar" a devolver o foco a um botão que já não estava no ecrã.
     const ok=await askConfirm(
       "Apagar a demonstração e começar a sua autarquia? Fica só o Executivo — "+
-      "todos os nódulos, agentes, procedimentos e grupos da demonstração são apagados. "+
+      "todas as unidades, pessoas, procedimentos e grupos da demonstração são apagados. "+
       "Se quiser guardar esta cópia, cancele e use “Guardar dataset” primeiro.",
       {yes:"Apagar e começar",danger:true});
     closeTourEnd();
@@ -13247,7 +13651,7 @@ if(tourEndEl){
 
 document.getElementById("newDatasetBtn").onclick=async()=>{
   const ok=await askConfirm(
-    "Criar uma nova rede? Todos os nódulos, agentes, procedimentos e grupos atuais serão apagados — só fica o Executivo. Exporte antes se quiser guardar.",
+    "Criar uma nova rede? Todas as unidades, pessoas, procedimentos e grupos atuais serão apagados — só fica o Executivo. Exporte antes se quiser guardar.",
     {yes:"Criar nova rede",danger:true});
   if(!ok)return;
   newDataset();
@@ -13258,6 +13662,33 @@ document.getElementById("newDatasetBtn").onclick=async()=>{
    THEMES
 ============================================================ */
 const THEMES={
+  claro:{label:"Claro",light:true,
+    css:{"--bg-deep":"#F3F6FB","--bg-mid":"#E9EEF6","--ink":"#1F1F1F","--ink-dim":"#444746",
+      "--gold":"#0B57D0","--steel":"#3C5A80","--panel":"#FFFFFF",
+      "--hairline":"rgba(31,31,31,0.16)","--vignette":"rgba(255,255,255,0)","--scrim":"rgba(32,33,36,0.42)"},
+    gold:0x0B57D0,fog:0xE6ECF4,amb:0xC2CCDA,keyc:0xFFFFFF,
+    sky:["#F4F7FB","#E8EEF6","#D9E2EE"],silhouette:"rgba(150,165,188,0.30)",
+    aurora:[["150,180,235",0.16],["140,205,200",0.12],["235,205,140",0.07]],
+    groundBase:["rgba(226,233,243,0.96)","rgba(214,223,236,0.88)"],
+    tessera:"52,72,104",tesseraGold:"11,87,208",tessAlpha:1.6,
+    stars:[0x93A3B8,0x6C7E96],pill:"rgba(32,33,36,0.84)",
+    pillInk:"#FFFFFF",pillSub:"rgba(214,222,234,0.95)",
+    primaries:[[0x2B5FA8,0x6C9BD6],[0xB0402F,0xD87A5C],[0x9C7A16,0xC9A83E],
+      [0x4F7A2F,0x86AC60],[0x7A3E9C,0xA878C8],[0xA85A1F,0xD08A50]],
+    gp:["#C5221F","#0B57D0","#188038","#B06000"]},
+  escuro:{label:"Escuro",light:false,
+    css:{"--bg-deep":"#131314","--bg-mid":"#1B1C1E","--ink":"#E3E3E3","--ink-dim":"#A9AEB6",
+      "--gold":"#A8C7FA","--steel":"#C4C7C5","--panel":"#1E1F20",
+      "--hairline":"rgba(227,227,227,0.16)","--vignette":"rgba(0,0,0,0.3)","--scrim":"rgba(0,0,0,0.6)"},
+    gold:0xA8C7FA,fog:0x121314,amb:0x98A1AD,keyc:0xFFFFFF,
+    sky:["#20242B","#17191D","#0F1012"],silhouette:"rgba(0,0,0,0.5)",
+    aurora:[["70,100,170",0.26],["50,120,120",0.2],["120,90,150",0.12]],
+    groundBase:["rgba(38,41,46,0.94)","rgba(24,26,29,0.82)"],
+    tessera:"200,206,214",tesseraGold:"168,199,250",tessAlpha:1,
+    stars:[0x98A1AD,0xC4C7C5],pill:"rgba(20,21,23,0.82)",
+    primaries:[[0x4A90E2,0x8FD0FF],[0xE0554F,0xFF9A6B],[0xE8C445,0xFFF0A0],
+      [0x5CC46A,0xA8F0B8],[0xB06AE0,0xE8A8FF],[0xE08A3C,0xFFC98A]],
+    gp:["#F28B82","#8AB4F8","#81C995","#FDD663"]},
   nocturno:{label:"Noturno",light:false,
     css:{"--bg-deep":"#04070E","--bg-mid":"#0A1424","--ink":"#E9EFF7","--ink-dim":"#8FA2BC",
       "--gold":"#E8B44C","--steel":"#C9D6E8","--panel":"rgba(10,20,36,0.86)",
@@ -13376,10 +13807,28 @@ function makeCalcadaTexture(T0){
   x.setTransform(1,0,0,1,0,0);
   return new THREE.CanvasTexture(c);
 }
+/* As superfícies de cada tema: o fundo da aplicação, o cartão do conteúdo,
+   os recipientes (procura, menus, fichas), o que está escolhido, o botão de
+   criar, e a cor do texto sobre a cor principal. Os temas de sempre tingem
+   a mesma estrutura com as suas cores. */
+const SUPERFICIES={
+  claro:["#F3F6FB","#FFFFFF","#E9EEF6","#D3E3FD","#041E49","#C2E7FF","#FFFFFF"],
+  escuro:["#131314","#1E1F20","#2A2C2F","#004A77","#C2E7FF","#004A77","#062E6F"],
+  nocturno:["#060C18","#0F1929","#1A2740","#263A5E","#DCE7FA","#263A5E","#1A1200"],
+  lisboa:["#0A0E22","#141A38","#212A50","#2F4A7A","#DCE8FF","#2F4A7A","#1A1300"],
+  calcada:["#E9E0CD","#F7F1E3","#DDD2BA","#E3D0A6","#2B1F0A","#D9C290","#FFFFFF"],
+  verde:["#0A1711","#13241C","#1E352A","#2C4A3B","#DDEFE4","#2C4A3B","#1A1600"],
+  contraste:["#000000","#0B0B0B","#1C1C1C","#F0E442","#000000","#F0E442","#000000"]
+};
+Object.keys(SUPERFICIES).forEach(id=>{
+  if(!THEMES[id])return;
+  ["--fundo","--sup","--sup2","--pri-cont","--s-pri-cont","--criar","--s-pri"].forEach((k,i)=>{THEMES[id].css[k]=SUPERFICIES[id][i];});
+  THEMES[id].css["--panel"]=SUPERFICIES[id][2];
+});
 function applyTheme(id,opts){
   opts=opts||{};
-  const T0=THEMES[id]||THEMES.nocturno;
-  themeId=THEMES[id]?id:"nocturno";
+  const T0=THEMES[id]||THEMES.claro;
+  themeId=THEMES[id]?id:"claro";
   Object.entries(T0.css).forEach(([k,v])=>document.documentElement.style.setProperty(k,v));
   ((CVD_PALETAS[cvdModo]&&CVD_PALETAS[cvdModo].gp)||T0.gp||["#E0554F","#4A90E2","#5CC46A","#E8C445"]).forEach((v,i)=>
     document.documentElement.style.setProperty(["--gp-a","--gp-b","--gp-c","--gp-d"][i],v));
@@ -13744,8 +14193,8 @@ async function __exportPPTX(){
     const ov=slideWithHeader("Estrutura em números","Visão geral do modelo");
     const tierCounts=TIER.map((t,i)=>nodes.filter(n=>n.tier===i).length);
     const stats=[
-      [String(nodes.length),"Nódulos"],
-      [String(agents.length),"Agentes"],
+      [String(nodes.length),"Unidades"],
+      [String(agents.length),"Pessoas"],
       [String(processes.length),"Procedimentos"],
       [String(processes.reduce((a,p)=>a+p.tasks.length,0)),"Tarefas"]
     ];
@@ -13761,7 +14210,7 @@ async function __exportPPTX(){
       if(y>5)return;
       ov.addText("TIER "+i,{x:0.5,y,w:0.9,h:0.3,fontFace:FONT,fontSize:9,bold:true,color:C.GOLD});
       ov.addText(t.label,{x:1.45,y,w:5,h:0.3,fontFace:FONT,fontSize:11,color:C.INK});
-      ov.addText(tierCounts[i]+" nódulo(s)",{x:7.5,y,w:2,h:0.3,align:"right",fontFace:FONT,fontSize:9,color:C.DIM});
+      ov.addText(tierCounts[i]+" unidade(s)",{x:7.5,y,w:2,h:0.3,align:"right",fontFace:FONT,fontSize:9,color:C.DIM});
     });
 
     /* ---- Organograma slides: Executivo + one per tier-1 branch ---- */
@@ -14163,7 +14612,7 @@ function animate(){
     });
   }
 
-  // O parentesco do pairar só se recalcula quando o nódulo pairado muda
+  // O parentesco do pairar só se recalcula quando a unidade pairada muda
   if(hoverNode!==lastHoverNode){lastHoverNode=hoverNode;computeHoverKin();}
   const kinOn=!!hoverKin&&!focusActive;
   /* Modo de realce estrutural: a seleção manda; sem seleção, o isolamento
@@ -14466,7 +14915,7 @@ function measureChrome(){
   // direita e ia parar debaixo do radar em ecrãs acima de 1500px.
   const rdVis=rdEl&&getComputedStyle(rdEl).display!=="none";
   set("--radar-w",rdVis?Math.round(rdEl.getBoundingClientRect().width)+14:0);
-  /* A barra de localização é centrada e cresce com o caminho até ao nódulo
+  /* A barra de localização é centrada e cresce com o caminho até à unidade
      escolhido. Publica-se o MÁXIMO que pode ocupar, e não a largura de agora:
      senão o nome da organização mudava de tamanho a cada seleção. */
   const wbEl=document.getElementById("whereBar");
@@ -15081,14 +15530,14 @@ function orgIssues(){
   const out=[];
   nodes.forEach(n=>{
     if(!primaryOf(n.id))
-      out.push({sev:"warn",kind:"Nódulo",msg:"“"+n.name+"” não tem responsável.",go:()=>selectNode(n)});
+      out.push({sev:"warn",kind:"Unidade",msg:"“"+n.name+"” não tem responsável.",go:()=>selectNode(n)});
     if(n.tier>0&&!n.parent)
-      out.push({sev:"warn",kind:"Nódulo",msg:"“"+n.name+"” não está ligado à hierarquia.",go:()=>selectNode(n)});
+      out.push({sev:"warn",kind:"Unidade",msg:"“"+n.name+"” não está ligado à hierarquia.",go:()=>selectNode(n)});
   });
   agents.forEach(a=>{
     if(a.primary)return;
     const used=processes.some(p=>p.tasks.some(t=>t.agent===a.id));
-    if(!used)out.push({sev:"info",kind:"Agente",msg:"“"+a.name+"” não tem tarefas atribuídas.",go:()=>selectAgent(a)});
+    if(!used)out.push({sev:"info",kind:"Pessoa",msg:"“"+a.name+"” não tem tarefas atribuídas.",go:()=>selectAgent(a)});
   });
   processes.forEach(p=>{
     if(!p.tasks.length)
@@ -15115,7 +15564,7 @@ function renderHealth(){
   ring.style.border="3px solid "+(score>85?"#5CC46A":(score>60?hex(GOLD3D):"#E0554F"));
   const sum=el("div","hx-sum");
   sum.append(el("div",null,warns+" problema(s) a corrigir · "+infos+" sugestão(ões)"));
-  sum.append(el("div",null,nodes.length+" nódulos · "+agents.length+" agentes · "+processes.length+" procedimentos"));
+  sum.append(el("div",null,nodes.length+" unidades · "+agents.length+" pessoas · "+processes.length+" procedimentos"));
   head.append(ring,sum);
   modalBody.append(head);
 
@@ -15150,14 +15599,14 @@ document.getElementById("healthBtn").onclick=showHealth;
    duplica dados, só os reorganiza para uma pergunta diferente.
 ============================================================ */
 const VIEWS=[
-  {id:"matrix",  ico:"▦", t:"Matriz Nó × Procedimento",
-   d:"Que nódulos entram em que procedimentos, e quanto pesam."},
+  {id:"matrix",  ico:"▦", t:"Matriz Unidade × Procedimento",
+   d:"Que unidades entram em que procedimentos, e quanto pesam."},
   {id:"sankey",  ico:"⇉", t:"Mapa de fluxo (Sankey)",
-   d:"Para onde corre o trabalho entre nódulos, com a espessura do caudal."},
+   d:"Para onde corre o trabalho entre unidades, com a espessura do caudal."},
   {id:"mural",   ico:"▤", t:"Mural de procedimentos",
    d:"Todos os fluxogramas lado a lado, em miniatura."},
   {id:"metro",   ico:"⊕", t:"Mapa de metro",
-   d:"Cada procedimento é uma linha; os nódulos partilhados são interfaces."},
+   d:"Cada procedimento é uma linha; as unidades partilhadas são interfaces."},
   {id:"oficial", ico:"▣", t:"Organograma oficial",
    d:"Versão documento, pronta a imprimir ou anexar a uma deliberação."},
   {id:"municipe",ico:"☺", t:"Vista do munícipe",
@@ -15197,7 +15646,7 @@ function renderView(id){
   fn();
 }
 
-/* ---------- 1. Matriz Nó × Procedimento ---------- */
+/* ---------- 1. Matriz Unidade × Procedimento ---------- */
 function matrixData(){
   const procs=processes.filter(p=>p.tasks.length);
   const count={},rowT={},colT={};
@@ -15224,11 +15673,11 @@ function matrixData(){
   return {procs,involved,count,rowT,colT,max};
 }
 function renderMatrix(){
-  modalTitle.textContent="Matriz Nó × Procedimento";
+  modalTitle.textContent="Matriz Unidade × Procedimento";
   modalBody.innerHTML="";
   const D=matrixData();
   modalBody.append(viewBar(
-    D.involved.length+" nódulo(s) × "+D.procs.length+" procedimento(s) — o número é quantas vezes o nódulo aparece numa tarefa."));
+    D.involved.length+" unidade(s) × "+D.procs.length+" procedimento(s) — o número é quantas vezes a unidade aparece numa tarefa."));
   if(!D.procs.length||!D.involved.length){
     modalBody.append(el("div","empty-note","Ainda não há tarefas para cruzar. Crie um procedimento primeiro."));
     modal.classList.add("open");
@@ -15239,7 +15688,7 @@ function renderMatrix(){
   tb.className="mx";
   const thead=document.createElement("thead");
   const hr=document.createElement("tr");
-  hr.append(el("th","mxrow","Nódulo"));
+  hr.append(el("th","mxrow","Unidade"));
   D.procs.forEach((p,pi)=>{
     const th=el("th","mxcol");
     const s=el("span",null,p.name);
@@ -15257,7 +15706,7 @@ function renderMatrix(){
     const n=byId(id);
     const tr=document.createElement("tr");
     const th=el("th","mxrow",abbrev(n.name));
-    th.title=n.name+" — abrir o painel deste nódulo";
+    th.title=n.name+" — abrir o painel desta unidade";
     th.style.cursor="pointer";
     clickable(th,"Abrir o painel de "+n.name,()=>{closeModalSilent();selectNode(n);});
     tr.append(th);
@@ -15317,7 +15766,7 @@ function renderSankey(){
   modalBody.append(viewBar(
     "Quem entrega a quem, somando todos os procedimentos visíveis. A espessura é o número de tarefas."));
   if(!D.links.length){
-    modalBody.append(el("div","empty-note","Nenhuma tarefa entre nódulos distintos nos procedimentos visíveis."));
+    modalBody.append(el("div","empty-note","Nenhuma tarefa entre unidades distintas nos procedimentos visíveis."));
     modal.classList.add("open");
     return;
   }
@@ -15554,7 +16003,7 @@ function renderOficial(){
     wrap.append(lvl);
   };
   const roots=nodes.filter(n=>!n.parent||!byId(n.parent));
-  if(!roots.length)tree.append(el("div","empty-note","Sem nódulos."));
+  if(!roots.length)tree.append(el("div","empty-note","Sem unidades."));
   roots.forEach(r=>draw(r,tree,0));
   // Uma hierarquia funda é mais larga do que um telemóvel: desliza aqui dentro
   // em vez de arrastar a página inteira para o lado.
@@ -15567,7 +16016,7 @@ function renderOficial(){
   tb.className="doc-t";
   const th=document.createElement("thead");
   const hr=document.createElement("tr");
-  ["Nódulo","Nível","Responsável","Efetivos"].forEach(h=>hr.append(el("th",null,h)));
+  ["Unidade","Nível","Responsável","Efetivos"].forEach(h=>hr.append(el("th",null,h)));
   th.append(hr);tb.append(th);
   const tbody=document.createElement("tbody");
   nodes.slice().sort((a,b)=>(a.tier-b.tier)||a.name.localeCompare(b.name,"pt")).forEach(n=>{
@@ -15587,7 +16036,7 @@ function renderOficial(){
     const pt=document.createElement("table");
     pt.className="doc-t";
     const pth=document.createElement("thead"),phr=document.createElement("tr");
-    ["Procedimento","Tarefas","Nódulos","Duração estimada"].forEach(h=>phr.append(el("th",null,h)));
+    ["Procedimento","Tarefas","Unidades","Duração estimada"].forEach(h=>phr.append(el("th",null,h)));
     pth.append(phr);pt.append(pth);
     const ptb=document.createElement("tbody");
     processes.forEach(p=>{
@@ -15602,7 +16051,7 @@ function renderOficial(){
     pt.append(ptb);
     doc.append(pt);
   }
-  doc.append(el("div","doc-foot",nodes.length+" nódulos · "+agents.length+" agentes · "+
+  doc.append(el("div","doc-foot",nodes.length+" unidades · "+agents.length+" pessoas · "+
     processes.length+" procedimentos · documento gerado automaticamente a partir do modelo."));
   modalBody.append(doc);
   modal.classList.add("open");
@@ -15707,7 +16156,7 @@ function setLinkMode(on){
   const b=document.getElementById("linkBtn");
   if(b){b.classList.toggle("active",linkMode);b.setAttribute("aria-pressed",linkMode?"true":"false");}
   flash(linkMode
-    ? "Modo ligar: arraste de um nódulo para outro para criar uma tarefa."
+    ? "Modo ligar: arraste de uma unidade para outra para criar uma tarefa."
     : "Modo ligar desligado.",{key:"link"});
 }
 function cancelComet(){
@@ -15824,7 +16273,7 @@ function anchorMap(p,hi){
   wrap.append(el("div","fc-anchor-t","Onde acontece"));
   wrap.append(svg);
   const legend=el("div","fc-anchor-l",
-    inProc.size+" de "+nodes.length+" nódulos · clique num ponto para ir lá");
+    inProc.size+" de "+nodes.length+" unidades · clique num ponto para ir lá");
   wrap.append(legend);
   return wrap;
 }
@@ -15838,7 +16287,7 @@ document.getElementById("linkBtn").onclick=()=>setLinkMode(!linkMode);
    Com o modo ligado, o organograma mostra quem está *em funções hoje*.
 ============================================================ */
 /* (continuityOn está declarado no topo — ver a nota lá.) */
-/* Quem cobre este agente, independentemente de o modo estar ligado — é o que
+/* Quem cobre esta pessoa, independentemente de o modo estar ligado — é o que
    o painel de ausências tem de mostrar. Segue a cadeia de substituições, com
    guarda contra ciclos (A substitui B, B substitui A). */
 function coverFor(a,seen){
@@ -15850,7 +16299,7 @@ function coverFor(a,seen){
   const s=a.subst?agentById(a.subst):null;
   return s?coverFor(s,seen):null;
 }
-/* Quem responde por este agente hoje: com o modo desligado é sempre a própria
+/* Quem responde por esta pessoa hoje: com o modo desligado é sempre a própria
    pessoa, porque o organograma está a mostrar o quadro e não a escala do dia. */
 function actingFor(a){
   if(!a)return null;
@@ -15858,7 +16307,7 @@ function actingFor(a){
   return coverFor(a);
 }
 /* O responsável em funções de um node: o titular se estiver, senão o seu
-   substituto, senão o primeiro agente presente do próprio node. */
+   substituto, senão a primeira pessoa presente do próprio node. */
 function actingPrimary(nodeId){
   const t=primaryOf(nodeId);
   if(!continuityOn)return t;
@@ -15889,11 +16338,11 @@ function setContinuity(on){
   if(continuityOn){
     const un=uncoveredNodes();
     flash(absentAgents().length+" ausência(s)"+
-      (un.length?(" · "+un.length+" nódulo(s) sem cobertura"):" · tudo coberto"),
+      (un.length?(" · "+un.length+" unidade(s) sem cobertura"):" · tudo coberto"),
       {key:"cont",type:un.length?"err":undefined});
   }else flash("Modo continuidade desligado.",{key:"cont"});
 }
-/* Um agente pode substituir outro se estiver presente e pertencer ao mesmo
+/* Uma pessoa pode substituir outro se estiver presente e pertencer ao mesmo
    node, ao node-pai ou a um node-filho — a cobertura real de uma autarquia. */
 function substituteOptions(a){
   if(!a)return [];
@@ -15986,7 +16435,7 @@ function renderContinuity(){
       const opts=substituteOptions(chosen);
       subWrap.append(el("label",null,"Quem assegura"));
       if(!opts.length){
-        subWrap.append(el("div","empty-note","Sem ninguém disponível nos nódulos vizinhos."));
+        subWrap.append(el("div","empty-note","Sem ninguém disponível nas unidades vizinhas."));
         subWrap.dataset.val="";
         return;
       }
@@ -16180,17 +16629,17 @@ function renderScenario(){
     if(items.length>40)g.append(el("div","empty-note","+ "+(items.length-40)+" não mostradas."));
     modalBody.append(g);
   };
-  sec("Nódulos criados",d.nodesAdded,x=>x.name,x=>{closeModalSilent();locateNode(x);});
-  sec("Nódulos removidos",d.nodesRemoved,x=>x.name);
-  sec("Nódulos renomeados",d.nodesRenamed,x=>x.from+" → "+x.node.name,x=>{closeModalSilent();locateNode(x.node);});
-  sec("Nódulos reposicionados",d.nodesMoved,x=>{
+  sec("Unidades criadas",d.nodesAdded,x=>x.name,x=>{closeModalSilent();locateNode(x);});
+  sec("Unidades removidas",d.nodesRemoved,x=>x.name);
+  sec("Unidades renomeadas",d.nodesRenamed,x=>x.from+" → "+x.node.name,x=>{closeModalSilent();locateNode(x.node);});
+  sec("Unidades reposicionadas",d.nodesMoved,x=>{
     const p=x.fromParent?byId(x.fromParent):null;
     return x.node.name+" (nível "+x.fromTier+" → "+x.node.tier+
       (p?(", antes sob "+p.name):"")+")";
   },x=>{closeModalSilent();locateNode(x.node);});
-  sec("Agentes admitidos",d.agentsAdded,x=>x.name+" — "+((byId(x.nodeId)||{}).name||"?"),x=>{closeModalSilent();selectAgent(x);});
-  sec("Agentes removidos",d.agentsRemoved,x=>x.name);
-  sec("Agentes transferidos",d.agentsMoved,x=>{
+  sec("Pessoas admitidas",d.agentsAdded,x=>x.name+" — "+((byId(x.nodeId)||{}).name||"?"),x=>{closeModalSilent();selectAgent(x);});
+  sec("Pessoas removidas",d.agentsRemoved,x=>x.name);
+  sec("Pessoas transferidas",d.agentsMoved,x=>{
     const f=byId(x.from),t=byId(x.agent.nodeId);
     return x.agent.name+": "+(f?abbrev(f.name):"?")+" → "+(t?abbrev(t.name):"?");
   },x=>{closeModalSilent();selectAgent(x.agent);});
@@ -16246,7 +16695,7 @@ function renderPaste(){
   modalTitle.textContent="Colar do Excel";
   modalBody.innerHTML="";
   modalBody.append(viewBar(
-    "Cole as colunas: Nódulo · Nível (1–"+(TIER.length-1)+") · Responsável · Categoria. Uma linha por nódulo."));
+    "Cole as colunas: Unidade · Nível (1–"+(TIER.length-1)+") · Responsável · Categoria. Uma linha por unidade."));
   const ta=document.createElement("textarea");
   ta.className="paste-area";
   ta.rows=8;
@@ -16257,7 +16706,7 @@ function renderPaste(){
   const preview=el("div");
   modalBody.append(preview);
   const bar=el("div","vw-bar");
-  const applyBtn=el("button","btn primary","Criar os nódulos");
+  const applyBtn=el("button","btn primary","Criar as unidades");
   applyBtn.type="button";
   applyBtn.disabled=true;
   bar.append(applyBtn);
@@ -16273,12 +16722,12 @@ function renderPaste(){
       preview.append(el("div","empty-note","Nada reconhecido ainda — cole as linhas acima."));
       return;
     }
-    preview.append(el("h4",null,parsed.rows.length+" nódulo(s) a criar"+
+    preview.append(el("h4",null,parsed.rows.length+" unidade(s) a criar"+
       (parsed.skipped?(" · "+parsed.skipped+" linha(s) ignorada(s)"):"")));
     const tb=document.createElement("table");
     tb.className="doc-t paste-t";
     const th=document.createElement("thead"),hr=document.createElement("tr");
-    ["Nódulo","Nível","Responsável","Categoria"].forEach(h=>hr.append(el("th",null,h)));
+    ["Unidade","Nível","Responsável","Categoria"].forEach(h=>hr.append(el("th",null,h)));
     th.append(hr);tb.append(th);
     const tbody=document.createElement("tbody");
     parsed.rows.slice(0,50).forEach(r=>{
@@ -16300,7 +16749,7 @@ function renderPaste(){
     if(!parsed.rows.length)return;
     let made=0;
     parsed.rows.forEach(r=>{
-      // Com um nome na folha, o responsável é esse — suprimimos o agente
+      // Com um nome na folha, o responsável é esse — suprimimos a pessoa
       // automático de createNode para não ficarem dois titulares.
       const n=createNode({name:r.name,tier:r.tier,noAgent:!!r.resp});
       if(!n)return;
@@ -16312,7 +16761,7 @@ function renderPaste(){
     });
     pasteText="";
     renderNodeList();renderAgentsTab();renderDetail();
-    flash(made+" nódulo(s) criado(s) a partir da folha.");
+    flash(made+" unidade(s) criada(s) a partir da folha.");
     closeModalSilent();
   };
   modal.classList.add("open");
@@ -16341,7 +16790,7 @@ function paletteActions(){
     {kind:"Ação",label:"Os meus alertas",run:()=>{filtroTarefas={k:"minhas",pessoa:null};setTab("tarefas");}},
     {kind:"Ação",label:"Guardar como app (instalar)",run:askToInstall},
     {kind:"Ação",label:"Vistas — galeria",run:showViewGallery},
-    {kind:"Ação",label:"Vista: Matriz Nó × Procedimento",run:()=>showView("matrix")},
+    {kind:"Ação",label:"Vista: Matriz Unidade × Procedimento",run:()=>showView("matrix")},
     {kind:"Ação",label:"Vista: Mapa de fluxo (Sankey)",run:()=>showView("sankey")},
     {kind:"Ação",label:"Vista: Mural de procedimentos",run:()=>showView("mural")},
     {kind:"Ação",label:"Vista: Mapa de metro",run:()=>showView("metro")},
@@ -16349,7 +16798,7 @@ function paletteActions(){
     {kind:"Ação",label:"Vista: Vista do munícipe",run:()=>showView("municipe")},
     {kind:"Ação",label:"Modo continuidade — ausências e substituições",run:showContinuity},
     {kind:"Ação",label:"Comparar cenários (atual → proposta)",run:showScenario},
-    {kind:"Ação",label:"Colar do Excel — criar nódulos em massa",run:showPaste},
+    {kind:"Ação",label:"Colar do Excel — criar unidades em massa",run:showPaste},
     {kind:"Ação",label:"Modo ligar (arrastar para criar tarefas)",run:()=>setLinkMode(!linkMode)},
     {kind:"Ação",label:"Modo apresentação",run:()=>togglePresent(true)},
     {kind:"Ação",label:"Um dia na Junta — reproduzir tudo",
@@ -16374,7 +16823,7 @@ function irDaPaleta(fn){
 function buildPaletteItems(){
   const out=paletteActions();
   /* Os tipos falam a língua da interface — Unidade e Pessoa — ainda que o
-     código continue a dizer nódulo e agente. */
+     código continue a dizer unidade e pessoa. */
   nodes.forEach(n=>out.push({kind:"Unidade",label:n.name,sub:"N"+n.tier,run:()=>irDaPaleta(()=>selectNode(n))}));
   agents.forEach(a=>{
     const n=byId(a.nodeId);
@@ -16504,7 +16953,7 @@ if(addBmBtn)addBmBtn.onclick=addBookmark;
 let fontScale=100;
 function applyFontScale(v){
   fontScale=Math.max(80,Math.min(140,parseInt(v,10)||100));
-  document.documentElement.style.fontSize=(16*fontScale/100).toFixed(2)+"px";
+  document.documentElement.style.fontSize=(17.5*fontScale/100).toFixed(2)+"px";
   const out=document.getElementById("fsVal");
   if(out)out.textContent=fontScale+"%";
   try{storageSet(FS_KEY,String(fontScale));}catch(e){}
@@ -16660,7 +17109,7 @@ function restoreState(json){
     });
     (s.agents||[]).forEach(a=>{
       if(!a||!byId(a.nodeId))return;
-      agents.push({id:a.id,name:String(a.name||"Agente").slice(0,30),
+      agents.push({id:a.id,name:String(a.name||"Pessoa").slice(0,30),
         category:CATEGORIES.includes(a.category)?a.category:"Técnico Superior",
         nodeId:a.nodeId,primary:!!a.primary,absent:!!a.absent,
         subst:typeof a.subst==="string"?a.subst:null});
@@ -16938,7 +17387,7 @@ function palcoAplicaSel(m){
 /* ---- Estado leve: quando só mudaram textos e datas, corrige-se no lugar ----
    Um restoreState custa dezenas de milissegundos (reconstrói os seiscentos
    objetos da cena); a escrever um nome no ecrã principal, isso era um soluço
-   por pausa no segundo ecrã. Se a estrutura for a mesma — os mesmos nódulos
+   por pausa no segundo ecrã. Se a estrutura for a mesma — as mesmas unidades
    nos mesmos lugares, as mesmas pessoas nas mesmas unidades, as mesmas
    tarefas com as mesmas pontas —, só se tocam os campos que mudaram, e só
    se refaz o rótulo de quem mudou de nome. */
@@ -17016,7 +17465,7 @@ function palcoRecebe(m){
   else if(m.t==="cvd"){defineCvd(m.modo,{silent:true});}
 }
 /* O tema mudou: o painel redesenha-se com as tintas novas e, se a moldura é o
-   dourado do tema (nódulo, pessoa), o feixe, o anel e os glifos acompanham. */
+   dourado do tema (unidade, pessoa), o feixe, o anel e os glifos acompanham. */
 function holoTema(){
   if(!holo)return;
   if(foco&&(foco.tipo==="nodulo"||foco.tipo==="agente")){
@@ -17334,7 +17783,7 @@ function geneseTermina(){
    a seleção. Uma sondagem leve de três em três décimos basta: não há evento
    único que apanhe todos os editores. */
 let ultimoFoco="",focoObjAnterior=null;
-/* O campo onde se está a escrever um nome (título do nódulo, da pessoa, do
+/* O campo onde se está a escrever um nome (título da unidade, da pessoa, do
    procedimento, renomear no sítio): o palco escreve-o letra a letra. */
 function campoNome(){
   const a=document.activeElement;
@@ -17353,7 +17802,7 @@ function marcaNovo(c,o){
   return c;
 }
 function contextoEdicao(){
-  /* procuras: o seletor de nódulos aberto para uma tarefa ou uma pessoa nova */
+  /* procuras: o seletor de unidades aberto para uma tarefa ou uma pessoa nova */
   if(npState&&nodePickEl.classList.contains("open")){
     if(npState.modo==="agente")return {tipo:"procura",de:"agente",alvo:npPairado};
     if(!npState.modo||npState.modo==="retarget")
@@ -17413,7 +17862,7 @@ if(!ehPalco)setInterval(()=>palcoEnviaFoco(false),300);
    segurança (quem pode ver e mudar o quê), objetos (o património e o que
    lhe está associado) e a validação das tarefas com prazos e alertas que
    sobem a hierarquia. O "perfil ativo" (Definições) diz quem está a usar
-   a aplicação: o Systems Admin, ou um dos agentes com a sua credencial.
+   a aplicação: o Systems Admin, ou uma das pessoas com a sua credencial.
 ============================================================ */
 function credValida(v){v=parseInt(v,10);return (v>=1&&v<=5)?v:1;}
 function credDe(a){return credValida(a&&a.cred);}
@@ -17430,8 +17879,8 @@ function membrosExecutivo(){return agents.filter(a=>ehExecutivo(a));}
 function presidente(){return agents.find(a=>ehPresidente(a))||null;}
 function credAtual(){return ehAdmin()?6:credDe(perfilAgente());}
 function descendeDe(nodeId,ancId){let n=byId(nodeId),g=0;while(n&&g++<64){if(n.id===ancId)return true;n=n.parent?byId(n.parent):null;}return false;}
-/* a chefia direta: o responsável do próprio nódulo, ou, sendo ele o
-   responsável, o do nódulo acima (ou o primeiro acima que tenha um) */
+/* a chefia direta: o responsável da própria unidade, ou, sendo ele o
+   responsável, o da unidade acima (ou o primeiro acima que tenha um) */
 function chefiaDe(a){
   if(!a)return null;
   const n=byId(a.nodeId);if(!n)return null;
@@ -17488,8 +17937,8 @@ function renderCredencial(a){
   sel.disabled=!pode;sel.style.width="100%";detail.append(sel);
   detail.append(el("div","foot-note",pode?("Pode atribuir até "+CRED_ROT[max]+"."):"Só o Systems Admin, o Presidente, o responsável do Pelouro ou uma chefia com permissão (e nunca acima da sua) alteram esta credencial."));
   if(a.primary){
-    [["podeCredSub","Pode alterar as credenciais dos subordinados diretos (no mesmo nódulo)"],
-     ["podeCredArvore","Pode alterar as credenciais nos nódulos hierarquicamente subordinados"]].forEach(([k,rot])=>{
+    [["podeCredSub","Pode alterar as credenciais dos subordinados diretos (na mesma unidade)"],
+     ["podeCredArvore","Pode alterar as credenciais nas unidades hierarquicamente subordinadas"]].forEach(([k,rot])=>{
       const lb=el("label","cred-perm");const ck=el("input");ck.type="checkbox";ck.checked=!!a[k];ck.disabled=!podeDarPermissoesCred();
       ck.onchange=()=>{a[k]=ck.checked;anotaHistorico("mudar as permissões de "+a.name);markDirty();};
       lb.append(ck," "+rot);detail.append(lb);
@@ -17504,7 +17953,7 @@ function renderPelouroDoNodulo(n){
   linha.innerHTML=pl?("<b>"+esc(pl.name)+"</b>"+(raiz?" · raiz do pelouro":" · herdado")+(pl.resp&&agentById(pl.resp)?" · "+esc(agentById(pl.resp).name):"")):"Sem pelouro";
   detail.append(linha);
   if(podeEditarPelouros()&&pelouros.length){
-    const sel=mkSelect([{label:raiz?"— passar a herdar do nódulo acima —":"— herdado (sem destacar) —",value:""}].concat(pelouros.map(x=>({label:"Destacar para "+x.name,value:x.id}))),raiz?pl.id:"",v=>{
+    const sel=mkSelect([{label:raiz?"— passar a herdar da unidade acima —":"— herdado (sem destacar) —",value:""}].concat(pelouros.map(x=>({label:"Destacar para "+x.name,value:x.id}))),raiz?pl.id:"",v=>{
       destacaNodulo(n,v?pelouros.find(x=>x.id===v):null);renderDetail();renderNodeList();
     });
     sel.style.width="100%";sel.style.marginTop="6px";detail.append(sel);
@@ -17537,7 +17986,7 @@ function renderPelouros(){
     head.append(nome);
     if(pode){
       const del=el("button","icon-btn","✕");del.title="Eliminar pelouro";del.setAttribute("aria-label","Eliminar o pelouro "+pl.name);
-      del.onclick=async()=>{if(await askConfirm("Eliminar o pelouro “"+pl.name+"”? Os seus nódulos ficam sem pelouro.")){apagaPelouro(pl);renderPelouros();renderNodeList();}};
+      del.onclick=async()=>{if(await askConfirm("Eliminar o pelouro “"+pl.name+"”? As suas unidades ficam sem pelouro.")){apagaPelouro(pl);renderPelouros();renderNodeList();}};
       head.append(del);
     }
     card.append(head);
@@ -17545,17 +17994,17 @@ function renderPelouros(){
     g.append(el("label",null,"Responsável"));
     const sel=mkSelect([{label:"— por definir —",value:""}].concat(exec.map(a=>({label:a.name+" ("+a.category+")",value:a.id}))),pl.resp||"",v=>{pl.resp=v||null;anotaHistorico("mudar o responsável do pelouro");markDirty();});
     sel.disabled=!pode;g.append(sel);card.append(g);
-    if(!exec.length)card.append(el("div","foot-note","O responsável tem de ser membro do Executivo (uma pessoa do nódulo de topo)."));
-    card.append(el("div","mini-title","Nódulos raiz"));
+    if(!exec.length)card.append(el("div","foot-note","O responsável tem de ser membro do Executivo (uma pessoa da unidade de topo)."));
+    card.append(el("div","mini-title","Unidades raiz"));
     const chips=el("div","chips");
     pl.nodes.filter(id=>byId(id)).forEach(id=>{
       const n=byId(id);const c=el("button","chip on",n.name+(pode?" ✕":""));c.type="button";
-      c.title=pode?"Retirar do pelouro":"Abrir o nódulo";
+      c.title=pode?"Retirar do pelouro":"Abrir a unidade";
       c.onclick=()=>{if(!pode){selectNode(n);return;}destacaNodulo(n,null);renderPelouros();renderNodeList();};
       chips.append(c);
     });
     if(pode){
-      const add=el("input","search-input");add.placeholder="Adicionar nódulo…";add.setAttribute("aria-label","Adicionar um nódulo ao pelouro "+pl.name);
+      const add=el("input","search-input");add.placeholder="Adicionar unidade…";add.setAttribute("aria-label","Adicionar uma unidade ao pelouro "+pl.name);
       const sug=el("div","sug-list");
       add.addEventListener("input",()=>{
         sug.innerHTML="";const q=normaliza(add.value);if(!q)return;
@@ -17568,7 +18017,7 @@ function renderPelouros(){
     }
     card.append(chips);
     const todos=nodulosDoPelouro(pl),procs=procsDoPelouro(pl);
-    card.append(el("div","foot-note","Engloba "+todos.length+" nódulo"+(todos.length===1?"":"s")+" (com os hierarquicamente abaixo) · "+procs.length+" procedimento"+(procs.length===1?"":"s")+" com origem aqui"+(procs.length?": "+procs.map(q=>q.name).join(", "):"")+"."));
+    card.append(el("div","foot-note","Engloba "+todos.length+" unidade"+(todos.length===1?"":"s")+" (com os hierarquicamente abaixo) · "+procs.length+" procedimento"+(procs.length===1?"":"s")+" com origem aqui"+(procs.length?": "+procs.map(q=>q.name).join(", "):"")+"."));
     host.append(card);
   });
   const sem=nodes.filter(n=>!pelouroDe(n.id));
@@ -17730,7 +18179,11 @@ function renderObjetos(){
   };
   if(q)objetos.filter(passa).sort((a,b)=>a.num-b.num).forEach(o=>linha(o,0));
   else objetos.filter(o=>objetoRaiz(o)&&passa(o)).sort((a,b)=>a.num-b.num).forEach(o=>linha(o,0));
-  if(!total)host.append(el("div","empty-note",objetos.length?"Nada com este filtro.":"Ainda não há objetos."));
+  if(!total){
+    if(objetos.length)host.append(el("div","empty-note","Nada com este filtro."));
+    else host.append(estadoVazio("Comece o inventário","Património, equipamentos, viaturas, chaves, contratos: cada objeto tem número, categoria, localização e valores, e pode guardar outros lá dentro.",
+      podeGerirObjetos()?"Criar o primeiro objeto":null,()=>{const o=criaObjeto();objMapaSuja();renderObjetos();selectObjeto(o);}));
+  }
   const inv=objetos.filter(o=>o.inventario&&!o.arquivado);
   host.append(el("div","foot-note",objetos.length+" objeto"+(objetos.length===1?"":"s")+" · "+inv.length+" no inventário · credencial atual: "+(ehAdmin()?"Systems Admin":CRED_ROT[credAtual()])+(objVista==="mapa"?" · no mapa, clique num cubo para abrir a ficha; arraste uma linha da lista para um cubo para o pôr lá dentro.":".")));
 }
@@ -18090,7 +18543,7 @@ function objTextura(){
   if(themeId==="lisboa"){
     x.fillStyle="#EEF4FF";x.fillRect(0,0,128,128);x.strokeStyle="#3E7CB1";x.lineWidth=2;
     for(let i=0;i<4;i++)for(let j=0;j<4;j++){x.strokeRect(i*32+2,j*32+2,28,28);x.fillStyle=(i+j)%2?"#3E7CB1":"#9AC2E8";x.beginPath();x.moveTo(i*32+16,j*32+6);x.lineTo(i*32+26,j*32+16);x.lineTo(i*32+16,j*32+26);x.lineTo(i*32+6,j*32+16);x.closePath();x.fill();}
-  }else if(themeId==="calcada"){
+  }else if(themeId==="calcada"||themeId==="claro"){
     x.fillStyle="#D9C7A0";x.fillRect(0,0,128,128);x.strokeStyle="rgba(120,90,40,.35)";x.lineWidth=1;
     for(let i=0;i<128;i+=6){x.beginPath();x.moveTo(0,i);x.lineTo(128,i);x.stroke();}
     x.fillStyle="rgba(150,110,50,.55)";x.fillRect(44,0,40,128);   // a fita de embalar
@@ -18262,7 +18715,7 @@ function stepObjMapa(dt){
    REPOSITÓRIOS
    Documentos, multimédia, atas e minutas: cada um com formato, ligação
    (endereço web ou caminho de rede), data, observações, as associações a
-   procedimentos, tarefas, nódulos e pessoas, e a credencial mínima de
+   procedimentos, tarefas, unidades e pessoas, e a credencial mínima de
    acesso — abaixo dela a pessoa vê que o repositório existe, mas não o abre.
 ============================================================ */
 const REPO_TIPOS={documento:"Documento",multimedia:"Multimédia",ata:"Ata",minuta:"Minuta"};
@@ -18350,7 +18803,7 @@ function renderRepositorioDetail(head,closeBtn){
     const ops=[{label:"+ associar…",value:""}];
     processes.forEach(p=>ops.push({label:"Procedimento "+p.name,value:"procedimento:"+p.id}));
     processes.forEach(p=>p.tasks.forEach(t=>{const A=byId(t.a),B=byId(t.b);ops.push({label:"Tarefa "+(t.nome||((A?abbrev(A.name):"?")+" → "+(B?abbrev(B.name):"?")))+" · "+p.name,value:"tarefa:"+t.id});}));
-    nodes.forEach(n=>ops.push({label:"Nódulo "+n.name,value:"nodulo:"+n.id}));
+    nodes.forEach(n=>ops.push({label:"Unidade "+n.name,value:"nodulo:"+n.id}));
     agents.forEach(a=>ops.push({label:"Pessoa "+a.name,value:"agente:"+a.id}));
     const sel=mkSelect(ops,"",v=>{if(!v)return;const i=v.indexOf(":");const a={tipo:v.slice(0,i),id:v.slice(i+1)};if(!r.assoc.some(x=>x.tipo===a.tipo&&x.id===a.id))r.assoc.push(a);markDirty();renderDetail();});
     ac.append(sel);
@@ -18365,7 +18818,7 @@ function renderRepositorioDetail(head,closeBtn){
     acts.append(del);detail.append(acts);
   }
 }
-/* a secção "Repositórios" nos painéis de nódulo, pessoa e tarefa */
+/* a secção "Repositórios" nos painéis de unidade, pessoa e tarefa */
 function renderReposDe(tipo,id){
   detail.append(el("h4",null,"Repositórios"));
   const lista=reposDe(tipo,id);
@@ -18390,7 +18843,7 @@ function reposChips(tipo,id){
 
 /* ============================================================
    EM ESPERA NO PALCO
-   Enquanto no ecrã principal se edita um nódulo, uma pessoa, uma tarefa ou um
+   Enquanto no ecrã principal se edita uma unidade, uma pessoa, uma tarefa ou um
    procedimento, o palco põe esse elemento em cena e mantém-no vivo: a câmara
    orbita devagar, o elemento respira, as faíscas percorrem-lhe o caminho.
    Barato por desenho — um só sprite e um só ponto por coreografia — para
@@ -18663,7 +19116,7 @@ function holoAjusta(x,L){
 function holoTotal(L){return L.reduce((s,l,k)=>s+(k?l[0].length+2:0)+l[1].length,0);}
 /* onde paira: base (o elemento), quanto sobe, e a escala do painel */
 function holoAncora(o){
-  /* acima do rótulo do nódulo (a pastilha com o nome e o titular), não em cima dele */
+  /* acima do rótulo da unidade (a pastilha com o nome e o titular), não em cima dele */
   if(foco.tipo==="nodulo")return o.pos?{base:o.pos.clone(),sobe:(o._rad||0.3)+1.7,k:0.9}:null;
   if(foco.tipo==="agente"){const n=byId(o.nodeId);return (n&&n.pos)?{base:n.pos.clone(),sobe:(n._rad||0.3)+1.7,k:0.9}:null;}
   /* sobre o cume do arco, bem acima, para o tubo não lhe passar por cima */
@@ -18729,7 +19182,7 @@ function holoDesenha(force){
   h.desenhado=n;h.piscou=pisca;
   /* as cores vêm do tema: o fundo e as tintas das pastilhas dos rótulos (o
      holograma fica da família delas), a moldura na cor do elemento — o
-     dourado do tema para nódulos e pessoas, a cor do procedimento nas tarefas */
+     dourado do tema para unidades e pessoas, a cor do procedimento nas tarefas */
   const T=THEMES[themeId]||THEMES.nocturno;
   const cor=hex(h.cor),fundo=T.pill||T.css["--panel"],tinta=T.pillInk||T.css["--ink"],
     tintaDim=T.pillSub||T.css["--ink-dim"],ouro=T.css["--gold"];
@@ -18967,7 +19420,7 @@ let obraObj=null;
 function tijoloCor(x,y,z,base){
   const par=(x+y+z)%2===0;
   if(themeId==="lisboa")return par?0xF2F7FF:0x7FB3E0;
-  if(themeId==="calcada")return par?0x3A3328:0xE6DEC8;
+  if(themeId==="calcada"||themeId==="claro")return par?0x3A3328:0xE6DEC8;
   if(themeId==="verde")return par?0x7A5A38:0x5A4028;
   if(themeId==="contraste")return par?0xFFFFFF:0x111111;
   const c=new THREE.Color(base);c.offsetHSL(0,0,par?0.07:-0.09);return c.getHex();
@@ -19060,7 +19513,7 @@ function obraObjetoTermina(){
 /* ============================================================
    PROCURA — o radar
    A escolher o destino de uma tarefa nova, um arco tracejado varre a partir
-   da origem e estica-se até ao nódulo candidato (o primeiro resultado da
+   da origem e estica-se até à unidade candidata (o primeiro resultado da
    pesquisa, ou o que está sob o ponteiro no seletor). A escolher a unidade
    de uma pessoa nova, um orbe paira sobre a unidade candidata — ou ronda a
    organização enquanto não há nenhuma.
@@ -19492,9 +19945,10 @@ updateLayerCounts();
 renderNodeList();
 renderAgentsTab();
 renderGroups();
-// Calçada é o arranque por omissão, mas uma escolha anterior manda nela.
+// O arranque segue o claro ou escuro do sistema; uma escolha anterior manda nele.
 const temaGuardado=storageGet(TH_KEY);
-applyTheme(THEMES[temaGuardado]?temaGuardado:"calcada",{silent:true});
+const temaDoSistema=(()=>{try{return matchMedia("(prefers-color-scheme: dark)").matches?"escuro":"claro";}catch(e){return "claro";}})();
+applyTheme(THEMES[temaGuardado]?temaGuardado:temaDoSistema,{silent:true});
 syncThemeButtons();
 applyScene(0);
 syncPlay();
@@ -19518,7 +19972,7 @@ syncPlay();
 ============================================================ */
 const SINC_KEY="of.sinc.v1",SINC_VERSOES_KEY="of.sinc.versoes.v1";
 const SINC_SERVIDOR="https://ntfy.sh";
-const PAGINA_ONLINE="https://hvs87.github.io/Autarquia-Framework-Mapping-Tool/network-framework.html";
+const PAGINA_ONLINE="https://hvs87.github.io/Mapeamento-Organizacional-Autarquias/network-framework.html";
 const ALFABETO_CODIGO="0123456789ABCDEFGHJKMNPQRSTVWXYZ";
 /** JSON com as chaves por ordem: dois aparelhos que têm o mesmo escrevem o mesmo. */
 function jsonEstavel(v, cache){
@@ -19537,7 +19991,7 @@ function jsonEstavel(v, cache){
 const _eObj = (x) => !!x && typeof x === "object" && !Array.isArray(x);
 
 /* ---- Unidades: o projeto partido nas peças que se versionam ----
-   Cada nódulo, pessoa, procedimento, tarefa, grupo, pelouro, objeto e
+   Cada unidade, pessoa, procedimento, tarefa, grupo, pelouro, objeto e
    repositório é uma peça; a ordem de cada lista é outra; o nome da
    organização, os níveis e os prazos dos alertas são uma peça cada. Cada
    peça guarda quando e em que aparelho mudou pela última vez, e ao juntar
@@ -19668,12 +20122,12 @@ const formatarCodigo = (c) => limparCodigo(c).replace(/(.{5})(?=.)/g, "$1-");
 
 async function sincChaves(codigo){
   const enc = new TextEncoder();
-  const base = await crypto.subtle.importKey("raw", enc.encode("mapeamento-autarquias/" + limparCodigo(codigo)), "HKDF", false, ["deriveKey", "deriveBits"]);
-  const sal = enc.encode("mapeamento-autarquias-sinc-v1");
+  const base = await crypto.subtle.importKey("raw", enc.encode("mapeamento-organizacional/" + limparCodigo(codigo)), "HKDF", false, ["deriveKey", "deriveBits"]);
+  const sal = enc.encode("mapeamento-organizacional-sinc-v1");
   const chave = await crypto.subtle.deriveKey({name: "HKDF", hash: "SHA-256", salt: sal, info: enc.encode("chave")},
     base, {name: "AES-GCM", length: 256}, false, ["encrypt", "decrypt"]);
   const bits = new Uint8Array(await crypto.subtle.deriveBits({name: "HKDF", hash: "SHA-256", salt: sal, info: enc.encode("topico")}, base, 128));
-  const topico = "fma-" + Array.from(bits, x => x.toString(16).padStart(2, "0")).join("");
+  const topico = "moa-" + Array.from(bits, x => x.toString(16).padStart(2, "0")).join("");
   return {chave, topico};
 }
 async function cifrar(chave, bytes){
@@ -20645,7 +21099,7 @@ function renderA11yRow(){
   b2.append(el("div","mini-sub","Contraste"));
   const bc=el("button","btn tiny",themeId==="contraste"?"Voltar ao tema anterior":"Usar o tema Alto Contraste");bc.id="a11yContrasteBtn";
   bc.onclick=()=>{
-    if(themeId==="contraste"){let ant="calcada";try{ant=localStorage.getItem("of.a11y.temaAnterior")||"calcada";}catch(e){}applyTheme(THEMES[ant]?ant:"calcada");}
+    if(themeId==="contraste"){let ant="claro";try{ant=localStorage.getItem("of.a11y.temaAnterior")||"claro";}catch(e){}applyTheme(THEMES[ant]?ant:"claro");}
     else{try{localStorage.setItem("of.a11y.temaAnterior",themeId);}catch(e){}applyTheme("contraste");}
     syncThemeButtons();renderA11yRow();
   };
@@ -20685,6 +21139,432 @@ function avisoPrivacidade(){
   return d;
 }
 
+/* ============================================================
+   ESTRUTURA — barra superior, navegação lateral, janela do palco
+   Monta-se no arranque por cima do que já existia: os botões são os
+   mesmos (mesmos ids, mesmos gestos), só mudam de sítio. O que era uma
+   fila de quinze botões no cabeçalho fica arrumado por intenção: o que
+   se procura (procura), o que se cria (Criar), como se vê (Vista), e as
+   ferramentas do palco numa coluna. O segundo ecrã não leva nada disto.
+============================================================ */
+const NAV_KEY="of.nav.v1",DENS_KEY="of.densidade.v1";
+const ICONES={
+  menu:'<path d="M4 6h16M4 12h16M4 18h16"/>',
+  busca:'<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6"/>',
+  ajustes:'<path d="M4 6h8M18 6h2M4 12h2M12 12h8M4 18h10M20 18h0"/><circle cx="15" cy="6" r="2.2"/><circle cx="9" cy="12" r="2.2"/><circle cx="17" cy="18" r="2.2"/>',
+  mais:'<path d="M12 5v14M5 12h14"/>',
+  camadas:'<path d="M12 3l9 5-9 5-9-5 9-5zM3 13l9 5 9-5"/>',
+  baixo:'<path d="M6 9l6 6 6-6"/>',
+  cubo:'<path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3zM12 12l8-4.5M12 12v9M12 12L4 7.5"/>',
+  organograma:'<rect x="9" y="3" width="6" height="5" rx="1"/><rect x="3" y="16" width="6" height="5" rx="1"/><rect x="15" y="16" width="6" height="5" rx="1"/><path d="M12 8v4M6 16v-4h12v4"/>',
+  fluxo:'<path d="M6 6h8a3 3 0 0 1 0 6h-4a3 3 0 0 0 0 6h8"/><circle cx="4.5" cy="6" r="1.6"/><circle cx="19.5" cy="18" r="1.6"/>',
+  grelha:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+  continuidade:'<circle cx="9" cy="8" r="3.5"/><path d="M3 20a6 6 0 0 1 12 0M16.5 11.5l4.5 4.5M21 11.5L16.5 16"/>',
+  estado:'<path d="M3 12h4l3-8 4 16 3-8h4"/>',
+  alvo:'<circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/>',
+  predio:'<rect x="4" y="3" width="16" height="18" rx="1.5"/><path d="M9 8h1M14 8h1M9 12h1M14 12h1M10 21v-4h4v4"/>',
+  pessoas:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.6a3.5 3.5 0 0 1 0 6.8M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/>',
+  lista:'<path d="M4 6l1.5 1.5L8 5M4 12l1.5 1.5L8 11M4 18l1.5 1.5L8 17M11 6h9M11 12h9M11 18h9"/>',
+  pasta:'<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/>',
+  pelouro:'<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/>',
+  fechar:'<path d="M6 6l12 12M18 6L6 18"/>',
+  pontos:'<circle cx="5" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="19" cy="12" r="1.4"/>',
+  visto:'<path d="M5 12.5l4.5 4.5L19 7.5"/>'
+};
+function icone(n,t){
+  return '<svg width="'+(t||20)+'" height="'+(t||20)+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICONES[n]||"")+'</svg>';
+}
+/* ---- menus: nascem do botão que os abriu e fecham-se com Esc ou ao tocar fora ---- */
+let menuAberto=null,menuAncora=null;
+function fechaMenu(){
+  if(!menuAberto)return;
+  menuAberto.remove();menuAberto=null;
+  document.removeEventListener("pointerdown",foraDoMenu,true);
+}
+function foraDoMenu(e){if(menuAberto&&!menuAberto.contains(e.target))fechaMenu();}
+function abreMenu(ancora,itens,opts){
+  const repete=menuAberto&&menuAncora===ancora;
+  fechaMenu();
+  if(repete)return;
+  opts=opts||{};
+  const m=el("div","menu-pop"+(opts.deBaixo?" de-baixo":""));m.setAttribute("role","menu");
+  let n=0;
+  itens.forEach(it=>{
+    if(it.sep){m.append(el("div","sep"));return;}
+    if(it.cab){const c=el("div","cab");if(it.forte)c.append(el("b",null,it.forte));c.append(it.cab);m.append(c);return;}
+    const b=el("button");b.type="button";b.setAttribute("role","menuitem");b.style.setProperty("--i",n++);
+    b.innerHTML=it.ic?icone(it.ic):'<span style="width:20px;flex:none"></span>';
+    b.append(el("span","mt",it.label));
+    if(it.nota)b.append(el("span","mn",it.nota));
+    if(it.on){b.classList.add("on");b.setAttribute("aria-current","true");}
+    b.onclick=()=>{fechaMenu();it.run();};
+    m.append(b);
+  });
+  document.body.append(m);
+  const r=ancora.getBoundingClientRect(),mw=m.offsetWidth,mh=m.offsetHeight;
+  let x=opts.direita?r.right-mw:r.left,y=opts.cima?r.top-mh-6:r.bottom+6;
+  x=Math.max(8,Math.min(x,innerWidth-mw-8));y=Math.max(8,Math.min(y,innerHeight-mh-8));
+  m.style.left=x+"px";m.style.top=y+"px";
+  m.style.setProperty("--ox",Math.round(r.left+r.width/2-x)+"px");
+  m.style.setProperty("--oy",(y>=r.top?0:mh)+"px");
+  menuAberto=m;menuAncora=ancora;
+  setTimeout(()=>document.addEventListener("pointerdown",foraDoMenu,true),0);
+  m.addEventListener("keydown",e=>{
+    const bs=[...m.querySelectorAll("button")],i=bs.indexOf(document.activeElement);
+    if(e.key==="Escape"){e.stopPropagation();e.preventDefault();fechaMenu();ancora.focus();}
+    else if(e.key==="ArrowDown"||e.key==="ArrowUp"){e.preventDefault();bs[(i+(e.key==="ArrowDown"?1:-1)+bs.length)%bs.length].focus();}
+    else if(e.key==="Tab"){fechaMenu();}
+  });
+  const p=m.querySelector("button");if(p)p.focus({preventScroll:true});
+}
+/* ---- Criar: um só sítio para tudo o que se pode criar ---- */
+async function criaTarefaGuiada(){
+  const ops=processes.map(p=>({k:p.id,label:p.name}));
+  ops.push({k:"__novo",label:"Num procedimento novo",primary:!processes.length});
+  ops.push({k:"__nao",label:"Cancelar"});
+  const r=await askOpcoes("Nova tarefa","Em que procedimento entra a tarefa?",ops);
+  if(!r||r==="__nao")return;
+  const p=r==="__novo"?createLayer():layerById(r);
+  if(!p)return;
+  showFeynman(p);startAddTask(p,null);
+}
+function menuCriar(ancora,opts){
+  const naPagina=(tab,id)=>{setTab(tab);setTimeout(()=>{const b=document.getElementById(id);if(b)b.click();},80);};
+  const it=[
+    {label:"Unidade",ic:"predio",run:()=>naPagina("nodulos","addNodeBtn")},
+    {label:"Pessoa",ic:"pessoas",run:()=>naPagina("agentes","addAgentBtn")},
+    {label:"Procedimento",ic:"fluxo",run:()=>{const p=createLayer();showFlowchart(p);}},
+    {label:"Tarefa",ic:"lista",run:criaTarefaGuiada},
+    {sep:true}];
+  if(podeGerirObjetos())it.push({label:"Objeto",ic:"cubo",run:()=>{setTab("objetos");const o=criaObjeto();objMapaSuja();renderObjetos();selectObjeto(o);}});
+  if(credAtual()>=2)it.push({label:"Repositório",ic:"pasta",run:()=>{setTab("repositorios");const r=criaRepositorio("documento");renderRepositorios();selectRepositorio(r);}});
+  if(podeEditarPelouros())it.push({label:"Pelouro",ic:"pelouro",run:()=>{setTab("pelouros");criaPelouro("",(presidente()||{}).id||null);renderPelouros();}});
+  it.push({label:"Grupo de procedimentos",ic:"camadas",run:()=>naPagina("procedimentos","addGroupBtn")});
+  abreMenu(ancora,it,opts);
+}
+/* ---- Vista: a mesma informação, vista de outra maneira ---- */
+function vistaAtual(){
+  if(document.body.classList.contains("page-org"))return "Organograma";
+  if(modalView&&modalView.type==="view"){const v=VIEWS.find(x=>x.id===modalView.view);if(v)return v.t;}
+  return "Rede 3D";
+}
+function menuVista(ancora){
+  const it=[
+    {label:"Rede 3D",ic:"cubo",on:vistaAtual()==="Rede 3D",run:()=>setTab("home")},
+    {label:"Organograma",ic:"organograma",run:()=>setTab("organograma")},
+    {label:"Fluxogramas",ic:"fluxo",run:showFlowIndex},
+    {sep:true}];
+  VIEWS.forEach(v=>it.push({label:v.t,ic:"grelha",run:()=>showView(v.id)}));
+  it.push({sep:true},{label:"Estado da rede",ic:"estado",run:showHealth});
+  abreMenu(ancora,it);
+}
+/* ---- Perfil ativo: quem está a usar a aplicação, sempre à vista ---- */
+function iniciaisDe(nome){
+  const p=String(nome||"").replace(/[^\p{L}\s.]/gu," ").split(/[\s.]+/).filter(Boolean);
+  return ((p[0]||"?")[0]+(p.length>1?p[p.length-1][0]:"")).toUpperCase();
+}
+function definePerfil(v){
+  perfil=v==="admin"?{tipo:"admin",id:null}:{tipo:"agente",id:v};
+  storageSet(PERFIL_KEY,JSON.stringify(perfil));
+  renderPerfilRow();renderAlertasRow();renderDetail();renderPelouros();renderObjetos();refreshTaskTab();avisaAlertas();
+}
+function pintaPerfil(){
+  const b=document.getElementById("perfilBtn");if(!b)return;
+  const a=perfilAgente();
+  b.textContent=a?iniciaisDe(a.name):"SA";
+  b.title="Perfil ativo: "+(a?a.name+" · "+CRED_ROT[credDe(a)]:"Systems Admin (vê e edita tudo)");
+  b.setAttribute("aria-label",b.title);
+}
+function menuPerfil(ancora){
+  const a=perfilAgente(),pr=presidente();
+  const it=[{cab:a?(CRED_ROT[credDe(a)]+" · "+((byId(a.nodeId)||{}).name||"")):"Vê e edita tudo",forte:a?a.name:"Systems Admin"},{sep:true},
+    {label:"Systems Admin",on:!a,run:()=>definePerfil("admin")}];
+  if(pr)it.push({label:pr.name,nota:"Presidente",on:!!a&&a.id===pr.id,run:()=>definePerfil(pr.id)});
+  if(a&&(!pr||a.id!==pr.id))it.push({label:a.name,nota:CRED_ROT[credDe(a)],on:true,run:()=>{}});
+  it.push({sep:true},{label:"Escolher outra pessoa…",ic:"pessoas",run:()=>{setTab("definicoes");setTimeout(()=>{const e=document.getElementById("perfilRow");if(e){e.scrollIntoView({block:"center"});const s=e.querySelector("select");if(s)s.focus();}},120);}});
+  abreMenu(ancora,it,{direita:true});
+}
+/* ---- Definições rápidas: o que se muda mais vezes, sem sair de onde se está ---- */
+function aplicaDensidade(){
+  let d="";try{d=localStorage.getItem(DENS_KEY)||"";}catch(e){}
+  document.body.classList.toggle("densa",d==="compacta");
+}
+function fechaRapidas(){const r=document.getElementById("rapidas");if(r)r.classList.remove("aberta");}
+function renderRapidas(){
+  const h=document.getElementById("rapidas");if(!h)return;
+  h.innerHTML="";
+  const t=el("h3",null,"Definições rápidas");
+  const x=el("button","topo-ic");x.type="button";x.innerHTML=icone("fechar");x.setAttribute("aria-label","Fechar as definições rápidas");x.onclick=fechaRapidas;
+  t.append(x);h.append(t);
+  h.append(el("div","mini-title","Tema"));
+  const g=el("div","grelha-temas");
+  Object.keys(THEMES).forEach(id=>{
+    const T=THEMES[id],b=el("button","tema-cartao"+(themeId===id?" on":""));b.type="button";b.dataset.tema=id;
+    const i=document.createElement("i");i.style.background=T.css["--fundo"];i.style.setProperty("--a",T.css["--gold"]);i.style.setProperty("--b",T.css["--pri-cont"]);
+    b.append(i,T.label);b.setAttribute("aria-pressed",String(themeId===id));
+    b.onclick=()=>{applyTheme(id);syncThemeButtons();renderRapidas();renderA11yRow();};
+    g.append(b);
+  });
+  h.append(g);
+  const seg=(titulo,ops,atual,aoMudar)=>{
+    h.append(el("div","mini-title",titulo));
+    const s=el("div","segmentos");s.setAttribute("role","radiogroup");s.setAttribute("aria-label",titulo);
+    ops.forEach(([k,rot])=>{const b=el("button",atual===k?"on":"",rot);b.type="button";b.setAttribute("role","radio");b.setAttribute("aria-checked",String(atual===k));
+      b.onclick=()=>{aoMudar(k);renderRapidas();};s.append(b);});
+    h.append(s);
+  };
+  seg("Visão das cores",[["normal","Normal"],["vermelhoverde","Vermelho-verde"],["azulamarelo","Azul-amarelo"],["mono","Mono"]],cvdModo,k=>defineCvd(k));
+  let dens="confortavel";try{dens=localStorage.getItem(DENS_KEY)||"confortavel";}catch(e){}
+  seg("Densidade",[["confortavel","Confortável"],["compacta","Compacta"]],dens,k=>{try{localStorage.setItem(DENS_KEY,k);}catch(e){}aplicaDensidade();moveNavInd();});
+  seg("Tamanho do texto",[["-","A−"],["0",fontScale+"%"],["+","A+"]],"0",k=>{if(k!=="0")applyFontScale(fontScale+(k==="+"?10:-10));});
+  const todas=el("button","btn","Todas as definições");todas.type="button";todas.style.marginTop="22px";
+  todas.onclick=()=>{fechaRapidas();setTab("definicoes");};
+  h.append(todas);
+}
+/* ---- Navegação: o indicador desliza até ao separador escolhido ---- */
+function moveNavInd(){
+  const ind=document.getElementById("navInd"),tb=document.getElementById("tabbar");
+  if(!ind||!tb)return;
+  const on=tb.querySelector(".tab.on");
+  if(!on){ind.style.width="0";return;}
+  ind.style.transform="translate("+(on.offsetLeft-12)+"px,"+on.offsetTop+"px)";
+  ind.style.width=on.offsetWidth+"px";ind.style.height=on.offsetHeight+"px";
+  const tab=on.dataset.tab;
+  document.querySelectorAll("#barraBaixo button[data-tab]").forEach(b=>b.classList.toggle("on",b.dataset.tab===tab));
+  const vb=document.getElementById("vistaBtnT");if(vb)vb.textContent=vistaAtual();
+}
+function alternaNav(){
+  const b=document.body.classList;
+  if(b.contains("vp-phone")){b.toggle("nav-aberta");return;}
+  b.toggle("nav-fina");
+  try{localStorage.setItem(NAV_KEY,b.contains("nav-fina")?"fina":"larga");}catch(e){}
+  setTimeout(moveNavInd,260);moveNavInd();
+}
+function renderNavProcs(){
+  const h=document.getElementById("navProcs");if(!h)return;
+  h.innerHTML="";
+  if(!processes.length)return;
+  h.append(el("div","nav-cab","Procedimentos à vista"));
+  processes.forEach((p,i)=>{
+    const r=el("button","nav-proc"+(p._visible?" on":"")+(isolateProc===i?" iso":""));r.type="button";
+    r.setAttribute("role","checkbox");r.setAttribute("aria-checked",String(!!p._visible));
+    r.title=(p._visible?"Esconder ":"Mostrar ")+p.name+" no palco";r.setAttribute("aria-label",p.name);
+    const c=el("span","cx");c.style.setProperty("--c",hex(p.color));
+    r.append(c,el("span","tab-t",p.name));
+    r.onclick=()=>{const sw=p._row&&p._row.querySelector(".switch");if(sw)sw.click();renderNavProcs();};
+    h.append(r);
+  });
+}
+function pintaContadorTarefas(){
+  const c=document.querySelector('#tabbar .tab[data-tab="tarefas"] .cont');if(!c)return;
+  let n=0;
+  try{processes.forEach(p=>p.tasks.forEach(t=>{const a=alertaTarefa(p,t);if(a&&a.nivel==="vermelho")n++;}));}catch(e){}
+  c.textContent=n?String(n):"";
+  c.title=n?n+" tarefa(s) em atraso":"";
+}
+/* ---- No telemóvel, o que não cabe na barra superior vai para a gaveta ---- */
+function arrumaTopo(){
+  const hdr=document.querySelector("header"),extra=document.getElementById("navExtra"),busca=document.getElementById("buscaBtn"),perf=document.getElementById("perfilBtn");
+  if(!hdr||!extra||!busca)return;
+  const ids=["orgName","undoBtn","redoBtn","helpBtn","rapidasBtn"];
+  const fone=document.body.classList.contains("vp-phone");
+  if(fone&&!extra.contains(document.getElementById("orgName"))){
+    ids.forEach(id=>{const e=document.getElementById(id);if(e)extra.append(e);});
+  }else if(!fone&&extra.contains(document.getElementById("orgName"))){
+    busca.before(document.getElementById("orgName"));
+    ["undoBtn","redoBtn","helpBtn","rapidasBtn"].forEach(id=>{const e=document.getElementById(id);if(e)perf.before(e);});
+  }
+  if(!fone)document.body.classList.remove("nav-aberta");
+}
+/* ---- A janela do palco: a câmara centra-se e encolhe para a parte livre ---- */
+const janela={cx:0,cy:0,z:1,sig:""};
+function alvoJanela(){
+  const b=document.body.classList,W=innerWidth,H=innerHeight;
+  if(b.contains("presenting")||W<200||H<200)return {cx:0,cy:0,z:1};
+  const fone=b.contains("vp-phone");
+  const jl=fone?0:(b.contains("nav-fina")?72:256),jt=fone?56:(b.contains("vp-squat")?52:64),jr=fone?0:8,jb=fone?64:8;
+  const folha=b.contains("detail-open")&&(b.contains("vp-desktop")||(b.contains("vp-tablet")&&b.contains("vp-landscape")))?400:0;
+  return {cx:(jl-jr-folha)/2,cy:(jt-jb)/2,z:Math.max(.5,Math.min((W-jl-jr)/W,(H-jt-jb)/H))};
+}
+function passoJanela(){
+  const a=alvoJanela(),k=reduceMotion?1:.18;
+  janela.cx+=(a.cx-janela.cx)*k;janela.cy+=(a.cy-janela.cy)*k;janela.z+=(a.z-janela.z)*k;
+  if(Math.abs(a.cx-janela.cx)<.4&&Math.abs(a.cy-janela.cy)<.4&&Math.abs(a.z-janela.z)<.002){janela.cx=a.cx;janela.cy=a.cy;janela.z=a.z;}
+  const W=innerWidth,H=innerHeight,sig=W+"|"+H+"|"+janela.cx.toFixed(1)+"|"+janela.cy.toFixed(1)+"|"+janela.z.toFixed(4);
+  if(sig!==janela.sig&&W>0&&H>0){
+    janela.sig=sig;
+    camera.zoom=janela.z;
+    camera.setViewOffset(W,H,-janela.cx,-janela.cy,W,H);
+  }
+  requestAnimationFrame(passoJanela);
+}
+/* ---- Movimento: onda ao tocar, e a linha que cresce até à ficha ---- */
+let origemToque=null;
+function ondaEm(e){
+  if(reduceMotion||document.body.classList.contains("movimento-reduzido"))return;
+  const alvo=e.target.closest&&e.target.closest(".btn,.tab,#criarBtn,.pilula,.menu-pop button,#barraBaixo button,.topo-ic,#fabCriar,.nav-proc");
+  if(!alvo||alvo.disabled)return;
+  const r=alvo.getBoundingClientRect(),d=Math.max(r.width,r.height)*2.2,o=el("span","onda");
+  o.style.width=o.style.height=d+"px";o.style.left=(e.clientX-r.left-d/2)+"px";o.style.top=(e.clientY-r.top-d/2)+"px";
+  alvo.append(o);setTimeout(()=>o.remove(),560);
+}
+function guardaOrigem(e){
+  const l=e.target.closest&&e.target.closest("#pageBody .row,#pageBody .task-row,#pageBody .obj-tree-row,#pageBody .pp-head");
+  origemToque=l?{r:l.getBoundingClientRect(),t:performance.now()}:null;
+}
+function animaFicha(){
+  const d=document.getElementById("detail");
+  if(!d||reduceMotion||document.body.classList.contains("movimento-reduzido"))return;
+  if(getComputedStyle(d).display==="none")return;
+  d.classList.remove("troca");void d.offsetWidth;d.classList.add("troca");
+  const o=origemToque;origemToque=null;
+  if(!o||performance.now()-o.t>700)return;
+  const alvo=d.getBoundingClientRect();
+  const f=el("div");f.id="fichaFantasma";
+  f.style.left=o.r.left+"px";f.style.top=o.r.top+"px";f.style.width=o.r.width+"px";f.style.height=o.r.height+"px";f.style.opacity=".55";
+  document.body.append(f);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    f.style.left=alvo.left+"px";f.style.top=alvo.top+"px";f.style.width=alvo.width+"px";f.style.height=alvo.height+"px";f.style.opacity="0";f.style.borderRadius="16px";
+  }));
+  setTimeout(()=>f.remove(),460);
+}
+/* Definições: o índice das secções, refeito de cada vez que a página abre */
+function indiceDefinicoes(){
+  const sec=document.querySelector("#pageBody #secDefinicoes .sec-body");if(!sec)return;
+  let ind=document.getElementById("defIndice");
+  if(!ind){ind=el("nav");ind.id="defIndice";ind.setAttribute("aria-label","Secções das definições");}
+  sec.prepend(ind);ind.innerHTML="";
+  [...sec.children].filter(m=>m.classList.contains("mini-title")&&m.offsetParent!==null&&m.textContent.trim()).forEach(m=>{
+    const b=el("button","chip",m.textContent.trim());b.type="button";
+    b.onclick=()=>m.scrollIntoView({block:"start",behavior:reduceMotion?"auto":"smooth"});
+    ind.append(b);
+  });
+}
+/** Estado vazio: uma figura, o nome do espaço, uma linha e o convite. */
+function estadoVazio(titulo,texto,rotulo,acao){
+  const v=el("div","vazio"),fig=el("div","vazio-fig");
+  fig.setAttribute("aria-hidden","true");fig.append(el("span"),el("span"),el("span"));
+  v.append(fig,el("div","vazio-t",titulo),el("div","vazio-s",texto));
+  if(rotulo&&acao){const b=el("button","btn primary",rotulo);b.type="button";b.onclick=acao;v.append(b);}
+  return v;
+}
+function montaEstrutura(){
+  if(ehPalco)return;
+  const hdr=document.querySelector("header"),tb=document.getElementById("tabbar");
+  const moldura=el("div");moldura.id="janela";moldura.setAttribute("aria-hidden","true");
+  document.getElementById("stage").after(moldura);
+  const botao=(id,rot,icn,cls)=>{const b=el("button",cls||"topo-ic");b.type="button";b.id=id;b.title=rot;b.setAttribute("aria-label",rot);b.innerHTML=icone(icn);return b;};
+  /* barra superior */
+  const navBtn=botao("navBtn","Menu principal","menu");navBtn.onclick=alternaNav;
+  const marca=el("span");marca.id="marca";marca.setAttribute("aria-hidden","true");
+  const busca=el("button");busca.type="button";busca.id="buscaBtn";busca.setAttribute("aria-label","Procurar e executar ações (Ctrl+K)");
+  busca.innerHTML=icone("busca")+'<span class="busca-t">Procurar unidades, pessoas, tarefas…</span><kbd>Ctrl K</kbd>';
+  busca.onclick=()=>openPalette();
+  const rap=botao("rapidasBtn","Definições rápidas","ajustes");
+  const perf=el("button");perf.type="button";perf.id="perfilBtn";perf.onclick=()=>menuPerfil(perf);
+  const linha=el("div");linha.id="sincLinha";linha.setAttribute("aria-hidden","true");
+  hdr.append(navBtn,marca,document.getElementById("orgName"),busca,document.getElementById("sincPill"),
+    document.getElementById("undoBtn"),document.getElementById("redoBtn"),document.getElementById("helpBtn"),rap,perf,linha);
+  const folha=el("aside");folha.id="rapidas";folha.setAttribute("aria-label","Definições rápidas");document.body.append(folha);
+  rap.onclick=()=>{const ab=folha.classList.toggle("aberta");if(ab){renderRapidas();const p=folha.querySelector("button");if(p)p.focus({preventScroll:true});}};
+  /* navegação lateral */
+  hdr.after(tb);
+  tb.setAttribute("aria-orientation","vertical");
+  tb.querySelectorAll(".tab").forEach(t=>{
+    [...t.childNodes].filter(n=>n.nodeType===3&&n.textContent.trim()).forEach(n=>{const s=el("span","tab-t",n.textContent.trim());n.replaceWith(s);});
+    t.title=t.textContent.trim();
+  });
+  const ini=tb.querySelector('.tab[data-tab="home"] .tab-t');if(ini){ini.textContent="Início";ini.parentNode.title="Início";}
+  const tt=tb.querySelector('.tab[data-tab="tarefas"]');if(tt)tt.append(el("span","cont"));
+  const criar=el("button");criar.type="button";criar.id="criarBtn";criar.title="Criar";criar.setAttribute("aria-haspopup","menu");
+  criar.innerHTML=icone("mais",24)+'<span class="tab-t">Criar</span>';criar.onclick=()=>menuCriar(criar);
+  const ind=el("div");ind.id="navInd";ind.setAttribute("aria-hidden","true");
+  const extra=el("div");extra.id="navExtra";
+  tb.prepend(extra,criar,ind);
+  const dados=tb.querySelector('.tab[data-tab="dados"]');
+  const procs=el("div");procs.id="navProcs";
+  if(dados)dados.before(el("div","nav-sep"),procs,el("div","nav-sep"));
+  const scrim=el("div");scrim.id="navScrim";scrim.onclick=()=>document.body.classList.remove("nav-aberta");document.body.append(scrim);
+  tb.addEventListener("click",e=>{if(e.target.closest(".tab"))document.body.classList.remove("nav-aberta");});
+  /* sobre o palco: vista, camadas, caminho, e a coluna de ferramentas */
+  const topo=el("div");topo.id="janelaTopo";
+  const vista=el("button","pilula");vista.type="button";vista.id="vistaBtn";vista.setAttribute("aria-haspopup","menu");vista.title="Mudar de vista";
+  vista.innerHTML=icone("cubo")+'<span id="vistaBtnT">Rede 3D</span>'+icone("baixo",16);vista.onclick=()=>menuVista(vista);
+  const cam=botao("camadasBtn","Camadas e legenda: procedimentos à vista, níveis e cores","camadas","pilula so-ic");
+  cam.setAttribute("aria-pressed","false");
+  cam.onclick=()=>{const on=document.body.classList.toggle("camadas");cam.setAttribute("aria-pressed",String(on));};
+  topo.append(vista,cam,document.getElementById("whereBar"));
+  const fer=el("div");fer.id="ferramentas";fer.setAttribute("role","toolbar");fer.setAttribute("aria-label","Ferramentas do palco");fer.setAttribute("aria-orientation","vertical");
+  const acoes=document.querySelector(".head-actions");
+  const comIcone={orgChartBtn:"organograma",flowIndexBtn:"fluxo",viewsBtn:"grelha",contBtn:"continuidade",healthBtn:"estado",resetViewBtn:"alvo"};
+  Object.keys(comIcone).forEach(id=>{
+    const b=document.getElementById(id);if(!b)return;
+    const rot=b.textContent.trim();
+    if(!b.getAttribute("aria-label"))b.setAttribute("aria-label",rot);
+    if(!b.title)b.title=rot;
+    b.innerHTML=icone(comIcone[id])+'<span class="rot"></span>';b.querySelector(".rot").textContent=rot;
+  });
+  const pb=document.getElementById("palcoBtn");
+  if(pb){[...pb.childNodes].filter(n=>n.nodeType===3).forEach(n=>n.remove());if(!pb.getAttribute("aria-label"))pb.setAttribute("aria-label","Abrir o palco no segundo ecrã");}
+  if(acoes){
+    fer.append(acoes);
+    const rv=document.getElementById("resetViewBtn");if(rv)rv.before(el("div","sepv"));
+  }
+  document.body.append(topo,fer);
+  document.addEventListener("pointerdown",e=>{
+    if(!document.body.classList.contains("camadas"))return;
+    if(e.target.closest("#panel,#camadasBtn,.menu-pop,#optDialog,#modal,#taskEdit,#nodePick"))return;
+    if(e.target.closest("#stage")){document.body.classList.remove("camadas");cam.setAttribute("aria-pressed","false");}
+  },true);
+  /* telemóvel: barra de destinos e botão de criar */
+  const baixo=el("nav");baixo.id="barraBaixo";baixo.setAttribute("aria-label","Destinos principais");
+  [["home","Início"],["agentes","Pessoas"],["tarefas","Tarefas"],["objetos","Objetos"]].forEach(([id,rot])=>{
+    const b=el("button");b.type="button";b.dataset.tab=id;
+    const i=el("span","ic"),org=tb.querySelector('.tab[data-tab="'+id+'"] .tab-ic');
+    if(org)i.innerHTML=org.innerHTML;
+    b.append(i,rot);b.onclick=()=>setTab(id);baixo.append(b);
+  });
+  const maisB=el("button");maisB.type="button";maisB.innerHTML='<span class="ic">'+icone("pontos")+'</span>Mais';maisB.setAttribute("aria-label","Mais destinos");
+  maisB.onclick=()=>document.body.classList.add("nav-aberta");baixo.append(maisB);
+  const fab=botao("fabCriar","Criar","mais","");fab.innerHTML=icone("mais",24);fab.onclick=()=>menuCriar(fab,{deBaixo:true,cima:true,direita:true});
+  document.body.append(baixo,fab);
+  /* estado guardado e ligações ao que já existia */
+  let nav="";try{nav=localStorage.getItem(NAV_KEY)||"";}catch(e){}
+  if(nav==="fina"||(!nav&&innerWidth<1180))document.body.classList.add("nav-fina");
+  aplicaDensidade();
+  const depois=(nome,fn)=>{const o=eval(nome);eval(nome+"=function(){const r=o.apply(this,arguments);try{fn.apply(this,arguments);}catch(e){}return r;}");};
+  depois("setTab",()=>{fechaMenu();moveNavInd();});
+  depois("showPage",tab=>{const p=pageBody;p.classList.remove("entra");void p.offsetWidth;p.classList.add("entra");if(tab==="definicoes")indiceDefinicoes();});
+  depois("validarTarefa",(p,t)=>{setTimeout(()=>{document.querySelectorAll('.task-row[data-tid="'+t.id+'"]').forEach(r=>r.classList.add("acabou-de-validar"));},40);});
+  depois("applyViewport",()=>{arrumaTopo();moveNavInd();});
+  depois("syncLayerRows",renderNavProcs);
+  depois("updateLayerCounts",renderNavProcs);
+  depois("renderPerfilRow",pintaPerfil);
+  depois("refreshTaskTab",pintaContadorTarefas);
+  depois("renderDetail",animaFicha);
+  depois("pintarEstadoSinc",()=>{document.body.classList.toggle("a-enviar",!!(SINC&&SINC.estado&&SINC.estado.aEnviar));});
+  depois("applyTheme",()=>{if(document.getElementById("rapidas").classList.contains("aberta"))renderRapidas();});
+  new MutationObserver(moveNavInd).observe(tb,{attributes:true,attributeFilter:["class"],subtree:true});
+  new MutationObserver(()=>{const vb=document.getElementById("vistaBtnT");if(vb)vb.textContent=vistaAtual();}).observe(document.body,{attributes:true,attributeFilter:["class"]});
+  document.addEventListener("pointerdown",ondaEm,true);
+  document.addEventListener("pointerdown",guardaOrigem,true);
+  document.addEventListener("keydown",e=>{
+    if(e.key!=="Escape")return;
+    if(menuAberto){fechaMenu();e.stopPropagation();return;}
+    const r=document.getElementById("rapidas");
+    if(r.classList.contains("aberta")){fechaRapidas();e.stopPropagation();return;}
+    if(document.body.classList.contains("nav-aberta")){document.body.classList.remove("nav-aberta");e.stopPropagation();}
+  },true);
+  document.addEventListener("pointerdown",e=>{
+    const r=document.getElementById("rapidas");
+    if(r.classList.contains("aberta")&&!e.target.closest("#rapidas,#rapidasBtn"))fechaRapidas();
+  },true);
+  arrumaTopo();renderNavProcs();pintaPerfil();pintaContadorTarefas();
+  measureChrome();
+  setTimeout(moveNavInd,0);
+  requestAnimationFrame(passoJanela);
+}
+montaEstrutura();
 booted=true;
 renderPerfilRow();renderAlertasRow();renderVisitaRow();
 aplicaPrefsA11y();

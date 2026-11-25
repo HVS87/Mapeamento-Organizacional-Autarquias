@@ -41,7 +41,7 @@ window.__QA_SINC = async function(opts){
   await t("código inválido recusado", () => !valido("123") && !valido("") && !valido(null));
   const cA = codigoNovo(), cB = codigoNovo();
   const kA1 = await run("sincChaves")(cA), kA2 = await run("sincChaves")(cA), kB = await run("sincChaves")(cB);
-  await t("chaves: mesmo código, mesma caixa", () => kA1.topico === kA2.topico && /^fma-[0-9a-f]{32}$/.test(kA1.topico));
+  await t("chaves: mesmo código, mesma caixa", () => kA1.topico === kA2.topico && /^moa-[0-9a-f]{32}$/.test(kA1.topico));
   await t("chaves: códigos diferentes, caixas diferentes", () => kA1.topico !== kB.topico);
   const cifrar = run("cifrar"), decifrar = run("decifrar"), comprimir = run("comprimir"), descomprimir = run("descomprimir");
   const texto = J(run("sincEstadoLocal")());
@@ -51,7 +51,7 @@ window.__QA_SINC = async function(opts){
   await t("cifra: outra chave não abre", async () => { try { await decifrar(kB.chave, pacote); return false; } catch(e){ return true; } });
   await t("cifra: um byte mudado não abre", async () => { const p = pacote.slice(); p[40] ^= 1; try { await decifrar(kA1.chave, p); return false; } catch(e){ return true; } });
   await t("cifra: o texto não aparece em claro", () => { const s = String.fromCharCode.apply(null, pacote.subarray(0, 4000)); return s.indexOf("Executivo") < 0 && s.indexOf("nodes") < 0; });
-  await t("QR do código de ligação", () => { const m = run("qrMatriz")("https://hvs87.github.io/Autarquia-Framework-Mapping-Tool/network-framework.html#ligar=" + limpar(cA)); return Array.isArray(m) && m.length >= 21 && m.length <= 57; });
+  await t("QR do código de ligação", () => { const m = run("qrMatriz")("https://hvs87.github.io/Mapeamento-Organizacional-Autarquias/network-framework.html#ligar=" + limpar(cA)); return Array.isArray(m) && m.length >= 21 && m.length <= 57; });
   await t("ligação lida de volta", () => { const r = run("codigoDeTexto")("https://x/y.html#ligar=" + limpar(cA) + "&s=" + encodeURIComponent("https://ntfy.exemplo.pt")); return r && limpar(r.codigo) === limpar(cA) && r.servidor === "https://ntfy.exemplo.pt"; });
   await t("estado: ida e volta pelas peças", () => {
     const L = run("sincEstadoLocal")();

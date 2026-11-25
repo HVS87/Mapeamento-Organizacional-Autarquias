@@ -95,7 +95,7 @@ function criaPrincipal(){
     fullscreen:d.ecraInteiro!==false,
     autoHideMenuBar:true,
     backgroundColor:"#04070E",
-    title:"Ferramenta de Mapeamento para Autarquias",
+    title:"Mapeamento Organizacional para Autarquias",
     webPreferences:prefs
   });
   janelaPrincipal.setMenuBarVisibility(false);
@@ -122,7 +122,7 @@ function abrePalco(){
     :{width:1100,height:700,fullscreen:false};
   janelaPalco=new BrowserWindow(Object.assign({
     autoHideMenuBar:true,backgroundColor:"#04070E",
-    title:"Palco — Ferramenta de Mapeamento para Autarquias",
+    title:"Palco — Mapeamento Organizacional para Autarquias",
     webPreferences:prefs
   },opts));
   janelaPalco.setMenuBarVisibility(false);

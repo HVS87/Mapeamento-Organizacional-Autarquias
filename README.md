@@ -1,38 +1,43 @@
-# Ferramenta de Mapeamento para Autarquias
+# Mapeamento Organizacional para Autarquias
 
-Um sistema interativo de 3D para visualização e gestão de estruturas organizacionais municipais portuguesas. Combina hierarquia vertical (organograma) com procedimentos horizontais (fluxos de trabalho), permitindo explorar responsabilidades, equipas e tarefas direcionais num espaço imersivo.
+Uma ferramenta interativa para mapear a estrutura e os procedimentos de uma autarquia portuguesa: a hierarquia (unidades e pessoas) e os fluxos de trabalho (procedimentos e tarefas) no mesmo espaço 3D, com organograma, fluxogramas e listas para trabalhar no dia a dia.
+
+Versão web: https://hvs87.github.io/Mapeamento-Organizacional-Autarquias/
 
 ## 🎯 Características
 
+### Uma estrutura simples
+- **Barra superior**: menu, nome da organização, procura (unidades, pessoas, tarefas e ações), estado da sincronização, anular e refazer, ajuda, definições rápidas e perfil ativo.
+- **Navegação lateral**: «Criar» (unidade, pessoa, procedimento, tarefa, objeto, repositório, pelouro, grupo), os onze destinos e os procedimentos à vista, que se mostram e escondem com uma caixa. Recolhe para uma calha; no telemóvel é uma gaveta, com uma barra inferior de destinos.
+- **Conteúdo num cartão**: o palco 3D, com o menu Vista e as ferramentas numa coluna, ou a página do separador escolhido. A ficha do que se escolhe abre numa folha lateral a toda a altura.
+
 ### Visualização 3D
-- **Rede organizacional em tempo real**: Quatro níveis de coordenação (Executivo, Geral, Setorial, Operacional) dispostos em anéis com cores por ramo
-- **Agentes orbitais**: Cada nódulo exibe a sua equipa como esferas em órbita; a dourada é o responsável
-- **Tarefas direcionais**: Correntes de energia percorrem cada procedimento (tarefa) da origem ao destino
-- **Modo imersivo**: Zoom, rotação livre e tour guiado com 8 cenas ilustrativas em português
+- **Rede organizacional em tempo real**: quatro níveis de coordenação em anéis, com cores por ramo
+- **Pessoas em órbita**: cada unidade mostra a sua equipa; a dourada é o responsável
+- **Tarefas direcionais**: correntes que percorrem cada procedimento da origem ao destino
+- **Visita guiada** em oito cenas
 
 ### Temas
-- **Nocturno** (padrão): Azul-marinho com dourado — otimizado para ambientes escuros
-- **Meia-noite em Lisboa**: Índigo com azulejo azul e amarelo de elétrico — tom lisboeta
-- **Calçada** (standby): Pedra e areia — modo claro com contraste elevado, ideal para projeções
-- **Verde Institucional**: Verde profundo com latão — identidade autárquica
+- **Claro** e **Escuro**: neutros, seguem o sistema
+- **Noturno**, **Meia-noite em Lisboa**, **Calçada**, **Verde Institucional** e **Alto Contraste**
 
-Cada tema retinge toda a interface, aurora do céu, tesserae do chão, e as paletas de cores das divisões.
+Cada tema tinge a mesma estrutura, o céu, o chão e as cores das divisões.
 
 ### Gestão de Dados
-- **Organograma interativo**: Criar/renomear/reorganizar nódulos, mudar níveis, reparentar equipas
-- **Equipas e agentes**: Adicionar agentes aos nódulos, designar responsáveis, reatribuir entre estruturas
-- **Procedimentos**: Criar tarefas direcionais com descrições, durações, agentes responsáveis
+- **Organograma interativo**: Criar/renomear/reorganizar unidades, mudar níveis, reparentar equipas
+- **Equipas e pessoas**: Adicionar pessoas às unidades, designar responsáveis, reatribuir entre estruturas
+- **Procedimentos**: Criar tarefas direcionais com descrições, durações, pessoas responsáveis
 - **Fluxogramas 2D**: Cada procedimento desdobra-se num fluxograma editável com visualização de cadeias
 - **Grupos de procedimentos**: Agrupar tarefas relacionadas em "Grupos de Procedimentos" para melhor navegação
 
 ### Governação
-- **Pelouros**: o Presidente (ou o Systems Admin) cria, edita e elimina Pelouros; cada um junta nódulos raiz e tudo o que está hierarquicamente abaixo, com um responsável do Executivo. Um nódulo pode ser destacado para outro Pelouro. Os procedimentos pertencem ao Pelouro onde têm origem. O organograma mostra o Pelouro de cada braço.
-- **Credenciais de segurança** (Consulta · Operacional · Chefia · Direção · Executivo): o Systems Admin define-as; o Presidente altera todas; os membros do Executivo alteram as dos seus Pelouros; uma chefia altera as dos subordinados diretos ou dos nódulos abaixo se tiver essa permissão, e nunca acima da sua.
+- **Pelouros**: o Presidente (ou o Systems Admin) cria, edita e elimina Pelouros; cada um junta unidades raiz e tudo o que está hierarquicamente abaixo, com um responsável do Executivo. Uma unidade pode ser destacado para outro Pelouro. Os procedimentos pertencem ao Pelouro onde têm origem. O organograma mostra o Pelouro de cada braço.
+- **Credenciais de segurança** (Consulta · Operacional · Chefia · Direção · Executivo): o Systems Admin define-as; o Presidente altera todas; os membros do Executivo alteram as dos seus Pelouros; uma chefia altera as dos subordinados diretos ou das unidades abaixo se tiver essa permissão, e nunca acima da sua.
 - **Objetos**: número, nome, categoria e atributos com texto preditivo, alertas (recorrentes, por procedimento ou por alteração noutro objeto), localização (geográfica, morada ou dentro de outro objeto), associações a objetos e procedimentos, valores com histórico (cobranças, despesas, valor patrimonial), observações, "conta para o inventário", arquivar e eliminar. O que se vê e edita depende da credencial.
 - **Validação e prazos de tarefas**: uma tarefa só fica concluída quando o responsável a valida, e só então o procedimento prossegue. Cada tarefa tem um prazo em dias (editável pela chefia com credencial): aviso amarelo "Prazo a vencer" ao aproximar-se, alerta vermelho "Em atraso" ao responsável e à chefia direta quando passa, e de semana em semana o alerta sobe um nível na hierarquia até ao responsável do Pelouro e ao Presidente. Os prazos dos alertas afinam-se em Definições.
 - **Objetos em lista ou em mapa 3D**: a lista é uma árvore colapsável e editável (novo objeto, novo objeto dentro do atual, arrastar um objeto para outro para o pôr lá dentro, zona para o tirar de dentro); o mapa 3D mostra a hierarquia em cubos (a organização é de esferas), com as raízes num anel e o que está dentro em volta de quem o contém. Ao arrastar um objeto para outro, o de destino abre-se como uma caixa em flor (quatro pétalas a virar para fora, brilho) e o transportado deposita-se lá dentro; um objeto novo constrói-se no segundo ecrã em cubinhos, camada a camada, à medida que o nome se escreve, e a tampa fecha quando o nome fica; as faces dos cubos vestem-se com o tema (azulejo em Lisboa, cartão na Calçada, madeira no Verde, traço grosso no Contraste, grelha de néon no Noturno).
-- **Repositórios**: documentos, multimédia, atas e minutas, com formato, ligação (endereço web ou caminho de rede), data e observações, associados a procedimentos, tarefas, nódulos e pessoas, e com credencial mínima de acesso (abaixo dela vê-se que existe, mas não se abre).
-- **Perfil ativo** (Definições): escolhe-se quem está a usar a aplicação — o Systems Admin ou um dos agentes — e tudo o resto respeita a credencial dessa pessoa.
+- **Repositórios**: documentos, multimédia, atas e minutas, com formato, ligação (endereço web ou caminho de rede), data e observações, associados a procedimentos, tarefas, unidades e pessoas, e com credencial mínima de acesso (abaixo dela vê-se que existe, mas não se abre).
+- **Perfil ativo** (Definições): escolhe-se quem está a usar a aplicação — o Systems Admin ou uma das pessoas — e tudo o resto respeita a credencial dessa pessoa.
 
 ### Sincronizar dispositivos e privacidade
 - O mesmo projeto no telemóvel, no tablet e no computador, sem conta: liga-se com um código QR em Definições › Sincronizar dispositivos. O projeto viaja cifrado (AES-GCM 256) por uma caixa de passagem que não o consegue ler; alterações feitas nos dois aparelhos juntam-se peça a peça.
@@ -43,7 +48,7 @@ Cada tema retinge toda a interface, aurora do céu, tesserae do chão, e as pale
 
 ### Experiência do Utilizador
 - **Tour guiado**: Reprodução automática (com ritmo adaptativo) ou navegação manual (←/→ ou clique)
-- **Pesquisa em tempo real**: Filtro rápido em todos os separadores (Procedimentos, Nódulos, Agentes, Grupos)
+- **Pesquisa em tempo real**: Filtro rápido em todos os separadores (Procedimentos, Unidades, Pessoas, Grupos)
 - **Suporte móvel**: Interface responsiva com gaveta lateral e painéis inferiores; controlos otimizados para toque
 - **Lembretes de mudanças**: Aviso `beforeunload` se houver alterações não gravadas
 - **Exportação/Importação**: Guardar datasets em JSON, partilhar configurações; PDF e apresentações PPTX
@@ -57,12 +62,12 @@ Cada tema retinge toda a interface, aurora do céu, tesserae do chão, e as pale
 ## 🚀 Como Começar
 
 ### Uso Online
-Abra [o link do GitHub Pages](#) e comece imediatamente — não é necessário instalar nada.
+Abra [a versão web](https://hvs87.github.io/Mapeamento-Organizacional-Autarquias/) e comece imediatamente — não é necessário instalar nada.
 
 ### Instalação Local
 ```bash
-git clone https://github.com/HVS87/Autarquia-Framework-Mapping-Tool.git
-cd Autarquia-Framework-Mapping-Tool
+git clone https://github.com/HVS87/Mapeamento-Organizacional-Autarquias.git
+cd Mapeamento-Organizacional-Autarquias
 # Abra network-framework.html num browser moderno (Chrome, Firefox, Safari, Edge)
 ```
 
@@ -79,13 +84,13 @@ A pasta `desktop/` gera a aplicação para Windows (portátil e instalador), Mac
 ### Exploração 3D
 - **Clique + arraste**: Roda a câmara
 - **Scroll/Pinch**: Zoom in/out (raio da órbita)
-- **Clique numa esfera**: Seleciona o nódulo ou a tarefa — abre o painel de edição à direita
+- **Clique numa esfera**: Seleciona a unidade ou a tarefa — abre o painel de edição à direita
 - **Espaço**: Reproduz/pausa o tour (quando não está num campo de texto)
 
 ### Edição de Dados
-1. **Nódulos**: Clique em qualquer esfera para renomear, mudar de nível, adicionar/remover agentes
+1. **Unidades**: Clique em qualquer esfera para renomear, mudar de nível, adicionar/remover pessoas
 2. **Tarefas**: Clique num arco para editar as pontas (origem/destino), descrição, responsável, duração
-3. **Agentes**: Atribua a um nódulo ou mude de responsável de uma tarefa
+3. **Pessoas**: Atribua a uma unidade ou mude de responsável de uma tarefa
 4. **Grupos**: Agrupe procedimentos relacionados e controle a visibilidade em conjunto
 
 ### Tour Guiado
@@ -141,4 +146,3 @@ Têm ideias? Encontraram um bug? Abra uma issue ou enviem um pull request — qu
 
 **Desenvolvido para modernizar a administração municipal através de visualização clara e interativa de estruturas e fluxos.**
 
-Versão: 2.0 • Temas: 4 • Scenes: 8 • Assertions: 1269 ✓

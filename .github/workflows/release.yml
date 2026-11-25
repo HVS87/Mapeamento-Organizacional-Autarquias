@@ -70,13 +70,13 @@ jobs:
         run: |
           chmod +x dist/*.AppImage
           ./dist/*.AppImage --appimage-extract >/dev/null
-          test -x "squashfs-root/mapeamento-autarquias"
+          test -x "squashfs-root/mapeamento-organizacional"
           dpkg-deb --info dist/*.deb | grep -E "Package|Version"
 
       - name: Guardar como artefacto
         uses: actions/upload-artifact@v4
         with:
-          name: mapeamento-autarquias-${{ matrix.alvo }}
+          name: mapeamento-organizacional-${{ matrix.alvo }}
           path: |
             desktop/dist/*.exe
             desktop/dist/*.dmg
@@ -89,7 +89,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
-          name: Mapeamento para Autarquias ${{ github.ref_name }}
+          name: Mapeamento Organizacional ${{ github.ref_name }}
           body_path: desktop/notas-da-versao.md
           files: |
             desktop/dist/*.exe
