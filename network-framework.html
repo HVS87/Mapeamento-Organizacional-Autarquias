@@ -2727,7 +2727,7 @@
   body.densa #pageBody>details.page-mode>summary{padding:12px 2px 8px}
 
   /* ---- estados vazios: um convite, não um pedido de desculpa ---- */
-  .vazio{display:flex;flex-direction:column;align-items:center;gap:10px;padding:36px 16px 28px;text-align:center}
+  .vazio{display:flex;flex-direction:column;align-items:center;gap:10px;padding:36px 16px 28px;text-align:center;column-span:all;grid-column:1/-1;break-inside:avoid}
   .vazio-fig{position:relative;width:96px;height:84px}
   .vazio-fig span{position:absolute;width:38px;height:38px;border-radius:9px;background:var(--sup2);border:2px solid var(--hairline);
     animation:cuboCai 3.6s var(--curva) infinite both}
@@ -2746,6 +2746,49 @@
   @keyframes riscaTexto{to{background-size:100% 1.5px}}
   .proc-avanco{height:4px;border-radius:2px;background:var(--hairline);overflow:hidden;margin:2px 0 6px}
   .proc-avanco i{display:block;height:4px;border-radius:2px;background:var(--gold);transition:width var(--mov-3) var(--curva)}
+
+  /* ---- filtros: o visto desenha-se quando a escolha muda ---- */
+  .chip.filtro{display:inline-flex;align-items:center;transition:background var(--mov-2) var(--curva),color var(--mov-2),border-color var(--mov-2)}
+  .chip.filtro.on{background:var(--pri-cont);color:var(--s-pri-cont);border-color:transparent}
+  .chip.filtro.on::before{content:"";flex:none;width:9px;height:5px;margin:0 7px 3px 1px;border-left:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(-45deg)}
+  .chip.filtro.on.desenha::before{clip-path:inset(0 100% 0 0);animation:vistoDesenha 380ms 60ms var(--curva) forwards;margin-left:-4px}
+  .chip.filtro.on.desenha{animation:chipAbre var(--mov-2) var(--curva)}
+  @keyframes vistoDesenha{to{clip-path:inset(0 0 0 0);margin-left:1px}}
+  @keyframes chipAbre{from{padding-left:6px}}
+  /* ---- avanço de cada procedimento ---- */
+  .proc-avanco-w{margin:2px 0 10px}
+  .proc-avanco-t{font-size:.72rem;color:var(--ink-dim);margin:0 0 4px}
+  .proc-avanco{height:4px;border-radius:2px;background:var(--hairline);overflow:hidden;margin:0}
+  .proc-avanco i{display:block;height:4px;border-radius:2px;background:var(--gold);transition:width 700ms var(--curva)}
+  .proc-avanco.completo i{background:#188038}
+  body:not(.theme-light) .proc-avanco.completo i{background:#81C995}
+  #pageBody .mini-title+.proc-avanco-w{margin-top:-2px}
+  /* ---- avisos com ação ---- */
+  .toast .tacts button{background:none;border:0;color:var(--pri-cont);font-weight:600;font-size:.78rem;padding:6px 10px;border-radius:6px;cursor:pointer}
+  .toast .tacts button:hover{background:rgba(127,127,127,.25);border:0}
+  body[data-tema="contraste"] .toast .tacts button{color:#000;text-decoration:underline}
+  /* ---- estados vazios: variantes ---- */
+  .vazio.compacto{padding:16px 12px 12px;gap:6px}
+  .vazio.compacto .vazio-fig{zoom:.7}
+  .vazio.compacto .vazio-t{font-size:.92rem}
+  .vazio-fig.lupa span,.vazio-fig.visto span{display:none}
+  .vazio-fig.lupa{animation:lupaProcura 2.8s var(--curva) infinite}
+  .vazio-fig.lupa::before{content:"";position:absolute;left:20px;top:6px;width:42px;height:42px;border-radius:50%;border:5px solid var(--gold);box-sizing:border-box;background:var(--pri-cont)}
+  .vazio-fig.lupa::after{content:"";position:absolute;left:56px;top:44px;width:7px;height:26px;border-radius:4px;background:var(--gold);transform:rotate(-45deg);transform-origin:top center}
+  @keyframes lupaProcura{0%,100%{transform:none}25%{transform:translate(-10px,4px) rotate(-8deg)}50%{transform:translate(8px,-2px) rotate(6deg)}75%{transform:translate(-4px,-4px) rotate(-3deg)}}
+  .vazio-fig.visto::before{content:"";position:absolute;left:18px;top:4px;width:62px;height:62px;border-radius:50%;background:var(--pri-cont);animation:vistoBola 3.4s var(--curva) infinite}
+  .vazio-fig.visto::after{content:"";position:absolute;left:37px;top:21px;width:24px;height:12px;border-left:5px solid var(--gold);border-bottom:5px solid var(--gold);transform:rotate(-45deg);clip-path:inset(0 100% 0 0);animation:vistoTraco 3.4s var(--curva) infinite}
+  @keyframes vistoBola{0%{transform:scale(.6);opacity:0}14%,86%{transform:none;opacity:1}100%{transform:none;opacity:0}}
+  @keyframes vistoTraco{0%,16%{clip-path:inset(0 100% 0 0);opacity:1}36%,86%{clip-path:inset(0 0 0 0);opacity:1}100%{clip-path:inset(0 0 0 0);opacity:0}}
+  @media (prefers-reduced-motion:reduce){
+    .vazio-fig,.vazio-fig::before,.vazio-fig::after{animation:none!important}
+    .vazio-fig.visto::after{clip-path:none}
+    .chip.filtro.on.desenha::before{animation:none;clip-path:none;margin-left:1px}
+    .proc-avanco i{transition:none}
+  }
+  body.movimento-reduzido .vazio-fig,body.movimento-reduzido .vazio-fig span,body.movimento-reduzido .vazio-fig::before,body.movimento-reduzido .vazio-fig::after{animation:none!important}
+  body.movimento-reduzido .vazio-fig.visto::after{clip-path:none}
+  body.movimento-reduzido .chip.filtro.on.desenha::before{clip-path:none;margin-left:1px}
 
   /* ---- movimento ---- */
   @keyframes folhaEntra{from{transform:translateX(28px);opacity:0}}
@@ -5111,24 +5154,30 @@ function updateChevrons(){
   if(sel!==chevFor)rebuildChevrons();
   if(!chevItems.length)return;
   const hide=document.body.classList.contains("presenting")||!!peek||innerWidth<60;
-  const W=innerWidth,H=innerHeight,M=54,cx=W/2,cy=H/2;
+  /* As setas vivem dentro da janela do palco: não passam por baixo da
+     navegação, da barra superior nem da ficha aberta. */
+  const W=innerWidth,H=innerHeight,M=54,J=janelaRect();
+  const il=J.l+J.il,it=J.t+J.it,ir=J.r-M,ib=J.b-M,cx=(il+ir)/2,cy=(it+ib)/2;
   chevItems.forEach(c=>{
     if(hide||!nodes.includes(c.node)){c.el.style.display="none";return;}
     const v=c.node.pos.clone().project(camera);
     const behind=v.z>1;
     let x=(v.x*0.5+0.5)*W,y=(-v.y*0.5+0.5)*H;
-    if(behind){x=W-x;y=H-y;}          // atrás da câmara: aponta para o lado oposto
-    if(!behind&&x>M&&x<W-M&&y>M&&y<H-M){c.el.style.display="none";return;}
+    if(behind){x=2*cx-x;y=2*cy-y;}    // atrás da câmara: aponta para o lado oposto
+    if(!behind&&x>J.l+24&&x<J.r-24&&y>J.t+24&&y<J.b-24){c.el.style.display="none";return;}
     let dx=x-cx,dy=y-cy;
     const len=Math.hypot(dx,dy);
     if(!isFinite(len)||len<1e-3){c.el.style.display="none";return;}
     dx/=len;dy/=len;
-    const s=Math.min((W/2-M)/Math.max(Math.abs(dx),1e-6),(H/2-M)/Math.max(Math.abs(dy),1e-6));
+    const s=Math.max(0,Math.min(((ir-il)/2)/Math.max(Math.abs(dx),1e-6),((ib-it)/2)/Math.max(Math.abs(dy),1e-6)));
     const ex=cx+dx*s,ey=cy+dy*s;
     if(!isFinite(ex)||!isFinite(ey)){c.el.style.display="none";return;}
     c.el.style.display="flex";
-    c.el.style.left=ex.toFixed(0)+"px";
-    c.el.style.top=ey.toFixed(0)+"px";
+    /* o rótulo é centrado no ponto: metade da largura não pode passar da janela */
+    const mw=(c.el.offsetWidth||120)/2+8,mh=(c.el.offsetHeight||22)/2+6;
+    const fx=Math.min(Math.max(ex,J.l+68+mw),J.r-mw),fy=Math.min(Math.max(ey,J.t+56+mh),J.b-mh);
+    c.el.style.left=fx.toFixed(0)+"px";
+    c.el.style.top=fy.toFixed(0)+"px";
     const ar=c.el.querySelector(".ar");
     if(ar)ar.style.transform="rotate("+(Math.atan2(dy,dx)*180/Math.PI).toFixed(0)+"deg)";
   });
@@ -6762,7 +6811,7 @@ function addLayerRow(p){
   del.setAttribute("aria-label","Apagar "+p.name);
   del.onclick=async()=>{
     if(p.tasks.length)return;
-    if(!(await askConfirm("Apagar o procedimento “"+p.name+"”? Esta ação não pode ser desfeita.",{yes:"Apagar",danger:true})))return;
+    if(!(await askConfirm("Apagar o procedimento “"+p.name+"”? Pode anular logo a seguir.",{yes:"Apagar",danger:true})))return;
     deleteLayer(p);
   };
 
@@ -6896,7 +6945,7 @@ function renderGroups(){
     del.setAttribute("aria-label","Apagar grupo "+g.name);
     del.onclick=async()=>{
       if(members.length)return;
-      if(!(await askConfirm("Apagar o grupo “"+g.name+"”? Esta ação não pode ser desfeita.",{yes:"Apagar",danger:true})))return;
+      if(!(await askConfirm("Apagar o grupo “"+g.name+"”? Pode anular logo a seguir.",{yes:"Apagar",danger:true})))return;
       groups.splice(groups.indexOf(g),1);
       markDirty();
       renderGroups();renderDetail();
@@ -7015,7 +7064,7 @@ function renderNodeList(){
   if(flatQ){
     const hits=nodes.filter(n=>n.name.toLowerCase().includes(flatQ))
       .sort((a,b)=>a.tier-b.tier||a.name.localeCompare(b.name));
-    if(!hits.length)nodeList.append(el("div","empty-note","Nenhuma unidade com esse nome."));
+    if(!hits.length)nodeList.append(estadoVazio("Nenhuma unidade com esse nome","Confirme a escrita, ou procure por uma parte do nome.",null,null,"lupa",true));
     hits.forEach(n=>addRow(n,0,true));
     return;
   }
@@ -7487,12 +7536,17 @@ function renderAgentsTab(){
     tog.append(b);
   });
   agentList.append(tog);
+  if(!agents.length&&!agentSearch.trim()){
+    agentList.append(estadoVazio("Ainda não há pessoas","Cada unidade tem a sua equipa; o responsável aparece a dourado no palco.",
+      "Adicionar uma pessoa",()=>{const b=document.getElementById("addAgentBtn");if(b)b.click();}));
+    return;
+  }
 
   const aq=agentSearch.trim().toLowerCase();
   if(aq){
     const hits=agents.filter(a=>a.name.toLowerCase().includes(aq))
       .sort((x,y)=>x.name.localeCompare(y.name));
-    if(!hits.length)agentList.append(el("div","empty-note","Nenhuma pessoa com esse nome."));
+    if(!hits.length)agentList.append(estadoVazio("Ninguém com esse nome","Confirme a escrita, ou procure pelo apelido.",null,null,"lupa",true));
     hits.forEach(a=>{
       const n=byId(a.nodeId);
       agentList.append(agentRowBtn(a,a.category+(n?(" · "+n.name):"")));
@@ -8134,10 +8188,10 @@ async function removeNodeInteractive(n){
     return false;
   }
   if(!imp.agents.length&&!imp.tasks.length&&!imp.kids.length){
-    if(!(await askConfirm("Apagar a unidade “"+n.name+"”? Esta ação não pode ser desfeita.",
+    if(!(await askConfirm("Apagar a unidade “"+n.name+"”? Pode anular logo a seguir.",
       {yes:"Apagar",danger:true})))return false;
     const ok=deleteNode(n);
-    flash(ok?"Unidade removida.":"Não foi possível remover a unidade.",ok?undefined:{type:"err"});
+    if(ok)avisaApagado("Unidade apagada");else flash("Não foi possível remover a unidade.",{type:"err"});
     return ok;
   }
   const plan=await openNodeReassign(n,imp);
@@ -8145,8 +8199,8 @@ async function removeNodeInteractive(n){
   const ok=applyNodeRemoval(n,plan);
   if(!ok){flash("Não foi possível remover a unidade.",{type:"err"});return false;}
   const moved=(plan.agents||[]).length,kept=(plan.tasks||[]).filter(x=>x.to).length;
-  flash("Unidade removida"+(moved?(" · "+moved+" pessoa(s) transferida(s)"):"")+
-    (kept?(" · "+kept+" tarefa(s) religada(s)"):"")+".");
+  avisaApagado("Unidade apagada"+(moved?(" · "+moved+" pessoa(s) transferida(s)"):"")+
+    (kept?(" · "+kept+" tarefa(s) religada(s)"):""));
   return true;
 }
 function applyAgentRemoval(a,plan){
@@ -8180,14 +8234,14 @@ async function removeAgentInteractive(a){
     if(!(await askConfirm("Remover a pessoa “"+a.name+"”"+where+"? Nada depende dele.",
       {yes:"Remover",danger:true})))return false;
     applyAgentRemoval(a,null);
-    flash("Pessoa removida.");
+    avisaApagado("Pessoa apagada");
     return true;
   }
   const plan=await openReassign(a,imp);
   if(!plan)return false;
   applyAgentRemoval(a,plan);
   const moved=plan.tasks.filter(x=>x.to).length;
-  flash("Pessoa removida"+(moved?(" · "+moved+" tarefa(s) reatribuída(s)"):"")+".");
+  avisaApagado("Pessoa apagada"+(moved?(" · "+moved+" tarefa(s) reatribuída(s)"):""));
   return true;
 }
 if(reassignEl)reassignEl.addEventListener("pointerdown",e=>{
@@ -9761,7 +9815,7 @@ function renderFlowchart(p){
     see.onclick=()=>selectTask(t);
     const del=el("button","btn tiny","Apagar tarefa");
     del.onclick=async()=>{
-      if(!(await askConfirm("Apagar a tarefa “"+shortDesc(t)+"”? Esta ação não pode ser desfeita.",{yes:"Apagar",danger:true})))return;
+      if(!(await askConfirm("Apagar a tarefa “"+shortDesc(t)+"”? Pode anular logo a seguir.",{yes:"Apagar",danger:true})))return;
       deleteTask(t);fcSel=null;renderFlowchart(p);
     };
     const close=el("button","btn tiny","Fechar editor");
@@ -9939,7 +9993,7 @@ function renderFlowIndex(){
   nb.onclick=()=>{const np=createLayer();showFeynman(np);startAddTask(np,null);};
   modalBody.append(nb);
   if(!processes.length){
-    modalBody.append(el("div","empty-note","Ainda não há procedimentos."));
+    modalBody.append(estadoVazio("Ainda não há procedimentos","Crie o primeiro com o botão acima: cada procedimento ganha aqui o seu fluxograma.",null,null,null,true));
   }
   processes.forEach(p=>{
     const st=procStats(p);
@@ -12412,6 +12466,7 @@ function renderTaskListAll(){
     }
   });
   /* barra de chips com contagens */
+  const desenhaT=filtroMudou("tarefas",filtroTarefas.k+"|"+(filtroTarefas.pessoa||""));
   const chips=el("div","filtro-chips");
   const conta=k=>{
     const guarda=filtroTarefas;filtroTarefas={k:k,pessoa:guarda.pessoa};
@@ -12423,8 +12478,8 @@ function renderTaskListAll(){
    ["validado","Validado"],["aprovado","Aprovado"],["excedido","Prazo excedido"]]
   .forEach(([k,rot])=>{
     const n=conta(k);
-    const b=el("button","chip"+(filtroTarefas.k===k?" on":""),rot+" · "+n);
-    b.type="button";
+    const b=el("button","chip filtro"+(filtroTarefas.k===k?" on"+(desenhaT?" desenha":""):""),rot+" · "+n);
+    b.type="button";b.setAttribute("aria-pressed",String(filtroTarefas.k===k));
     b.onclick=()=>{filtroTarefas={k:k,pessoa:null};renderTaskListAll();};
     chips.append(b);
   });
@@ -12475,8 +12530,8 @@ function renderTaskListAll(){
     dot.style.background=hex(p.color);
     dot.style.display="inline-block";
     dot.style.marginRight="6px";
-    head.append(dot,document.createTextNode(p.name+" · "+p.tasks.length));
-    host.append(head);
+    head.append(dot,document.createTextNode(p.name+" · "+feitas(p)+" de "+p.tasks.length+" validadas"));
+    host.append(head,barraAvanco(p,false));
     p.tasks.forEach(t=>{
       if(!tarefaPassaFiltro(t,p,excedidos))return;
       total++;
@@ -12510,10 +12565,12 @@ function renderTaskListAll(){
     });
   });
   if(!total){
-    host.append(el("div","foot-note",
-      filtroTarefas.k==="tudo"
-        ?"Ainda não há tarefas. Crie a primeira no modo ligar (L) — arraste de uma unidade para outra — ou dentro de um fluxograma."
-        :"Nada nesta fatia. Escolha outro filtro, ou “Tudo”."));
+    if(filtroTarefas.k==="tudo")
+      host.append(estadoVazio("Ainda não há tarefas","Uma tarefa liga duas unidades dentro de um procedimento. Crie a primeira aqui, no modo ligar (L) do palco, ou dentro de um fluxograma.",
+        "Criar uma tarefa",criaTarefaGuiada));
+    else if(["semresp","avencer","atraso","minhas","excedido"].includes(filtroTarefas.k))
+      host.append(estadoVazio("Nada por resolver","Nenhuma tarefa nesta fatia. Escolha outro filtro, ou «Tudo».",null,null,"visto"));
+    else host.append(estadoVazio("Nada nesta fatia","Escolha outro filtro, ou «Tudo».",null,null,"lupa",true));
   }
 }
 /* O separador só se redesenha quando está à vista, e no máximo uma vez por
@@ -12925,7 +12982,7 @@ function renderVersoes(){
   if(!host)return;
   host.innerHTML="";
   const l=loadVersoes();
-  if(!l.length){host.append(el("div","foot-note","Ainda não guardou nenhuma versão."));return;}
+  if(!l.length){host.append(estadoVazio("Ainda não há versões","Guarde uma versão antes de uma reorganização: depois pode comparar e repor.",null,null,null,true));return;}
   l.slice().reverse().forEach(v=>{
     const row=el("div","ver-row");
     row.append(el("span","nm",v.nome));
@@ -15679,7 +15736,7 @@ function renderMatrix(){
   modalBody.append(viewBar(
     D.involved.length+" unidade(s) × "+D.procs.length+" procedimento(s) — o número é quantas vezes a unidade aparece numa tarefa."));
   if(!D.procs.length||!D.involved.length){
-    modalBody.append(el("div","empty-note","Ainda não há tarefas para cruzar. Crie um procedimento primeiro."));
+    modalBody.append(estadoVazio("Ainda não há tarefas para cruzar","A matriz junta unidades e procedimentos. Crie um procedimento com tarefas e volte aqui.","Criar um procedimento",()=>{const p=createLayer();showFlowchart(p);}));
     modal.classList.add("open");
     return;
   }
@@ -15842,7 +15899,7 @@ function renderMural(){
   modalBody.innerHTML="";
   modalBody.append(viewBar(processes.length+" procedimento(s). Clique numa miniatura para abrir o fluxograma."));
   if(!processes.length){
-    modalBody.append(el("div","empty-note","Ainda não há procedimentos."));
+    modalBody.append(estadoVazio("Ainda não há procedimentos","Crie o primeiro com o botão acima: cada procedimento ganha aqui o seu fluxograma.",null,null,null,true));
     const nb=el("button","btn primary","+ Novo procedimento");
     nb.onclick=()=>{const np=createLayer();showFeynman(np);startAddTask(np,null);};
     modalBody.append(nb);
@@ -15906,7 +15963,7 @@ function renderMetro(){
   modalBody.append(viewBar(
     "Cada procedimento é uma linha. As paragens a dourado servem mais do que uma linha — são as interfaces."));
   if(!D.lines.length){
-    modalBody.append(el("div","empty-note","Ainda não há procedimentos com tarefas."));
+    modalBody.append(estadoVazio("Ainda não há linhas","Cada procedimento com tarefas vira uma linha deste mapa.","Criar um procedimento",()=>{const p=createLayer();showFlowchart(p);}));
     modal.classList.add("open");
     return;
   }
@@ -16091,7 +16148,8 @@ function renderMunicipe(){
       c.chain.some(n=>n.name.toLowerCase().indexOf(q)>=0)||
       c.p.tasks.some(t=>String(t.desc||"").toLowerCase().indexOf(q)>=0));
     if(!cards.length){
-      list.append(el("div","empty-note",q?"Nada corresponde a “"+q+"”.":"Ainda não há procedimentos."));
+      list.append(q?estadoVazio("Nada corresponde a «"+q+"»","Experimente outra palavra: o nome de um serviço ou de um pedido.",null,null,"lupa",true)
+        :estadoVazio("Ainda não há procedimentos","Esta vista explica à população o que a autarquia faz, procedimento a procedimento.",null,null,null,true));
       return;
     }
     cards.forEach(c=>{
@@ -16933,7 +16991,7 @@ function renderBookmarks(){
   if(!host)return;
   host.innerHTML="";
   const l=loadBookmarks();
-  if(!l.length){host.append(el("div","empty-note","Sem vistas guardadas."));return;}
+  if(!l.length){host.append(estadoVazio("Sem vistas guardadas","Guarde o enquadramento da câmara para voltar a ele com um clique.",null,null,null,true));return;}
   l.forEach((b,i)=>{
     const row=el("div","bm-row");
     const go=el("button","go",b.name);
@@ -17242,6 +17300,7 @@ function recordHistory(){
       return;
     }
   }
+  const _antes=lastSnap;
   if(lastSnap!==null){
     undoStack.push(lastSnap);
     undoRotulos.push(rotuloPendente);
@@ -17251,6 +17310,7 @@ function recordHistory(){
   }
   rotuloPendente=null;
   lastSnap=cur;
+  try{verificaApagados(_antes,cur);}catch(e){}
   updateHistoryUI();
   scheduleAutosave();
 }
@@ -17975,7 +18035,8 @@ function renderPelouros(){
   }
   host.append(topo);
   if(!pode)host.append(el("div","foot-note","Só o Presidente (ou o Systems Admin) cria, edita ou elimina Pelouros."));
-  if(!pelouros.length)host.append(el("div","empty-note","Ainda não há Pelouros."));
+  if(!pelouros.length)host.append(estadoVazio("Ainda não há pelouros","Um pelouro junta unidades sob um membro do Executivo; os procedimentos pertencem ao pelouro onde nascem.",
+    pode?"Criar um pelouro":null,()=>{criaPelouro("",(presidente()||{}).id||null);renderPelouros();}));
   pelouros.forEach(pl=>{
     const card=el("div","pel-card");card.style.borderLeftColor=hex(corPelouro(pl));
     const head=el("div","pel-head");
@@ -18127,7 +18188,7 @@ function renderObjetos(){
   busca.addEventListener("input",()=>{objQuery=busca.value;renderObjetos();setTimeout(()=>{const b=host.querySelector(".search-input");if(b&&document.activeElement!==b){b.focus();b.setSelectionRange(b.value.length,b.value.length);}},0);});
   host.append(busca);
   const chips=el("div","chips");
-  [["ativos","Ativos"],["inventario","Inventário"],["arquivados","Arquivados"],["todos","Todos"]].forEach(([k,r])=>{const c=el("button","chip"+(objFiltro===k?" on":""),r);c.type="button";c.onclick=()=>{objFiltro=k;renderObjetos();};chips.append(c);});
+  const desenhaO=filtroMudou("objetos",objFiltro);[["ativos","Ativos"],["inventario","Inventário"],["arquivados","Arquivados"],["todos","Todos"]].forEach(([k,r])=>{const c=el("button","chip filtro"+(objFiltro===k?" on"+(desenhaO?" desenha":""):""),r);c.type="button";c.setAttribute("aria-pressed",String(objFiltro===k));c.onclick=()=>{objFiltro=k;renderObjetos();};chips.append(c);});
   host.append(chips);
   const q=normaliza(objQuery);
   const passa=o=>podeVerObjeto(o)&&(objFiltro==="todos"||(objFiltro==="arquivados"?o.arquivado:(objFiltro==="inventario"?(o.inventario&&!o.arquivado):!o.arquivado)))
@@ -18180,7 +18241,7 @@ function renderObjetos(){
   if(q)objetos.filter(passa).sort((a,b)=>a.num-b.num).forEach(o=>linha(o,0));
   else objetos.filter(o=>objetoRaiz(o)&&passa(o)).sort((a,b)=>a.num-b.num).forEach(o=>linha(o,0));
   if(!total){
-    if(objetos.length)host.append(el("div","empty-note","Nada com este filtro."));
+    if(objetos.length)host.append(estadoVazio("Nada com este filtro","Escolha outro filtro, ou procure por número, nome ou categoria.",null,null,"lupa",true));
     else host.append(estadoVazio("Comece o inventário","Património, equipamentos, viaturas, chaves, contratos: cada objeto tem número, categoria, localização e valores, e pode guardar outros lá dentro.",
       podeGerirObjetos()?"Criar o primeiro objeto":null,()=>{const o=criaObjeto();objMapaSuja();renderObjetos();selectObjeto(o);}));
   }
@@ -18407,6 +18468,7 @@ function avisaAlertas(){
 }
 function renderValidacaoTarefa(t,p){
   detail.append(el("h4",null,"Validação e prazo"));
+  if(p)detail.append(barraAvanco(p,true));
   const g=el("div","field-grid");
   g.append(el("label",null,"Estado"));
   const est=el("div","d-meta");
@@ -18769,11 +18831,14 @@ function renderRepositorios(){
   busca.addEventListener("input",()=>{repoQuery=busca.value;renderRepositorios();setTimeout(()=>{const b=host.querySelector(".search-input");if(b&&document.activeElement!==b){b.focus();b.setSelectionRange(b.value.length,b.value.length);}},0);});
   host.append(busca);
   const chips=el("div","chips");
-  [["todos","Todos"]].concat(Object.entries(REPO_TIPOS).map(([k,v])=>[k,v+"s"])).forEach(([k,r])=>{const c=el("button","chip"+(repoFiltro===k?" on":""),k==="ata"?"Atas":(k==="documento"?"Documentos":(k==="multimedia"?"Multimédia":(k==="minuta"?"Minutas":r))));c.type="button";c.onclick=()=>{repoFiltro=k;renderRepositorios();};chips.append(c);});
+  [["todos","Todos"]].concat(Object.entries(REPO_TIPOS).map(([k,v])=>[k,v+"s"])).forEach(([k,r],_i,_a)=>{if(!_i)window.__desenhaR=filtroMudou("repos",repoFiltro);const c=el("button","chip filtro"+(repoFiltro===k?" on"+(window.__desenhaR?" desenha":""):""),k==="ata"?"Atas":(k==="documento"?"Documentos":(k==="multimedia"?"Multimédia":(k==="minuta"?"Minutas":r))));c.type="button";c.onclick=()=>{repoFiltro=k;renderRepositorios();};chips.append(c);});
   host.append(chips);
   const q=normaliza(repoQuery);
   const lista=repositorios.filter(r=>repoFiltro==="todos"||r.tipo===repoFiltro).filter(r=>!q||normaliza(r.nome+" "+r.formato+" "+r.assoc.map(nomeAssoc).join(" ")).includes(q)).sort((a,b)=>a.data<b.data?1:(a.data>b.data?-1:0));
-  if(!lista.length)host.append(el("div","empty-note",repositorios.length?"Nada com este filtro.":"Ainda não há repositórios."));
+  if(!lista.length)host.append(repositorios.length
+    ?estadoVazio("Nada com este filtro","Escolha outro tipo, ou procure por outra palavra.",null,null,"lupa",true)
+    :estadoVazio("Ainda não há repositórios","Documentos, multimédia, atas e minutas, ligados às unidades, pessoas, procedimentos e tarefas a que dizem respeito.",
+      credAtual()>=2?"Criar um documento":null,()=>{const r=criaRepositorio("documento");renderRepositorios();selectRepositorio(r);}));
   lista.forEach(r=>repoLinha(r,host,false));
   host.append(el("div","foot-note",repositorios.length+" repositório"+(repositorios.length===1?"":"s")+" · credencial atual: "+(ehAdmin()?"Systems Admin":CRED_ROT[credAtual()])+"."));
 }
@@ -21441,8 +21506,9 @@ function indiceDefinicoes(){
   });
 }
 /** Estado vazio: uma figura, o nome do espaço, uma linha e o convite. */
-function estadoVazio(titulo,texto,rotulo,acao){
-  const v=el("div","vazio"),fig=el("div","vazio-fig");
+function estadoVazio(titulo,texto,rotulo,acao,variante,compacto){
+  const v=el("div","vazio"+(compacto?" compacto":"")),fig=el("div","vazio-fig"+(variante?" "+variante:""));
+  v.setAttribute("role","status");
   fig.setAttribute("aria-hidden","true");fig.append(el("span"),el("span"),el("span"));
   v.append(fig,el("div","vazio-t",titulo),el("div","vazio-s",texto));
   if(rotulo&&acao){const b=el("button","btn primary",rotulo);b.type="button";b.onclick=acao;v.append(b);}
@@ -21564,7 +21630,126 @@ function montaEstrutura(){
   setTimeout(moveNavInd,0);
   requestAnimationFrame(passoJanela);
 }
-montaEstrutura();
+/* ============================================================
+   MOVIMENTO (2): filtros que se desenham, listas que se reordenam à
+   vista, «apagado · Anular» em todas as eliminações, avanço de cada
+   procedimento, e a janela do palco para as setas das margens.
+============================================================ */
+const semMovimento=()=>reduceMotion||document.body.classList.contains("movimento-reduzido");
+/* ---- filtros: o visto só se desenha quando a escolha acabou de mudar ---- */
+const filtrosVistos={};
+function filtroMudou(grupo,valor){
+  const mudou=filtrosVistos[grupo]!==undefined&&filtrosVistos[grupo]!==valor;
+  filtrosVistos[grupo]=valor;
+  return mudou;
+}
+/* ---- listas: cada linha desliza do sítio onde estava para o novo ---- */
+function comFLIP(host,sel,chave,render){
+  if(!host||semMovimento()||host.offsetParent===null){render();return;}
+  const antes=new Map();
+  host.querySelectorAll(sel).forEach(e=>{const k=e.getAttribute(chave);if(k)antes.set(k,e.getBoundingClientRect());});
+  render();
+  if(!antes.size)return;
+  let novas=0;
+  host.querySelectorAll(sel).forEach(e=>{
+    const a=antes.get(e.getAttribute(chave));
+    if(a){
+      const b=e.getBoundingClientRect(),dx=a.left-b.left,dy=a.top-b.top;
+      if(Math.abs(dx)>1||Math.abs(dy)>1)
+        e.animate([{transform:"translate("+dx+"px,"+dy+"px)"},{transform:"none"}],{duration:360,easing:"cubic-bezier(.2,0,0,1)"});
+    }else{
+      e.animate([{opacity:0,transform:"translateY(8px) scale(.98)"},{opacity:1,transform:"none"}],
+        {duration:260,delay:80+Math.min(novas++,10)*18,easing:"cubic-bezier(.2,0,0,1)",fill:"backwards"});
+    }
+  });
+}
+/* ---- «apagado · Anular»: qualquer eliminação, venha de onde vier ---- */
+const APAGAVEIS=[["unidade","unidade","unidades",1],["pessoa","pessoa","pessoas",1],["procedimento","procedimento","procedimentos",0],
+  ["grupo","grupo de procedimentos","grupos de procedimentos",0],["pelouro","pelouro","pelouros",0],["objeto","objeto","objetos",0],
+  ["repositorio","repositório","repositórios",0],["tarefa","tarefa","tarefas",1],["nivel","nível","níveis",0]];
+let contagemCache={snap:null,c:null},ultimoAvisoApagado=0;
+function contagensVivas(){
+  return {unidade:nodes.length,pessoa:agents.length,procedimento:processes.length,tarefa:processes.reduce((s,p)=>s+p.tasks.length,0),
+    grupo:groups.length,pelouro:pelouros.length,objeto:objetos.length,repositorio:repositorios.length,nivel:TIER.length};
+}
+function contagensDe(json){
+  try{
+    const s=JSON.parse(json),x=s.extras||{},L=s.layers||[];
+    return {unidade:(s.nodes||[]).length,pessoa:(s.agents||[]).length,procedimento:L.length,tarefa:L.reduce((n,l)=>n+(l.tasks||[]).length,0),
+      grupo:(s.groups||[]).length,pelouro:(x.pelouros||[]).length,objeto:(x.objetos||[]).length,repositorio:(x.repositorios||[]).length,nivel:(s.tiers||[]).length};
+  }catch(e){return null;}
+}
+function avisaApagado(msg){
+  ultimoAvisoApagado=performance.now();
+  const n=undoStack.length;
+  toast(msg,{key:"apagado",duration:7000,actions:[{label:"Anular",fn:()=>{
+    if(undoStack.length===n&&!rascunho)undoAction();
+    else flash("Entretanto houve outras alterações: use Anular no topo, as vezes que forem precisas.",{key:"apagado"});
+  }}]});
+}
+function verificaApagados(antes,depois){
+  const a=contagemCache.snap===antes?contagemCache.c:contagensDe(antes);
+  const c=contagensVivas();
+  contagemCache={snap:depois,c};
+  if(!a||!antes||_sincAplicando)return;
+  const desceu=APAGAVEIS.find(([k])=>c[k]<a[k]);
+  if(!desceu)return;
+  const [k,sing,plur,fem]=desceu,n=a[k]-c[k];
+  const msg=n===1?sing[0].toUpperCase()+sing.slice(1)+(fem?" apagada":" apagado"):n+" "+plur+(fem?" apagadas":" apagados");
+  setTimeout(()=>{if(performance.now()-ultimoAvisoApagado>500)avisaApagado(msg);},0);
+}
+/* ---- avanço de um procedimento: a barra cresce do valor anterior para o novo ---- */
+const avancoAnt={};
+function feitas(p){return p.tasks.filter(t=>t.estado==="validado"||t.estado==="aprovado").length;}
+function barraAvanco(p,comTexto){
+  const tot=p.tasks.length,f=feitas(p),pc=tot?Math.round(f/tot*100):0;
+  const w=el("div","proc-avanco-w");
+  w.setAttribute("role","progressbar");w.setAttribute("aria-valuemin","0");w.setAttribute("aria-valuemax",String(tot));w.setAttribute("aria-valuenow",String(f));
+  w.setAttribute("aria-label",p.name+": "+f+" de "+tot+" tarefas validadas");
+  if(comTexto)w.append(el("div","proc-avanco-t",f+" de "+tot+" tarefas validadas"+(f===tot&&tot?" — procedimento concluído":"")));
+  const b=el("div","proc-avanco"+(f===tot&&tot?" completo":"")),i=document.createElement("i");
+  const ant=avancoAnt[p.id];
+  i.style.width=(ant===undefined||semMovimento()?pc:ant)+"%";
+  b.append(i);w.append(b);
+  avancoAnt[p.id]=pc;
+  if(ant!==undefined&&ant!==pc&&!semMovimento())requestAnimationFrame(()=>requestAnimationFrame(()=>{i.style.width=pc+"%";}));
+  return w;
+}
+/* ---- a janela do palco, para quem precisa de saber onde fica ---- */
+function janelaRect(){
+  const b=document.body.classList,W=innerWidth,H=innerHeight;
+  if(b.contains("presenting")||b.contains("palco")||!document.getElementById("janela"))return {l:0,t:0,r:W,b:H,il:54,it:54};
+  const fone=b.contains("vp-phone");
+  const r={l:fone?0:(b.contains("nav-fina")?72:256),t:fone?56:(b.contains("vp-squat")?52:64),r:W-(fone?0:8),b:H-(fone?64:8),il:fone?70:76,it:64};
+  const d=document.getElementById("detail");
+  if(b.contains("detail-open")&&d&&getComputedStyle(d).display!=="none"){
+    const q=d.getBoundingClientRect();
+    if(q.width<W*0.7)r.r=Math.min(r.r,q.left-8);else r.b=Math.min(r.b,q.top-8);
+  }
+  return r;
+}
+function montaMovimento(){
+  if(ehPalco)return;
+  const envolve=(nome,fab)=>{const o=eval(nome);eval(nome+"=fab(o)");};
+  envolve("renderTaskListAll",o=>function(){const a=arguments,h=document.getElementById("taskListAll");comFLIP(h,".task-row","data-tid",()=>o.apply(this,a));});
+  envolve("renderObjetos",o=>function(){const a=arguments,h=document.getElementById("objetoList");comFLIP(h,".obj-tree-row","data-oid",()=>o.apply(this,a));});
+  envolve("renderNodeList",o=>function(){
+    const r=o.apply(this,arguments);
+    if(nodes.length<=1&&!nodeSearch.trim()&&!nodeList.querySelector(".vazio"))
+      nodeList.prepend(estadoVazio("Só o Executivo, por agora","Crie a primeira divisão para começar a desenhar o organograma; as outras unidades penduram-se nela.",
+        "Criar uma unidade",()=>{const b=document.getElementById("addNodeBtn");if(b)b.click();}));
+    return r;
+  });
+  envolve("renderPageProcs",o=>function(){
+    const r=o.apply(this,arguments);
+    const h=document.getElementById("procExplore");
+    if(!processes.length&&h&&!h.querySelector(".vazio"))
+      h.prepend(estadoVazio("Ainda não há procedimentos","Um procedimento é a sequência de tarefas que leva um pedido de uma unidade a outra até estar resolvido.",
+        "Criar um procedimento",()=>{const p=createLayer();showFlowchart(p);}));
+    return r;
+  });
+}
+montaEstrutura();montaMovimento();
 booted=true;
 renderPerfilRow();renderAlertasRow();renderVisitaRow();
 aplicaPrefsA11y();

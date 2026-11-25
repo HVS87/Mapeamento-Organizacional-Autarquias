@@ -15,6 +15,7 @@ window.__QA_ESTRUTURA = async function(){
   const ls = {}; CH.forEach(k => { ls[k] = localStorage.getItem(k); });
   const tema0 = g("themeId"), fs0 = g("fontScale");
   const fone = document.body.classList.contains("vp-phone");
+  const semMov = () => g("reduceMotion") || document.body.classList.contains("movimento-reduzido");
   const itens = () => qa(".menu-pop button .mt").map(e => e.textContent);
   const escolhe = rot => click(qa(".menu-pop button").find(b => b.querySelector(".mt").textContent === rot));
   try {
@@ -38,7 +39,7 @@ window.__QA_ESTRUTURA = async function(){
       click(q("#navBtn")); await sleep(40);
       await t("navegação: volta ao que era", () => document.body.classList.contains("nav-fina") === estava);
       run("setTab")("tarefas"); await sleep(320);
-      await t("navegação: o indicador acompanha o separador", () => { const on = q("#tabbar .tab.on"), i = q("#navInd"); return on.dataset.tab === "tarefas" && i.style.transform.includes("," + on.offsetTop + "px") && parseFloat(i.style.width) === on.offsetWidth; });
+      await t("navegação: o indicador acompanha o separador", () => { const on = q("#tabbar .tab.on"), i = q("#navInd"); return on.dataset.tab === "tarefas" && i.style.transform.replace(/\s/g, "").includes("," + on.offsetTop + "px)") && parseFloat(i.style.width) === on.offsetWidth; });
       run("setTab")("home"); await sleep(60);
     } else {
       await t("telemóvel: barra inferior com cinco destinos e botão de criar", () => qa("#barraBaixo button").length === 5 && vis(q("#fabCriar")));
@@ -91,7 +92,8 @@ window.__QA_ESTRUTURA = async function(){
     click(q("#camadasBtn")); await sleep(60);
     await t("camadas: fecha", () => !vis(q("#panel")));
     /* ---- janela do palco ---- */
-    await sleep(700);
+    /* a câmara aproxima-se do alvo frame a frame: num separador escondido os frames atrasam-se */
+    for (let k = 0; k < 40 && Math.abs(g("camera").zoom - run("alvoJanela")().z) > 0.01; k++) await sleep(100);
     await t("janela do palco: a câmara encolhe e centra-se na parte livre", () => { const c = g("camera"); return c.zoom < 1 && c.zoom > 0.45 && c.view && c.view.enabled && (fone ? Math.abs(c.view.offsetX) < 1 : c.view.offsetX < -10); });
     await t("janela do palco: a moldura não apanha cliques", () => getComputedStyle(q("#janela")).pointerEvents === "none");
     /* ---- perfil ---- */
@@ -134,6 +136,50 @@ window.__QA_ESTRUTURA = async function(){
     run("clearSelection")();
     run("flash")("Aviso de teste"); await sleep(120);
     await t("avisos: nascem em baixo", () => { const b = q("#toasts .toast"); return b && b.getBoundingClientRect().top > innerHeight * 0.55; });
+    /* ---- filtros que se desenham, listas que se reordenam ---- */
+    run("setTab")("tarefas"); await sleep(300);
+    const chipAtraso = qa("#taskListAll .chip.filtro").find(c => /^Por confirmar/.test(c.textContent));
+    click(chipAtraso); await sleep(40);
+    await t("filtro: a escolha nova desenha o visto e fica marcada", () => { const c = qa("#taskListAll .chip.filtro.on"); return c.length === 1 && /^Por confirmar/.test(c[0].textContent) && c[0].classList.contains("desenha") && c[0].getAttribute("aria-pressed") === "true"; });
+    run("renderTaskListAll")(); await sleep(30);
+    await t("filtro: o visto não se volta a desenhar a cada atualização", () => !q("#taskListAll .chip.filtro.on").classList.contains("desenha"));
+    click(qa("#taskListAll .chip.filtro").find(c => /^Tudo/.test(c.textContent))); await sleep(30);
+    await t("listas: as linhas animam-se ao mudar de filtro", () => semMov() || qa("#taskListAll .task-row").some(r => r.getAnimations().length > 0));
+    /* ---- avanço por procedimento ---- */
+    const pv = g("processes")[0], tv = pv.tasks.find(x => x.estado !== "validado" && x.estado !== "aprovado");
+    const barra = () => q('#taskListAll [role="progressbar"][aria-label^="' + pv.name.replace(/"/g, "") + '"]');
+    const antesV = +barra().getAttribute("aria-valuenow");
+    run("validarTarefa")(pv, tv); run("renderTaskListAll")(); await sleep(60);
+    await t("avanço: validar uma tarefa faz crescer a barra do procedimento", () => +barra().getAttribute("aria-valuenow") === antesV + 1 && /validadas/.test(barra().previousElementSibling.textContent));
+    run("selectTask")(tv); await sleep(60);
+    await t("avanço: a ficha da tarefa mostra quantas faltam", () => /de \d+ tarefas validadas/.test(q("#detail").textContent));
+    run("clearSelection")();
+    /* ---- «apagado · Anular» ---- */
+    const pa = g("processes")[1], nTar = pa.tasks.length;
+    const tx = run("createTask")(1, pa.tasks[0].a, pa.tasks[0].b, "Tarefa para apagar", null, "1 dia"); run("markDirty")(); await sleep(30);
+    run("deleteTask")(tx); await sleep(80);
+    const avisoA = qa("#toasts .toast").find(e => /Tarefa apagada/.test(e.textContent));
+    await t("apagar: aparece «Tarefa apagada» com Anular", () => !!avisoA && /Anular/.test(avisoA.textContent));
+    click(avisoA.querySelector(".tacts button")); await sleep(80);
+    await t("apagar: Anular devolve a tarefa", () => g("processes")[1].tasks.length === nTar + 1);
+    run("setTab")("pelouros"); await sleep(60);
+    const pls = g("pelouros").splice(0); run("renderPelouros")(); await sleep(30);
+    await t("estados vazios: Pelouros convida a criar o primeiro", () => !!q("#pageBody .vazio .vazio-t") && /pelouros/.test(q("#pageBody .vazio .vazio-t").textContent));
+    pls.forEach(p => g("pelouros").push(p)); run("renderPelouros")();
+    run("setTab")("tarefas"); filtroAtraso: { F.set("filtroTarefas", {k: "atraso", pessoa: null}); run("renderTaskListAll")(); await sleep(30); }
+    await t("estados vazios: fatia sem nada em atraso mostra o visto", () => !!q("#taskListAll .vazio-fig.visto") || qa("#taskListAll .task-row").length > 0);
+    F.set("filtroTarefas", {k: "tudo", pessoa: null});
+    run("setTab")("agentes"); await sleep(40);
+    F.set("agentSearch", "zzzz nada"); run("renderAgentsTab")(); await sleep(30);
+    await t("estados vazios: procura sem resultados mostra a lupa", () => !!q("#pageBody .vazio-fig.lupa"));
+    F.set("agentSearch", ""); run("renderAgentsTab")();
+    /* ---- setas das margens, dentro da janela ---- */
+    run("setTab")("home"); await sleep(60);
+    run("selectNode")(g("nodes")[6]); await sleep(1500);
+    const J = run("janelaRect")();
+    const setas = qa("#chevrons > *").filter(vis);
+    await t("setas das margens: todas dentro da janela do palco", () => setas.every(e => { const b = e.getBoundingClientRect(), cx = b.left + b.width / 2, cy = b.top + b.height / 2; return cx >= J.l && cx <= J.r && cy >= J.t && cy <= J.b; }));
+    run("clearSelection")();
     /* ---- vocabulário e regras ---- */
     const maus = [];
     for (const tab of ["home", "nodulos", "agentes", "tarefas", "procedimentos", "pelouros", "objetos", "repositorios", "dados", "definicoes"]){
