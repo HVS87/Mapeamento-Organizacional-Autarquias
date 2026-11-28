@@ -42,9 +42,9 @@ const correrUmaVez = (exe, args) => new Promise(res => {
   const p = spawn(exe, args, {stdio: "ignore", windowsVerbatimArguments: true});
   p.on("exit", c => res(c)); p.on("error", () => res(-1));
 });
-/* Em algumas versões do Windows, o System.dll do NSIS rebenta de vez em quando
-   ao arrancar um instalador (0xC0000005), com ou sem os nossos ganchos; uma
-   segunda tentativa passa. Conta-se, para se ver se piora. */
+/* Com o NSIS 3.0.4, o System.dll rebentava ao arrancar o instalador em algumas
+   versões do Windows 11 (0xC0000005); com o 3.12 deixou de acontecer. Se voltar,
+   repete-se e conta-se, e o resultado di-lo — não passa despercebido. */
 let repeticoes = 0;
 const correr = async (exe, args) => {
   for (let k = 0; ; k++){

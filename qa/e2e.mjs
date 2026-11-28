@@ -14,8 +14,13 @@ const electron = createRequire(path.join(desktop, "package.json"))("electron");
 const PORTA = +(process.env.QA_PORTA || 9223), rede = !process.argv.includes("--sem-rede");
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
+/* um perfil só desta QA, que se apaga no fim: o que lá ficar (uma ligação de
+   sincronização, um autosave) não passa para a próxima volta nem para quem
+   corre a aplicação em desenvolvimento */
+const perfil1 = fs.mkdtempSync(path.join((await import("node:os")).tmpdir(), "fma-e2e-perfil-"));
+process.on("exit", () => { try { fs.rmSync(perfil1, {recursive: true, force: true}); } catch(e){} });
 const proc = spawn(electron, [".", "--remote-debugging-port=" + PORTA, "--disable-renderer-backgrounding", "--disable-backgrounding-occluded-windows"],
-  {cwd: desktop, env: Object.assign({}, process.env, {MAPA_HTML: path.join(aqui, "build", "qa.html"),
+  {cwd: desktop, env: Object.assign({}, process.env, {MAPA_HTML: path.join(aqui, "build", "qa.html"), MAPA_DADOS: perfil1,
     /* as atualizações apontam para um sítio sem resposta: a procura ao arrancar
        falha em silêncio, e a QA nunca descarrega nada de verdade aqui */
     MAPA_ATUALIZACOES: "http://127.0.0.1:9/"}), stdio: "ignore"});

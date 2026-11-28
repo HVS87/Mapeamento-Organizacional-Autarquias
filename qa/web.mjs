@@ -146,7 +146,6 @@ try {
   await abrir(c, SITE);
   const antes = await c.avaliar(`(async()=>{const F=__F,run=n=>F.run(n);
     await new Promise(r=>setTimeout(r,800));
-    run("closeCoach")();   // a visita de primeira utilização fica por cima de tudo: fecha-se, como faria uma pessoa
     localStorage.setItem("of.atualizacoes.v1",JSON.stringify({auto:false}));
     run("applyTheme")("lisboa");localStorage.setItem("of.theme.v1","lisboa");
     run("sincLigarCom")(run("codigoNovo")());
@@ -165,8 +164,9 @@ try {
     while(Date.now()<fim){const t=document.getElementById("odTitle");if(t&&/9\\.9\\.9/.test(t.textContent)&&document.querySelector("#odBtns button"))break;await new Promise(r=>setTimeout(r,100));}
     const titulo=(document.getElementById("odTitle")||{}).textContent||"";
     const b=[...document.querySelectorAll("#odBtns button")].find(x=>x.textContent==="Atualizar agora");
-    return {titulo,ha:!!b,dirty:F.get("dirty")};})()`);
-  /* um clique a sério: com gesto do utilizador, o browser perguntaria «sair do site?» se a página o pedisse */
+    return {titulo,ha:!!b,dirty:F.get("dirty"),visita:document.getElementById("coach").classList.contains("open")};})()`);
+  /* um clique a sério: com gesto do utilizador, o browser perguntaria «sair do site?» se a página o pedisse;
+     e, num perfil novo, com a visita de boas-vindas aberta por baixo da pergunta */
   procura.clicou = procura.ha && await c.clicar('[...document.querySelectorAll("#odBtns button")].find(x=>x.textContent==="Atualizar agora")');
   /* a página recarrega sozinha */
   await sleep(1500);
@@ -189,6 +189,7 @@ try {
     ["a app estava instalada (service worker a servir)", antes.controlada],
     ["a pergunta mostrou a versão nova", /Versão 9\.9\.9 disponível/.test(procura.titulo) && procura.clicou],
     ["com alterações por guardar, recarregou sem perguntar «sair do site?»", procura.dirty === true && c.dialogos.length === 0],
+    ["com a visita de boas-vindas aberta, o clique chegou à pergunta", procura.visita === true && depois.versao === "9.9.9"],
     ["recarregou já na versão nova, apesar da cache de 10 min", depois.versao === "9.9.9"],
     ["o projeto ficou (" + depois.org + ")", depois.org === "Câmara Municipal de Teste" && depois.nos === antes.nos],
     ["o tema ficou", depois.tema === antes.tema && !!antes.tema],

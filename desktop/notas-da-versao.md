@@ -16,6 +16,11 @@
 
 As aplicações não estão assinadas por um certificado de programador. No Windows, o SmartScreen mostra «Editor desconhecido»: *Mais informações › Executar mesmo assim*. No Mac, na primeira vez: botão direito na aplicação › *Abrir* › *Abrir*.
 
+### Versão 1.1.1
+- **Instalador do Windows mais robusto**: passa a ser construído com uma versão recente do sistema de instalação, que deixou de fechar de repente ao arrancar em algumas versões do Windows 11 (também ao atualizar em silêncio).
+- **As perguntas ficam por cima da visita de boas-vindas**: na primeira utilização, uma pergunta que chegasse ao mesmo tempo (o segundo ecrã, uma versão nova) ficava tapada e não se conseguia responder; agora fica à frente, e a visita espera por baixo.
+- Quem já tem a 1.1.0 recebe esta pelas Definições › Atualizações, sem reinstalar.
+
 ### Versão 1.1.0
 - **Atualizações sem reinstalar**: Definições › Atualizações tem o botão «Procurar atualizações» e a opção «Procurar sempre atualizações ao iniciar», ligada por omissão. Quando há versão nova, basta «Atualizar agora».
 - **Na aplicação de secretária**, a versão nova descarrega-se da Release, confere-se pela impressão digital (SHA-256) e a aplicação recarrega com ela, no Windows (instalado e portátil), no Mac e no Linux. Se um dia uma versão precisar de um programa mais recente, o instalador do Windows e o AppImage atualizam-se sozinhos; os restantes abrem a página de download.

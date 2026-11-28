@@ -630,7 +630,9 @@
   .te-grid .btn{justify-self:start;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .danger-btn{border-color:#E0554F;color:#E0554F}
   .danger-btn:hover{background:rgba(224,85,79,0.12)}
-  #optDialog{position:fixed;inset:0;z-index:52;display:none;background:var(--scrim);
+  /* As perguntas ficam por cima de tudo o que não é a paleta e o leitor de QR —
+     incluindo a visita de boas-vindas, que espera por baixo até a pergunta fechar. */
+  #optDialog{position:fixed;inset:0;z-index:82;display:none;background:var(--scrim);
     -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);padding:24px}
   #optDialog.open{display:grid;place-items:center}
   #odCard{width:min(470px,calc(100vw - 48px));padding:20px;border-radius:14px;animation:confirmIn .2s ease}
@@ -1017,7 +1019,7 @@
 
   /* ---------- Confirm dialog ---------- */
   #confirm{
-    position:fixed;inset:0;z-index:60;display:none;
+    position:fixed;inset:0;z-index:82;   /* por cima da visita de boas-vindas, como as opções */display:none;
     background:rgba(4,8,16,0.7);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
     align-items:center;justify-content:center;padding:24px;
   }
@@ -20041,7 +20043,7 @@ syncPlay();
    último estado sem perguntar. Os dados e as preferências vivem no
    armazenamento deste aparelho, que uma atualização não toca.
 ============================================================ */
-const VERSAO_APP="1.1.0";
+const VERSAO_APP="1.1.1";
 const ATUALIZ_KEY="of.atualizacoes.v1",ATUALIZ_FEITA_KEY="of.atualizacoes.feita.v1";
 let repostoNoArranque=false,atualizEmCurso=false,atualizUltima=null;
 /* recarregar para atualizar não pergunta «sair do site?»: o trabalho já está gravado e volta sozinho */

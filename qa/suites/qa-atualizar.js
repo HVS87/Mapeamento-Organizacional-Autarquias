@@ -63,6 +63,26 @@ window.__QA_ATUALIZAR = async function(){
     return r;
   });
 
+  /* as perguntas ficam por cima da visita de boas-vindas (que abre sozinha
+     na primeira utilização, ao mesmo tempo que podem chegar perguntas) */
+  {
+    const coach = q("#coach"), estava = coach.classList.contains("open");
+    const noTopo = b => { const r = b.getBoundingClientRect(), e = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2); return e === b || b.contains(e); };
+    coach.classList.add("open");
+    const po = run("askOpcoes")("Teste", "por cima da visita?", [{k: "a", label: "Fica por cima"}]);
+    await sleep(80);
+    const bo = q("#odBtns button");
+    await t("a janela de opções fica por cima da visita de boas-vindas", () => noTopo(bo));
+    bo.click(); await po;
+    const pc = run("askConfirm")("Por cima da visita?", {yes: "Sim"});
+    await sleep(80);
+    const bc = q("#confirmYes") || [...q("#confirm").querySelectorAll("button")].find(b => b.textContent === "Sim");
+    await t("a confirmação fica por cima da visita de boas-vindas", () => noTopo(bc));
+    bc.click(); await pc;
+    await t("a visita continua lá depois da pergunta", () => coach.classList.contains("open"));
+    if (!estava) coach.classList.remove("open");
+  }
+
   /* ---------- 2. comparar versões ---------- */
   const cmp = run("compararVersoesApp");
   await t("comparar versões", () => cmp("1.1.0", "1.0.9") === 1 && cmp("1.0.10", "1.0.9") === 1 && cmp("2.0.0", "10.0.0") === -1 && cmp("1.1.0", "1.1.0") === 0 && cmp("0.9.9", "1.0.0") === -1);

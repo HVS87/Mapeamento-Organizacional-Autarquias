@@ -1,7 +1,7 @@
 {
   "name": "mapeamento-organizacional-desktop",
   "productName": "Mapeamento Organizacional para Autarquias",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Mapeamento em 3D da estrutura orgânica e dos procedimentos da administração local portuguesa — aplicação de secretária.",
   "main": "main.js",
   "author": {
@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "electron": "^33.2.0",
-    "electron-builder": "^25.1.8",
+    "electron-builder": "^26.18.0",
     "jsqr": "^1.4.0"
   },
   "build": {
@@ -87,10 +87,14 @@
         "repo": "Mapeamento-Organizacional-Autarquias",
         "releaseType": "release"
       }
-    ]
+    ],
+    "toolsets": {
+      "nsis": "1.2.1"
+    }
   },
   "allowScripts": {
-    "electron@33.4.11": true
+    "electron@33.4.11": true,
+    "electron-winstaller": false
   },
   "dependencies": {
     "electron-updater": "^6.8.11"

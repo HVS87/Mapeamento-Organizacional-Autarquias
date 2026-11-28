@@ -192,6 +192,8 @@ npm run build:mac     # Mac: .dmg e .zip, Apple e Intel (só num Mac)
 npm run build:linux   # Linux: AppImage e .deb
 ```
 
+O instalador e o portátil do Windows usam o NSIS 3.12 (`build.toolsets.nsis` no `package.json`): o 3.0.4 que o electron-builder traz por omissão fechava de repente ao arrancar (`System.dll`, 0xC0000005) em algumas versões do Windows 11, cerca de metade das vezes.
+
 No Windows também serve `.\construir-exe.ps1`. O `preparar-app.js` copia a página e os ícones para `app/`, descarrega o three.js (a aplicação funciona sem internet) e desliga o service worker da versão web; o `electron-builder` faz o resto. No Mac, a aplicação leva uma assinatura ad-hoc (`assinar-adhoc.js`), sem a qual um Mac com chip Apple a recusaria. Os resultados ficam em `desktop/dist/`.
 
 Onde ficam os dados: na versão portátil do Windows, ao lado do executável (a pasta onde está o .exe, não a temporária onde se descompacta; se for só de leitura, a pasta do utilizador); no Windows instalado, no Mac e no Linux, na pasta do utilizador (`%APPDATA%\…`, `~/Library/Application Support/…`, `~/.config/…`). A pasta do programa instalado é apagada e reescrita a cada atualização, e por isso nunca guarda dados: o que a versão 1.0 lá deixava passa sozinho para a pasta do utilizador no primeiro arranque, e o instalador (`instalador.nsh`) resguarda-o enquanto substitui a versão anterior.
