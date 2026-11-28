@@ -83,7 +83,7 @@ const PASTA_PAGINA=path.join(app.getPath("userData"),"pagina");
    Sobe sempre que uma página nova precisar de algo que um programa antigo
    não tem; a página de uma Release só se instala num programa com o nível
    que ela pede. Lido daqui por gerar-atualizacao.js. */
-const CASCA=2;
+const CASCA=3;   // 3: a 1.1.0 não conseguia instalar a página (ver copiarDoPacote)
 const REPO="HVS87/Mapeamento-Organizacional-Autarquias";
 const PAGINA_RELEASES="https://github.com/"+REPO+"/releases/latest";
 /* MAPA_ATUALIZACOES: outra origem para as atualizações (a QA usa um servidor local) */
@@ -336,6 +336,17 @@ async function procurar(){
   else pendente={tipo:"descarregar",m};
   return Object.assign(base,{tipo:pendente.tipo});
 }
+/* Copia uma pasta de dentro do pacote para fora, ficheiro a ficheiro. Dentro
+   do app.asar o fs.cpSync não funciona (usa opendir, que o asar não tem) —
+   foi isso que impediu a 1.1.0 empacotada de instalar páginas novas. */
+function copiarDoPacote(de,para){
+  fs.mkdirSync(para,{recursive:true});
+  for(const n of fs.readdirSync(de)){
+    const a=path.join(de,n),b=path.join(para,n);
+    if(fs.statSync(a).isDirectory())copiarDoPacote(a,b);
+    else fs.writeFileSync(b,fs.readFileSync(a));
+  }
+}
 /* A página nova monta-se numa pasta ao lado e só no fim toma o lugar da
    anterior: uma falha a meio deixa tudo como estava. */
 async function instalarPagina(m){
@@ -348,8 +359,8 @@ async function instalarPagina(m){
   const tmp=PASTA_PAGINA+".nova",velha=PASTA_PAGINA+".anterior";
   fs.rmSync(tmp,{recursive:true,force:true});
   fs.mkdirSync(path.join(tmp,"vendor"),{recursive:true});
-  fs.copyFileSync(path.join(RECURSOS,"vendor","three.min.js"),path.join(tmp,"vendor","three.min.js"));
-  fs.cpSync(path.join(RECURSOS,"icons"),path.join(tmp,"icons"),{recursive:true});
+  copiarDoPacote(path.join(RECURSOS,"vendor"),path.join(tmp,"vendor"));
+  copiarDoPacote(path.join(RECURSOS,"icons"),path.join(tmp,"icons"));
   fs.writeFileSync(path.join(tmp,"network-framework.html"),html);
   fs.writeFileSync(path.join(tmp,"versao.json"),JSON.stringify({versao:m.versao,casca:m.casca,sha256:m.sha256,instalada:new Date().toISOString()},null,2));
   fs.rmSync(velha,{recursive:true,force:true});

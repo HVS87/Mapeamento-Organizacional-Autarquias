@@ -1,8 +1,8 @@
 {
-  "versao": "1.1.1",
+  "versao": "1.1.2",
   "novidades": [
-    "Instalador do Windows mais robusto: passa a ser construído com uma versão recente do sistema de instalação, que deixou de fechar de repente ao arrancar em algumas versões do Windows 11 (também ao atualizar em silêncio).",
-    "As perguntas ficam por cima da visita de boas-vindas: na primeira utilização, uma pergunta que chegasse ao mesmo tempo (o segundo ecrã, uma versão nova) ficava tapada e não se conseguia responder; agora fica à frente, e a visita espera por baixo.",
-    "Quem já tem a 1.1.0 recebe esta pelas Definições › Atualizações, sem reinstalar."
+    "Atualizações da aplicação de secretária corrigidas: na 1.1.0 e na 1.1.1 empacotadas, «Atualizar agora» falhava ao montar a página nova (a cópia dos ficheiros de dentro do pacote não funcionava fora do ambiente de desenvolvimento). Corrigido, e agora testado na aplicação instalada.",
+    "Para quem tem a 1.1.0 ou a 1.1.1: no Windows instalado e no AppImage (Linux), «Procurar atualizações» atualiza o programa inteiro e reabre sozinho. No Windows portátil, no Mac e no .deb, a aplicação abre a página de download: descarregue esta versão uma vez, à mão; os dados e as preferências ficam onde estão.",
+    "Daqui em diante, as versões novas instalam-se pelas Definições em todas as plataformas."
   ]
 }

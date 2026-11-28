@@ -88,13 +88,19 @@ try {
   chk.push(["reinstalar por cima: as definições sobrevivem", (ler(path.join(inst, "definicoes.json")) || "").includes(MARCA)]);
   chk.push(["a pasta temporária do instalador foi limpa", !fs.existsSync(path.join(os.tmpdir(), "mapeamento-organizacional-dados"))]);
 
-  /* 3. arrancar a aplicação instalada */
-  const pagina = Buffer.from("<!doctype html><title>x</title>");
+  /* 3. arrancar a aplicação instalada. O servidor faz de Release: primeiro uma
+     página nova (a da aplicação, com a versão seguinte), depois um programa novo */
+  const CASCA = +/const CASCA=(\d+);/.exec(fs.readFileSync(path.join(desktop, "main.js"), "utf8"))[1];
+  const base = fs.readFileSync(path.join(desktop, "app", "network-framework.html"), "utf8");
+  const pagina = Buffer.from(base.replace(/const VERSAO_APP="[^"]+";/, 'const VERSAO_APP="' + seguinte + '";'), "utf8");
+  const depoisDeSeguinte = seguinte.replace(/\d+$/, n => String(+n + 1));
+  let manifesto = {versao: seguinte, casca: CASCA, sha256: (await import("node:crypto")).createHash("sha256").update(pagina).digest("hex"), tamanho: pagina.length, novidades: ["Página nova (QA)."]};
   const ficheiros = {};
   for (const f of fs.readdirSync(path.join(desktop, "dist-qa"))) if (/\.(yml|exe|blockmap)$/.test(f)) ficheiros[f] = path.join(desktop, "dist-qa", f);
   srv = http.createServer((q, r) => {
     const n = decodeURIComponent(new URL(q.url, "http://x").pathname).replace(/^\//, "");
-    if (n === "atualizacao.json"){ r.writeHead(200); r.end(JSON.stringify({versao: seguinte, casca: 99, sha256: "a".repeat(64), tamanho: pagina.length, novidades: ["Programa novo (QA)."]})); return; }
+    if (n === "atualizacao.json"){ r.writeHead(200); r.end(JSON.stringify(manifesto)); return; }
+    if (n === "pagina.html"){ r.writeHead(200); r.end(pagina); return; }
     if (!ficheiros[n]){ r.writeHead(404); r.end(); return; }
     const st = fs.statSync(ficheiros[n]);
     r.writeHead(200, {"Content-Length": st.size}); fs.createReadStream(ficheiros[n]).pipe(r);
@@ -104,18 +110,22 @@ try {
   app = spawn(exe, ["--remote-debugging-port=" + PORTA_CDP], {stdio: "ignore",
     env: Object.assign({}, process.env, {MAPA_DADOS: dados, MAPA_ATUALIZACOES: "http://127.0.0.1:" + PORTA_SRV + "/"})});
   app.on("error", () => {});
-  let alvo = null;
-  for (let k = 0; k < 80 && !alvo; k++){
-    try { alvo = (await (await fetch("http://127.0.0.1:" + PORTA_CDP + "/json")).json()).find(x => x.type === "page" && /network-framework\.html/.test(x.url)); } catch(e){}
-    if (!alvo) await sleep(500);
-  }
-  if (!alvo) throw new Error("a aplicação instalada não abriu a página");
-  const ws = new WebSocket(alvo.webSocketDebuggerUrl);
-  await new Promise((r, j) => { ws.onopen = r; ws.onerror = j; });
-  let id = 0; const pend = new Map();
-  ws.onmessage = ev => { const m = JSON.parse(ev.data); if (pend.has(m.id)){ pend.get(m.id)(m); pend.delete(m.id); } };
+  let ws = null, id = 0; const pend = new Map();
   const avaliar = expr => new Promise(r => { const i = ++id; pend.set(i, m => r(m.result && m.result.result && m.result.result.value)); ws.send(JSON.stringify({id: i, method: "Runtime.evaluate", params: {expression: expr, awaitPromise: true, returnByValue: true}})); });
-  for (let k = 0; k < 60; k++){ if (await avaliar("!!(window.desktop&&document.getElementById('atualizRow'))")) break; await sleep(500); }
+  const ligarPagina = async re => {
+    let alvo = null;
+    for (let k = 0; k < 80 && !alvo; k++){
+      try { alvo = (await (await fetch("http://127.0.0.1:" + PORTA_CDP + "/json")).json()).find(x => x.type === "page" && re.test(x.url)); } catch(e){}
+      if (!alvo) await sleep(500);
+    }
+    if (!alvo) throw new Error("a aplicação instalada não abriu a página (" + re + ")");
+    try { if (ws) ws.close(); } catch(e){}
+    ws = new WebSocket(alvo.webSocketDebuggerUrl);
+    await new Promise((r, j) => { ws.onopen = r; ws.onerror = j; });
+    ws.onmessage = ev => { const m = JSON.parse(ev.data); if (pend.has(m.id)){ pend.get(m.id)(m); pend.delete(m.id); } };
+    for (let k = 0; k < 60; k++){ if (await avaliar("!!(window.desktop&&document.getElementById('atualizRow'))")) break; await sleep(500); }
+  };
+  await ligarPagina(/network-framework\.html/);
   const info = await avaliar("window.desktop.atualizacoes()");
   const pasta = await avaliar("window.desktop.pastaAutosaves()");
   chk.push(["instalado: o programa atualiza-se sozinho", info && info.modo === "instalado" && info.programaSozinho === true && info.versao === versao]);
@@ -124,9 +134,25 @@ try {
     (ler(path.join(dados, "definicoes.json")) || "").includes(MARCA) && fs.existsSync(path.join(dados, "autosaves", "autosave-2026-01-01_10-00.json"))]);
   chk.push(["as definições migradas valem (ecrã inteiro desligado)", (await avaliar("window.desktop.definicoes().ecraInteiro")) === false]);
 
-  /* 4. o programa inteiro, para a versão seguinte */
+  /* 4. uma página nova, dentro da aplicação empacotada (o three.js e os ícones
+     vêm de dentro do app.asar) */
+  const rp = await avaliar("window.desktop.procurarAtualizacoes()");
+  chk.push(["página nova: oferecida como atualização da página", rp && rp.tipo === "pagina" && rp.versao === seguinte]);
+  const ap = await avaliar("window.desktop.aplicarAtualizacao()");
+  chk.push(["página nova: descarregada, conferida e instalada" + (ap && ap.erro ? " (" + ap.erro + ")" : ""), ap && ap.ok === true && ap.tipo === "pagina" &&
+    fs.existsSync(path.join(dados, "pagina", "vendor", "three.min.js")) && fs.existsSync(path.join(dados, "pagina", "icons"))]);
+  if (ap && ap.ok){
+    avaliar("window.desktop.concluirAtualizacao()");
+    await sleep(2500);
+    await ligarPagina(/pagina\/network-framework\.html/);
+    const ip = await avaliar("({v:window.desktop.atualizacoes().versao,tres:typeof THREE!=='undefined',ok:!!document.getElementById('atualizRow')})");
+    chk.push(["página nova: a aplicação recarregou nela, com o 3D", ip && ip.v === seguinte && ip.tres && ip.ok]);
+  }
+
+  /* 5. o programa inteiro, quando a página nova pede um programa mais novo */
+  manifesto = Object.assign({}, manifesto, {versao: depoisDeSeguinte, casca: 99});
   const r = await avaliar("window.desktop.procurarAtualizacoes()");
-  chk.push(["a página nova pede um programa mais novo: atualização do programa", r && r.tipo === "programa" && r.versao === seguinte]);
+  chk.push(["a página nova pede um programa mais novo: atualização do programa", r && r.tipo === "programa" && r.versao === depoisDeSeguinte]);
   const a = await avaliar("window.desktop.aplicarAtualizacao()");
   chk.push(["o programa novo descarregou-se e conferiu", a && a.ok === true && a.tipo === "programa"]);
   if (a && a.ok){
@@ -147,7 +173,7 @@ try {
 } catch(e){
   chk.push(["exceção: " + (e && e.message || e), false]);
 } finally {
-  /* 5. fechar e desinstalar */
+  /* 6. fechar e desinstalar */
   spawnSync("taskkill", ["/F", "/T", "/IM", NOME + ".exe"], {stdio: "ignore"});
   if (app) try { app.kill(); } catch(e){}
   if (srv) srv.close();
