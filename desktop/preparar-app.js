@@ -4,6 +4,7 @@
    Windows, no Mac e no Linux. Corre antes do electron-builder. */
 "use strict";
 const fs = require("fs"), path = require("path");
+const {CDN_THREE, prepararPagina} = require("./pagina-desktop");
 const raiz = path.join(__dirname, "..");
 const app = path.join(__dirname, "app");
 
@@ -15,21 +16,15 @@ const app = path.join(__dirname, "app");
   fs.mkdirSync(path.join(__dirname, "build"), {recursive: true});
   fs.copyFileSync(path.join(raiz, "icons", "icon-512.png"), path.join(__dirname, "build", "icon.png"));
 
-  let html = fs.readFileSync(path.join(raiz, "network-framework.html"), "utf8");
   /* O three.js vem de um CDN na versão web; na aplicação fica dentro do pacote. */
-  const cdn = "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js";
   const local = path.join(app, "vendor", "three.min.js");
   if (!fs.existsSync(local)) {
     console.log("A descarregar three.js r128…");
-    const r = await fetch(cdn);
+    const r = await fetch(CDN_THREE);
     if (!r.ok) throw new Error("three.js: o CDN respondeu " + r.status);
     fs.writeFileSync(local, Buffer.from(await r.arrayBuffer()));
   }
-  const tag = '<script src="' + cdn + '" crossorigin="anonymous"></script>';
-  if (!html.includes(tag)) throw new Error("Não encontrei o <script> do three.js para apontar à cópia local.");
-  html = html.replace(tag, '<script src="vendor/three.min.js"></script>');
-  /* O service worker é da versão web (instalação como app); aqui não faz sentido. */
-  html = html.replace(/navigator\.serviceWorker\.register\([^)]*\)/, "Promise.resolve()");
-  fs.writeFileSync(path.join(app, "network-framework.html"), html, "utf8");
+  const html = fs.readFileSync(path.join(raiz, "network-framework.html"), "utf8");
+  fs.writeFileSync(path.join(app, "network-framework.html"), prepararPagina(html), "utf8");
   console.log("Pasta app preparada em " + app);
 })().catch(e => { console.error(e.message || e); process.exit(1); });

@@ -57,6 +57,13 @@ jobs:
           # Sem certificado de programador: a aplicação sai sem assinatura
           CSC_IDENTITY_AUTO_DISCOVERY: "false"
 
+      # A página que as aplicações já instaladas descarregam para se atualizarem
+      # (pagina.html), e o que diz a versão, o nível do programa que ela pede e a
+      # impressão digital (atualizacao.json). Só uma das três máquinas os junta.
+      - name: Ficheiros da atualização (versão, impressão digital, página)
+        if: runner.os == 'Linux'
+        run: node gerar-atualizacao.js release
+
       - name: Mac — a assinatura ad-hoc está lá e é válida
         if: runner.os == 'macOS'
         run: |
@@ -83,6 +90,10 @@ jobs:
             desktop/dist/*-mac-*.zip
             desktop/dist/*.AppImage
             desktop/dist/*.deb
+            desktop/dist/latest*.yml
+            desktop/dist/*.blockmap
+            desktop/dist/atualizacao.json
+            desktop/dist/pagina.html
           if-no-files-found: error
 
       - name: Juntar à Release
@@ -91,10 +102,17 @@ jobs:
         with:
           name: Mapeamento Organizacional ${{ github.ref_name }}
           body_path: desktop/notas-da-versao.md
+          # latest.yml e latest-linux.yml (com os .blockmap) são o que o instalador
+          # do Windows e o AppImage leem para se atualizarem por inteiro
           files: |
             desktop/dist/*.exe
             desktop/dist/*.dmg
             desktop/dist/*-mac-*.zip
             desktop/dist/*.AppImage
             desktop/dist/*.deb
+            desktop/dist/latest.yml
+            desktop/dist/latest-linux.yml
+            desktop/dist/*.blockmap
+            desktop/dist/atualizacao.json
+            desktop/dist/pagina.html
           fail_on_unmatched_files: false

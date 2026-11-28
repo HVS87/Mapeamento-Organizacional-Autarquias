@@ -166,10 +166,11 @@ A pasta `desktop/` embrulha a mesma página num executável Windows (Electron), 
 
 - **Arranca em ecrã inteiro** por omissão (desliga-se em Definições › Segundo ecrã › "Arrancar em ecrã inteiro").
 - **Segundo monitor automático**: ao detetar dois ecrãs pergunta uma vez se quer estender o palco 3D para o outro; a resposta fica guardada e muda-se em Definições ("Estender automaticamente para o segundo ecrã"). Sem janelas do browser nem arrastar — o palco abre já em ecrã inteiro no monitor certo. Ligar ou desligar um monitor com a aplicação aberta também dispara a oferta.
-- **Autosaves em pasta local**: nasce uma pasta `autosaves/` ao lado do executável com `autosave.json` (o último estado, gravado a cada alteração) e cópias datadas de 30 em 30 minutos (guardam-se as 40 mais recentes). Ao arrancar, o ficheiro mais recente é o que se oferece para recuperar. O botão "Abrir pasta dos autosaves" (separador Dados) abre-a no Explorador. Se a pasta do executável for só de leitura, usa-se `%APPDATA%\mapeamento-autarquias-desktop\`.
-- **A pasta dos autosaves muda-se** em Definições › Autosaves e ficheiros ("Alterar pasta…" abre o seletor do sistema; o autosave atual é copiado para a nova pasta; "Repor predefinida" volta à pasta ao lado do executável).
+- **Autosaves em pasta local**: nasce uma pasta `autosaves/` com `autosave.json` (o último estado, gravado a cada alteração) e cópias datadas de 30 em 30 minutos (guardam-se as 40 mais recentes). Ao arrancar, o ficheiro mais recente é o que se oferece para recuperar. O botão "Abrir pasta dos autosaves" (separador Dados) abre-a no Explorador. Na versão portátil fica ao lado do executável; no Windows instalado, em `%APPDATA%\Mapeamento Organizacional para Autarquias\`.
+- **A pasta dos autosaves muda-se** em Definições › Autosaves e ficheiros ("Alterar pasta…" abre o seletor do sistema; o autosave atual é copiado para a nova pasta; "Repor predefinida" volta à pasta predefinida).
 - **Menu do Esc**: com nada aberto para fechar, o Esc abre um menu com Voltar, Guardar, Guardar como…, Definições e Sair. "Guardar" escreve no ficheiro atual (o último guardado ou aberto) e, sem ficheiro, abre o diálogo do sistema; os botões "Guardar dataset" / "Guardar como…" do separador Dados fazem o mesmo. Sair — pelo menu ou pelo X da janela — com alterações por guardar pergunta primeiro ("Guardar" ou "Sair mesmo assim"); cancelar o diálogo de gravação cancela a saída.
 - **Definições do .exe** vivem em `definicoes.json`, ao lado da pasta de autosaves predefinida.
+- **Atualizações** (Definições › Atualizações): ver [Atualizações](#atualizações).
 - **Funciona sem internet**: o three.js vai dentro do pacote. As exportações PDF/PPTX continuam a precisar de rede na primeira utilização.
 - **Atalhos de teclado** remapeiam-se em Definições › Atalhos de teclado (tal como na versão web).
 - **Dois ecrãs sem soluços**: com o palco aberto, o ecrã principal cede a placa gráfica ao segundo ecrã (desenha a 20 frames por segundo, e a 10 quando um editor lhe tapa o 3D — a interface não é afetada). **Motor gráfico** (Definições › Desempenho, só no .exe): em alguns portáteis o motor automático (Direct3D 11) dá a cada uma de duas janelas um vsync sim, outro não — o palco fica preso a 30 frames por segundo por mais leve que seja a cena; a própria aplicação avisa quando o deteta, e **Vulkan** resolve (60/60, com uma tremura ligeira: cerca de 3% dos frames a dobrar). Com um só ecrã, o automático é o mais estável (56–60 fps sem um único frame acima de 24 ms); Direct3D 9 e OpenGL ficam a 22–24 fps em placas integradas e servem só como recurso. Aplica-se no arranque seguinte; antes de uma demonstração a dois ecrãs, escolha Vulkan e reinicie.
@@ -193,7 +194,7 @@ npm run build:linux   # Linux: AppImage e .deb
 
 No Windows também serve `.\construir-exe.ps1`. O `preparar-app.js` copia a página e os ícones para `app/`, descarrega o three.js (a aplicação funciona sem internet) e desliga o service worker da versão web; o `electron-builder` faz o resto. No Mac, a aplicação leva uma assinatura ad-hoc (`assinar-adhoc.js`), sem a qual um Mac com chip Apple a recusaria. Os resultados ficam em `desktop/dist/`.
 
-Onde ficam os dados: no Windows, ao lado do executável (o portátil usa a pasta onde está o .exe, não a temporária onde se descompacta) ou, se essa pasta for só de leitura, na pasta do utilizador; no Mac e no Linux, sempre na pasta do utilizador (`~/Library/Application Support/…`, `~/.config/…`).
+Onde ficam os dados: na versão portátil do Windows, ao lado do executável (a pasta onde está o .exe, não a temporária onde se descompacta; se for só de leitura, a pasta do utilizador); no Windows instalado, no Mac e no Linux, na pasta do utilizador (`%APPDATA%\…`, `~/Library/Application Support/…`, `~/.config/…`). A pasta do programa instalado é apagada e reescrita a cada atualização, e por isso nunca guarda dados: o que a versão 1.0 lá deixava passa sozinho para a pasta do utilizador no primeiro arranque, e o instalador (`instalador.nsh`) resguarda-o enquanto substitui a versão anterior.
 
 Para experimentar sem empacotar: `npm install` e `npm start` dentro de `desktop/`.
 
@@ -206,21 +207,32 @@ node qa/estatico.mjs        # sintaxe, referências, ids, PT-BR, grafia pré-AO9
 node qa/qr.mjs              # o QR da sincronização lido por um leitor independente
 node qa/preparar.mjs        # páginas instrumentadas em qa/build/
 node qa/servir.mjs          # http://127.0.0.1:8754/qa/build/qa.html (web) e qa-desktop.html (.exe simulado)
-node qa/e2e.mjs             # Electron real: suites nas duas janelas, segundo ecrã e frames
+node qa/web.mjs             # navegador sem janela: as suites na web e no .exe simulado, e uma atualização real da app instalada
+node qa/e2e.mjs             # Electron real: suites nas duas janelas, segundo ecrã, frames e uma atualização real
+node qa/instalador.mjs      # Windows, depois de npm run build:win: instala numa pasta temporária, reinstala por cima,
+                            # atualiza o programa inteiro para a versão seguinte e desinstala (recusa-se se já estiver instalada)
 ```
+
+`qa/suites/qa-atualizar.js` (`__QA_ATUALIZAR()`) verifica Definições › Atualizações, a procura (atual, versão nova, erro, programa antigo), a gravação antes de recarregar, a reposição ao arrancar e que a sincronização não toma o projeto de exemplo por alterações. O `qa/web.mjs` atualiza a app instalada de verdade (service worker e a cache de dez minutos do GitHub Pages) e o `qa/e2e.mjs` faz o mesmo na aplicação de secretária, com a página servida localmente como se viesse da Release: descarregar, conferir, recarregar, reiniciar, e recusar uma página que não confere ou que pede um programa mais novo.
 
 Na página instrumentada, as suites correm com `eval(await (await fetch("/qa/suites/qa-app.js")).text()); await __QA_APP()` (e `__QA_SINC({rede:true})`, `__QA_VARRER()` depois de mudar o tamanho da janela). Repõem o projeto e o armazenamento no fim.
 
 ### Publicar uma Release no GitHub
 
-Não é preciso compilar localmente: o workflow `.github/workflows/release.yml` compila os dois `.exe` num runner Windows e publica-os na Release a cada etiqueta `v*`. Depois de subir a versão em `desktop/package.json` e de commitar:
+Não é preciso compilar localmente: o workflow `.github/workflows/release.yml` compila para Windows, Mac e Linux e publica tudo na Release a cada etiqueta `v*`. Antes, a versão nova vai a três sítios, e o `qa/estatico.mjs` recusa-se a passar se não coincidirem:
+
+1. `desktop/package.json` (`version`);
+2. `const VERSAO_APP` em `network-framework.html`;
+3. uma secção `### Versão x.y.z` em `desktop/notas-da-versao.md`, e depois `node desktop/gerar-atualizacao.js versao` (escreve o `versao.json` da raiz, com as novidades tiradas dessa secção).
+
+Se a página nova precisar de algo novo do programa (`main.js`, `preload.js`, a versão do Electron), sobe-se também `const CASCA` em `desktop/main.js`. Depois de commitar:
 
 ```powershell
-git tag v1.0.1
-git push origin v1.0.1
+git tag v1.1.0
+git push origin main v1.1.0
 ```
 
-Em poucos minutos a Release aparece em *Releases* com o instalador e o portátil anexados; as notas vêm de `desktop/notas-da-versao.md`. O mesmo workflow pode ser lançado à mão em *Actions › Release (.exe) › Run workflow* — nesse caso os executáveis ficam como artefacto da execução, sem criar Release.
+Em poucos minutos a Release aparece em *Releases* com os executáveis e os ficheiros das atualizações (`atualizacao.json`, `pagina.html`, `latest.yml`, `latest-linux.yml` e os `.blockmap`); as notas vêm de `desktop/notas-da-versao.md`. O mesmo workflow pode ser lançado à mão em *Actions › Release (.exe) › Run workflow* — nesse caso os executáveis ficam como artefacto da execução, sem criar Release.
 
 Se o `electron-builder` falhar com "Cannot create symbolic link: A required privilege is not held by the client", é o pacote auxiliar `winCodeSign` a tentar criar ligações simbólicas (só a parte macOS, que aqui não serve). Ou se ativa o Modo de Programador do Windows (Definições › Sistema › Para programadores) e se repete o build, ou se descompacta o `.7z` à mão sem a pasta `darwin`:
 
@@ -269,12 +281,16 @@ Definições › Acessibilidade:
 - **Espera no palco para objetos**: ao editar um objeto, o palco troca a organização pelo mapa de cubos, enquadra o cubo (que roda devagar, com a tampa entreaberta a respirar) e o holograma mostra a ficha (categoria, atributos, contém, onde, estado).
 - Tudo isto vai no dataset (JSON, autosave, versões, anular/refazer) em `extras` e nos campos novos de pessoas (`cred`, permissões) e tarefas (`prazoDias`, `ativaDesde`, `validadoPor`, `validadoEm`). Datasets antigos abrem na mesma: credencial Consulta para todos, sem pelouros nem objetos.
 
-## Atualizar a App
+## Atualizações
 
-1. Edite `network-framework.html` localmente
-2. Commit & push para `main`
-3. GitHub Pages rebuilda automaticamente (5-30 segundos)
-4. Publicado! 🚀
+Definições › Atualizações tem o botão **Procurar atualizações** e o interruptor **Procurar sempre atualizações ao iniciar** (ligado por omissão; a escolha é de cada aparelho). Ao arrancar, só se fala se houver versão nova: um aviso com «Atualizar». No botão, diz-se sempre o resultado.
+
+- **Versão web e app instalada no telemóvel ou no tablet**: a página consulta o `versao.json` da raiz, que o service worker vai sempre buscar à rede. «Atualizar agora» pede a página nova sem cache (a cópia do browser e a do service worker ficam ambas atualizadas) e recarrega. Um push para `main` publica a versão web; o `versao.json` vai no mesmo commit.
+- **Aplicação de secretária**: o programa lê o `atualizacao.json` da Release mais recente (versão, nível do programa pedido, SHA-256 e tamanho da página). Se o programa instalado chega, descarrega o `pagina.html`, confere-o, monta-o numa pasta ao lado (`pagina/`, na pasta do utilizador, com o three.js e os ícones do pacote) e só então troca e recarrega — uma falha a meio deixa tudo como estava. Funciona igual no Windows (instalado e portátil), no Mac e no Linux. Se a página nova pedir um programa mais novo, o Windows instalado e o AppImage atualizam o programa inteiro (`latest.yml` / `latest-linux.yml`, com reinício automático); o portátil, o Mac e o .deb abrem a página de download.
+- **Dados e preferências**: antes de recarregar, o rascunho aberto aplica-se, o autosave grava-se e a sincronização envia o que tiver por enviar; fica uma marca, e no arranque seguinte o último estado volta sem perguntar. Tema, acessibilidade, atalhos, perfil, definições do .exe e a ligação de sincronização vivem no armazenamento do aparelho e não mudam.
+- **Sincronização**: com a sincronização ligada, cada arranque repõe o último estado antes de ela olhar para o projeto — de outro modo, o projeto de exemplo com que a página nasce contaria como uma alteração e seguiria para os outros aparelhos. Aparelhos em versões diferentes continuam a sincronizar entre si (o formato das mensagens não muda entre versões).
+
+Quem tem a versão 1.0.0 da aplicação de secretária instala a 1.1.0 à mão uma última vez; daí em diante, as versões chegam pelas Definições.
 
 ---
 

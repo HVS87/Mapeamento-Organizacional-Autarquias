@@ -41,6 +41,7 @@ Cada tema tinge a mesma estrutura, o céu, o chão e as cores das divisões.
 
 ### Sincronizar dispositivos e privacidade
 - O mesmo projeto no telemóvel, no tablet e no computador, sem conta: liga-se com um código QR em Definições › Sincronizar dispositivos. O projeto viaja cifrado (AES-GCM 256) por uma caixa de passagem que não o consegue ler; alterações feitas nos dois aparelhos juntam-se peça a peça.
+- **Atualizações sem reinstalar** (Definições › Atualizações): «Procurar atualizações» e «Procurar sempre atualizações ao iniciar» (ligado por omissão). A versão nova chega à aplicação de secretária (Windows, Mac, Linux) e à app instalada no telemóvel ou no tablet sem a reinstalar; os dados, as preferências e a ligação de sincronização mantêm-se.
 - Esta é uma ferramenta gratuita e sem fins lucrativos. Todos os dados ficam no aparelho; não há contas, publicidade, cookies de terceiros, analytics nem estatísticas de utilização.
 
 ### Acessibilidade
@@ -77,7 +78,7 @@ cd Mapeamento-Organizacional-Autarquias
 3. A app abre em modo standalone — funciona offline após o primeiro carregamento
 
 ### Aplicação de secretária (Windows, Mac, Linux)
-A pasta `desktop/` gera a aplicação para Windows (portátil e instalador), Mac (Apple e Intel) e Linux (AppImage e .deb), independente do browser: arranca em ecrã inteiro, estende sozinho o palco 3D para um segundo monitor (mediante confirmação, reversível nas Definições) e guarda os autosaves numa pasta `autosaves/` (no Windows ao lado do executável; no Mac e no Linux na pasta do utilizador). No telemóvel e no tablet, a versão web instala-se como app (Adicionar ao ecrã principal). Instruções em [DEPLOY.md](DEPLOY.md#aplicação-de-secretária-exe). Os atalhos de teclado remapeiam-se em Definições › Atalhos de teclado.
+A pasta `desktop/` gera a aplicação para Windows (portátil e instalador), Mac (Apple e Intel) e Linux (AppImage e .deb), independente do browser: arranca em ecrã inteiro, estende sozinho o palco 3D para um segundo monitor (mediante confirmação, reversível nas Definições) e guarda os autosaves numa pasta `autosaves/` (na versão portátil do Windows ao lado do executável; no Windows instalado, no Mac e no Linux na pasta do utilizador). Atualiza-se a partir das Definições, sem reinstalar. No telemóvel e no tablet, a versão web instala-se como app (Adicionar ao ecrã principal). Instruções em [DEPLOY.md](DEPLOY.md#aplicação-de-secretária-exe). Os atalhos de teclado remapeiam-se em Definições › Atalhos de teclado.
 
 ## 📖 Guia de Utilização
 

@@ -30,5 +30,12 @@ contextBridge.exposeInMainWorld("desktop",{
   onPedirSair:cb=>{ipcRenderer.on("pedir-sair",()=>cb());},
   /* pasta dos autosaves */
   pastaAutosaves:()=>ipcRenderer.sendSync("pasta-autosaves-ler"),
-  escolherPasta:()=>ipcRenderer.invoke("pasta-autosaves-escolher")
+  escolherPasta:()=>ipcRenderer.invoke("pasta-autosaves-escolher"),
+  /* atualizações: procurar, descarregar e preparar, e depois concluir
+     (recarregar com a página nova, ou reiniciar com o programa novo) */
+  atualizacoes:()=>ipcRenderer.sendSync("atualizacoes-info"),
+  procurarAtualizacoes:()=>ipcRenderer.invoke("atualizacoes-procurar"),
+  aplicarAtualizacao:()=>ipcRenderer.invoke("atualizacoes-aplicar"),
+  concluirAtualizacao:()=>ipcRenderer.invoke("atualizacoes-concluir"),
+  onAtualizacaoProgresso:cb=>{ipcRenderer.on("atualizacoes-progresso",(_e,p)=>cb(p));}
 });

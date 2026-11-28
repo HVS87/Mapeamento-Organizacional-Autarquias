@@ -50,7 +50,12 @@ const STUB = `<script>
     sair:function(){D.log.push(["sair"]);},
     onPedirSair:function(cb){D.cbSair.push(cb);},
     pastaAutosaves:function(){return {atual:"C:\\\\qa\\\\autosaves",omissao:"C:\\\\qa\\\\autosaves"};},
-    escolherPasta:function(){D.log.push(["escolherPasta"]);return Promise.resolve("C:\\\\qa\\\\outra");}
+    escolherPasta:function(){D.log.push(["escolherPasta"]);return Promise.resolve("C:\\\\qa\\\\outra");},
+    atualizacoes:function(){return {versao:"qa",programa:"qa",casca:2,modo:"qa",programaSozinho:false};},
+    procurarAtualizacoes:function(){D.log.push(["procurarAtualizacoes"]);return Promise.resolve(D.procura||{tipo:"atual",versao:"qa",atual:"qa",novidades:[]});},
+    aplicarAtualizacao:function(){D.log.push(["aplicarAtualizacao"]);return Promise.resolve(D.aplicar||{ok:false,erro:"procure primeiro"});},
+    concluirAtualizacao:function(){D.log.push(["concluirAtualizacao"]);return Promise.resolve(true);},
+    onAtualizacaoProgresso:function(cb){D.cbProgresso=cb;}
   };
 })();
 </script>

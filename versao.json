@@ -1,0 +1,11 @@
+{
+  "versao": "1.1.0",
+  "novidades": [
+    "Atualizações sem reinstalar: Definições › Atualizações tem o botão «Procurar atualizações» e a opção «Procurar sempre atualizações ao iniciar», ligada por omissão. Quando há versão nova, basta «Atualizar agora».",
+    "Na aplicação de secretária, a versão nova descarrega-se da Release, confere-se pela impressão digital (SHA-256) e a aplicação recarrega com ela, no Windows (instalado e portátil), no Mac e no Linux. Se um dia uma versão precisar de um programa mais recente, o instalador do Windows e o AppImage atualizam-se sozinhos; os restantes abrem a página de download.",
+    "No telemóvel e no tablet, a app instalada a partir da versão web atualiza-se da mesma maneira, sem a reinstalar.",
+    "Dados e preferências mantêm-se: antes de recarregar, o autosave grava-se e a sincronização envia o que tiver por enviar; depois, o último estado volta sem perguntar. Tema, acessibilidade, atalhos, perfil e ligação de sincronização ficam como estavam.",
+    "Sincronização mais segura ao arrancar: com a sincronização ligada, cada aparelho abre logo com o seu último estado — antes, ao reabrir, o projeto de exemplo podia seguir para os outros aparelhos como se fosse uma alteração nova.",
+    "Windows instalado: os autosaves e as definições passam da pasta do programa para a pasta do utilizador, onde nenhuma atualização lhes toca; o instalador resguarda-os ao substituir a versão anterior. A versão portátil continua a guardá-los ao lado do executável."
+  ]
+}

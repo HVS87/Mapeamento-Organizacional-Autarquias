@@ -20,7 +20,7 @@ scripts.forEach((m, i) => {
   const f = path.join(tmp, "s" + i + ".js"); fs.writeFileSync(f, m[2]);
   try { execFileSync(process.execPath, ["--check", f], {stdio: "pipe"}); } catch(e){ problemas.push("sintaxe no script " + i + ": " + String(e.stderr).split("\n").slice(0, 4).join(" ")); }
 });
-for (const f of ["sw.js", "desktop/main.js", "desktop/preload.js"]) {
+for (const f of ["sw.js", "desktop/main.js", "desktop/preload.js", "desktop/pagina-desktop.js", "desktop/preparar-app.js", "desktop/gerar-atualizacao.js"]) {
   try { execFileSync(process.execPath, ["--check", path.join(raiz, f)], {stdio: "pipe"}); } catch(e){ problemas.push("sintaxe em " + f); }
 }
 fs.rmSync(tmp, {recursive: true, force: true});
@@ -44,7 +44,18 @@ const criados = new Set([...principal.matchAll(/\.id\s*=\s*"([^"]+)"/g)].map(m =
   .filter(r => !ids.includes(r) && !criados.has(r)).forEach(r => problemas.push("getElementById de um id que não existe: " + r));
 
 /* texto */
-const textos = ["network-framework.html", "README.md", "DEPLOY.md", "desktop/notas-da-versao.md", "sw.js", "desktop/main.js"];
+/* versões: o package.json, a página e o versao.json da versão web dizem o mesmo,
+   e as notas têm a secção dessa versão (é de lá que saem as novidades) */
+const versaoPkg = JSON.parse(fs.readFileSync(path.join(raiz, "desktop/package.json"), "utf8")).version;
+const versaoPag = (/\bconst VERSAO_APP\s*=\s*"(\d+\.\d+\.\d+)"/.exec(html) || [])[1];
+let versaoWeb = null; try { versaoWeb = JSON.parse(fs.readFileSync(path.join(raiz, "versao.json"), "utf8")).versao; } catch(e){}
+if (versaoPag !== versaoPkg) problemas.push("VERSAO_APP (" + versaoPag + ") não é a do desktop/package.json (" + versaoPkg + ")");
+if (versaoWeb !== versaoPkg) problemas.push("versao.json (" + versaoWeb + ") não é a do desktop/package.json (" + versaoPkg + ") — node desktop/gerar-atualizacao.js versao");
+if (!fs.readFileSync(path.join(raiz, "desktop/notas-da-versao.md"), "utf8").includes("### Versão " + versaoPkg)) problemas.push("notas-da-versao.md sem a secção da versão " + versaoPkg);
+if (!/\bconst CASCA=\d+;/.test(fs.readFileSync(path.join(raiz, "desktop/main.js"), "utf8"))) problemas.push("desktop/main.js sem const CASCA");
+if (!fs.readFileSync(path.join(raiz, "sw.js"), "utf8").includes('url.pathname.endsWith("/versao.json")')) problemas.push("sw.js: o versao.json tem de vir sempre da rede");
+
+const textos = ["network-framework.html", "README.md", "DEPLOY.md", "desktop/notas-da-versao.md", "sw.js", "desktop/main.js", "desktop/instalador.nsh", "versao.json"];
 const PTBR = /\b(você|vocês|usuário|usuários|arquivo|arquivos|gerenciar|gerenciamento|deletar|salvar|celular|cadastro|cadastrar|contato|registro|sobrenome|ônibus|equipe|planejamento|planejar|aprimorar|acessar|senha|aplicativo|conosco|bacana|grátis)\b/i;
 const PRE90 = /\b(acção|acções|actual\w*|activ[oa]s?|direcção|selecção|projecto\w*|objecto\w*|correct[oa]\w*|exact[oa]\w*|óptim\w*|efectiv\w*|efectua\w*|aspecto\w*|tecto|director\w*|direct[oa]s?|directamente|objectiv\w*|adopt\w*|recepção|concepção|percepção|baptismo|afect\w*|infecção|redacção|espectacul\w*|protecção|lectiv\w*)\b/;
 for (const f of textos) {

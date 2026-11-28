@@ -7,7 +7,7 @@
    primeira visita a ferramenta abre sem rede — numa junta com internet
    intermitente, isso é a diferença entre servir e não servir.
 ============================================================ */
-const VERSION = "v4";
+const VERSION = "v5";
 const SHELL   = "fma-shell-" + VERSION;   // a app em si
 const EXTRA   = "fma-extra-" + VERSION;   // bibliotecas externas
 
@@ -122,6 +122,30 @@ self.addEventListener("fetch", e => {
       const net = await fetch(req);
       guardar(e, EXTRA, req, net);
       return net;
+    })());
+    return;
+  }
+
+  /* versao.json diz se há versão nova: vem sempre da rede, nunca da cache —
+     uma resposta guardada diria para sempre que não há nada de novo. Sem
+     rede, falha, e a app sabe que não pôde perguntar. */
+  if (sameOrigin && url.pathname.endsWith("/versao.json")) {
+    e.respondWith(fetch(req, {cache: "no-store"}));
+    return;
+  }
+
+  /* Pedido explícito da versão nova (a app, ao atualizar, pede a página com
+     cache:"reload"): rede primeiro, e a cópia fica guardada para o arranque
+     seguinte, também sem rede. */
+  if (sameOrigin && (req.cache === "reload" || req.cache === "no-store")) {
+    e.respondWith((async () => {
+      try {
+        const net = await fetch(req);
+        guardar(e, SHELL, new Request(url.origin + url.pathname), net);
+        return net;
+      } catch (err) {
+        return (await caches.match(req, {ignoreSearch: true})) || Response.error();
+      }
     })());
     return;
   }

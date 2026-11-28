@@ -8,6 +8,7 @@ network-framework.test.html
 desktop/node_modules/
 desktop/app/
 desktop/dist/
+desktop/dist-qa/
 
 # Autosaves locais do .exe corrido a partir da raiz do projeto (electron .)
 autosaves/

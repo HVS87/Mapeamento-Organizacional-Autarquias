@@ -1,42 +1,122 @@
 /* Processo principal da aplicação de secretária (Electron).
    Responsabilidades: a janela principal (ecrã inteiro por omissão), o palco
    no segundo monitor (já em ecrã inteiro, sem arrastar nem clicar), a pasta
-   local de autosaves, as definições persistidas, e o correio entre as duas
-   janelas — no .exe cada janela file:// é uma origem opaca, por isso o
-   BroadcastChannel da versão web não as liga; o IPC daqui faz esse papel. */
+   local de autosaves, as definições persistidas, as atualizações, e o correio
+   entre as duas janelas — no .exe cada janela file:// é uma origem opaca, por
+   isso o BroadcastChannel da versão web não as liga; o IPC daqui faz esse papel. */
 "use strict";
-const {app,BrowserWindow,ipcMain,screen,shell,dialog}=require("electron");
+const {app,BrowserWindow,ipcMain,screen,shell,dialog,net}=require("electron");
 const fs=require("fs");
 const path=require("path");
+const crypto=require("crypto");
+
+/* MAPA_DADOS põe os dados do utilizador (armazenamento da página, definições,
+   página atualizada) noutra pasta: a QA corre assim sem tocar nos verdadeiros. */
+if(process.env.MAPA_DADOS)app.setPath("userData",path.resolve(process.env.MAPA_DADOS));
+
+/* ---------- como foi instalada ----------
+   Decide onde vivem os dados e que atualizações se podem fazer sozinhas. */
+function modoInstalacao(){
+  if(!app.isPackaged)return "desenvolvimento";
+  if(process.platform==="darwin")return "mac";
+  if(process.platform==="linux")return process.env.APPIMAGE?"appimage":"linux";
+  return process.env.PORTABLE_EXECUTABLE_DIR?"portatil":"instalado";
+}
+const MODO=modoInstalacao();
 
 /* ---------- onde vivem os dados ----------
-   Em desenvolvimento (electron .) é a raiz do projeto. Empacotado, é a pasta
-   do executável (versão portátil, tudo ao lado do .exe); se essa pasta for
-   só de leitura (instalado em Program Files), cai-se nos dados do
-   utilizador. A pasta "autosaves" nasce lá dentro. */
+   Em desenvolvimento (electron .) é a raiz do projeto. A versão portátil do
+   Windows guarda tudo ao lado do .exe (numa pen, os dados vão com ela). Em
+   todos os outros casos, na pasta do utilizador: no Mac a aplicação vive
+   dentro de um .app assinado (escrever lá dentro parte a assinatura), no
+   Linux o AppImage é montado só de leitura, e no Windows instalado a pasta
+   do programa é apagada e reescrita a cada atualização. */
 function pastaBase(){
-  if(!app.isPackaged)return path.join(__dirname,"..");
-  /* No Mac a aplicação vive dentro de um .app assinado (escrever lá dentro
-     parte a assinatura) e no Linux o AppImage é montado só de leitura: os
-     dados vão para a pasta do utilizador. */
-  if(process.platform!=="win32")return app.getPath("userData");
-  /* O portátil do Windows descompacta-se numa pasta temporária que desaparece
-     ao fechar; a pasta verdadeira, ao lado do .exe, vem nesta variável. */
-  if(process.env.PORTABLE_EXECUTABLE_DIR){
+  if(!app.isPackaged)return process.env.MAPA_DADOS?app.getPath("userData"):path.join(__dirname,"..");
+  /* O portátil descompacta-se numa pasta temporária que desaparece ao
+     fechar; a pasta verdadeira, ao lado do .exe, vem nesta variável. */
+  if(MODO==="portatil"){
     try{fs.accessSync(process.env.PORTABLE_EXECUTABLE_DIR,fs.constants.W_OK);return process.env.PORTABLE_EXECUTABLE_DIR;}catch(e){}
   }
-  const exeDir=path.dirname(app.getPath("exe"));
-  try{fs.accessSync(exeDir,fs.constants.W_OK);return exeDir;}
-  catch(e){return app.getPath("userData");}
+  return app.getPath("userData");
 }
 const BASE=pastaBase();
 const PASTA_AUTOSAVES_OMISSAO=path.join(BASE,"autosaves");
 const FICHEIRO_DEFS=path.join(BASE,"definicoes.json");
-/* MAPA_HTML aponta para outra página (uma cópia instrumentada para QA, por
-   exemplo); só faz sentido fora do pacote. */
-const HTML=app.isPackaged
+
+/* Até à versão 1.0, o Windows instalado guardava os autosaves e as
+   definições ao lado do executável. Passam para a pasta do utilizador, uma
+   vez, sem apagar nada: o que já lá estiver não é substituído. (O instalador
+   também os resguarda antes de a versão anterior ser desinstalada — ver
+   instalador.nsh.) */
+function migrarDadosAntigos(){
+  if(MODO!=="instalado")return;
+  const antiga=path.dirname(app.getPath("exe"));
+  if(path.resolve(antiga)===path.resolve(BASE))return;
+  try{
+    fs.mkdirSync(BASE,{recursive:true});
+    const de=path.join(antiga,"definicoes.json");
+    if(fs.existsSync(de)&&!fs.existsSync(FICHEIRO_DEFS))fs.copyFileSync(de,FICHEIRO_DEFS);
+    const pa=path.join(antiga,"autosaves");
+    if(fs.existsSync(pa)){
+      fs.mkdirSync(PASTA_AUTOSAVES_OMISSAO,{recursive:true});
+      for(const f of fs.readdirSync(pa)){
+        const para=path.join(PASTA_AUTOSAVES_OMISSAO,f);
+        if(/\.json$/i.test(f)&&!fs.existsSync(para))fs.copyFileSync(path.join(pa,f),para);
+      }
+    }
+  }catch(e){}
+}
+migrarDadosAntigos();
+
+/* ---------- a página ----------
+   A que vem no pacote, ou uma mais recente que as Atualizações tenham
+   descarregado para a pasta do utilizador. MAPA_HTML aponta para outra
+   página (uma cópia instrumentada para QA, por exemplo); só fora do pacote. */
+const HTML_EMBUTIDO=app.isPackaged
   ?path.join(app.getAppPath(),"app","network-framework.html")
   :(process.env.MAPA_HTML||path.join(__dirname,"..","network-framework.html"));
+/* vendor/three.min.js e os ícones que a página atualizada leva consigo */
+const RECURSOS=app.isPackaged?path.join(app.getAppPath(),"app"):path.join(__dirname,"app");
+const PASTA_PAGINA=path.join(app.getPath("userData"),"pagina");
+/* Nível da ponte entre a página e o programa (este ficheiro e o preload).
+   Sobe sempre que uma página nova precisar de algo que um programa antigo
+   não tem; a página de uma Release só se instala num programa com o nível
+   que ela pede. Lido daqui por gerar-atualizacao.js. */
+const CASCA=2;
+const REPO="HVS87/Mapeamento-Organizacional-Autarquias";
+const PAGINA_RELEASES="https://github.com/"+REPO+"/releases/latest";
+/* MAPA_ATUALIZACOES: outra origem para as atualizações (a QA usa um servidor local) */
+const ORIGEM_ATUALIZACOES=(process.env.MAPA_ATUALIZACOES||("https://github.com/"+REPO+"/releases/latest/download/")).replace(/\/?$/,"/");
+
+function compararVersoes(a,b){
+  const pa=String(a).split(".").map(n=>parseInt(n,10)||0),pb=String(b).split(".").map(n=>parseInt(n,10)||0);
+  for(let i=0;i<3;i++){if((pa[i]||0)!==(pb[i]||0))return (pa[i]||0)>(pb[i]||0)?1:-1;}
+  return 0;
+}
+const versaoValida=v=>typeof v==="string"&&/^\d{1,4}\.\d{1,4}\.\d{1,4}$/.test(v);
+/* Em desenvolvimento, a página da pasta do projeto manda — salvo na QA das
+   atualizações, que é quando há uma origem própria. */
+const usaPaginaDescarregada=app.isPackaged||!!process.env.MAPA_ATUALIZACOES;
+function paginaDescarregada(){
+  if(!usaPaginaDescarregada)return null;
+  try{
+    const v=JSON.parse(fs.readFileSync(path.join(PASTA_PAGINA,"versao.json"),"utf8"));
+    if(!v||!versaoValida(v.versao))return null;
+    if(compararVersoes(v.versao,app.getVersion())<=0)return null;   // o programa já traz esta ou mais recente
+    if((v.casca|0)>CASCA)return null;
+    if(!fs.existsSync(path.join(PASTA_PAGINA,"network-framework.html")))return null;
+    return v;
+  }catch(e){return null;}
+}
+/* Depois de o programa inteiro ser atualizado, a página descarregada antes
+   fica para trás: apaga-se, para não ocupar espaço nem confundir. */
+function limparPaginaVelha(){
+  if(!usaPaginaDescarregada||paginaDescarregada())return;
+  try{fs.rmSync(PASTA_PAGINA,{recursive:true,force:true});}catch(e){}
+}
+const htmlAtual=()=>paginaDescarregada()?path.join(PASTA_PAGINA,"network-framework.html"):HTML_EMBUTIDO;
+const versaoAtual=()=>{const p=paginaDescarregada();return p?p.versao:app.getVersion();};
 
 /* a pasta dos autosaves muda-se nas Definições; sem escolha, fica ao lado do exe */
 function pastaAutosaves(){
@@ -99,7 +179,7 @@ function criaPrincipal(){
     webPreferences:prefs
   });
   janelaPrincipal.setMenuBarVisibility(false);
-  janelaPrincipal.loadFile(HTML);
+  janelaPrincipal.loadFile(htmlAtual());
   /* fechar pelo X passa pela mesma pergunta do menu: a página decide e chama "sair" */
   janelaPrincipal.on("close",e=>{
     if(aSair||janelaPrincipal.isDestroyed())return;
@@ -126,7 +206,7 @@ function abrePalco(){
     webPreferences:prefs
   },opts));
   janelaPalco.setMenuBarVisibility(false);
-  janelaPalco.loadFile(HTML,{hash:"palco"});
+  janelaPalco.loadFile(htmlAtual(),{hash:"palco"});
   janelaPalco.on("closed",()=>{
     janelaPalco=null;
     if(janelaPrincipal&&!janelaPrincipal.isDestroyed())janelaPrincipal.webContents.send("palco-msg",{t:"adeus"});
@@ -172,7 +252,7 @@ ipcMain.handle("ficheiro-guardar",async(e,json,o)=>{
   let alvo=(!o.como&&ficheiroAtual)?ficheiroAtual:null;
   if(!alvo){
     const w=BrowserWindow.fromWebContents(e.sender);
-    const sug=String(o.sugestao||"organizacao").replace(/[^w-]+/g,"_")||"organizacao";
+    const sug=String(o.sugestao||"organizacao").replace(/[^\w-]+/g,"_")||"organizacao";
     const r=await dialog.showSaveDialog(w,{title:o.como?"Guardar como":"Guardar",
       defaultPath:ficheiroAtual||path.join(app.getPath("documents"),sug+".json"),
       filters:[{name:"Dataset (JSON)",extensions:["json"]}]});
@@ -204,6 +284,124 @@ ipcMain.on("palco-msg",(e,m)=>{
   });
 });
 
+/* ---------- atualizações ----------
+   Duas camadas. A página — quase toda a ferramenta — atualiza-se em
+   qualquer instalação: descarrega-se da Release mais recente, confere-se a
+   impressão digital (SHA-256) e fica na pasta do utilizador, ao lado dos
+   dados, que não mudam de sítio. Quando a página nova precisa de um programa
+   mais novo (nível da ponte acima do deste), o Windows instalado e o
+   AppImage atualizam o programa inteiro; o portátil, o Mac e o .deb abrem a
+   página de download. A página decide quando (ao arrancar, se a pessoa
+   quiser, e no botão das Definições); daqui só sai o que ela pede. */
+const PROGRAMA_SOZINHO=MODO==="instalado"||MODO==="appimage";
+let pendente=null;          // {tipo:"pagina"|"programa"|"descarregar", versao, ...}
+let programaPronto=false;
+let atualizador=null;
+function obterAtualizador(){
+  if(atualizador)return atualizador;
+  const {autoUpdater}=require("electron-updater");
+  autoUpdater.autoDownload=false;
+  autoUpdater.autoInstallOnAppQuit=true;
+  autoUpdater.logger=null;
+  if(process.env.MAPA_ATUALIZACOES)autoUpdater.setFeedURL({provider:"generic",url:ORIGEM_ATUALIZACOES});
+  autoUpdater.on("download-progress",p=>avisarProgresso({fase:"programa",pct:Math.round(p.percent||0)}));
+  atualizador=autoUpdater;
+  return atualizador;
+}
+function avisarProgresso(p){
+  if(janelaPrincipal&&!janelaPrincipal.isDestroyed())janelaPrincipal.webContents.send("atualizacoes-progresso",p);
+}
+async function buscar(url,ms){
+  const ctl=new AbortController(),t=setTimeout(()=>ctl.abort(),ms||20000);
+  try{
+    const r=await net.fetch(url,{cache:"no-store",signal:ctl.signal});
+    if(!r.ok)throw new Error(r.status===404?"ainda não há atualizações publicadas":"o servidor respondeu "+r.status);
+    return Buffer.from(await r.arrayBuffer());
+  }finally{clearTimeout(t);}
+}
+function lerManifesto(buf){
+  let m=null;try{m=JSON.parse(buf.toString("utf8"));}catch(e){}
+  if(!m||!versaoValida(m.versao)||!/^[0-9a-f]{64}$/.test(String(m.sha256||""))||!(m.tamanho>0&&m.tamanho<20e6))
+    throw new Error("a informação da versão nova está incompleta");
+  return {versao:m.versao,casca:Math.max(1,m.casca|0),sha256:m.sha256,tamanho:m.tamanho|0,
+    novidades:Array.isArray(m.novidades)?m.novidades.filter(x=>typeof x==="string").slice(0,8).map(x=>x.slice(0,240)):[]};
+}
+async function procurar(){
+  pendente=null;
+  const m=lerManifesto(await buscar(ORIGEM_ATUALIZACOES+"atualizacao.json"));
+  const base={versao:m.versao,atual:versaoAtual(),novidades:m.novidades};
+  if(compararVersoes(m.versao,versaoAtual())<=0)return Object.assign(base,{tipo:"atual"});
+  if(m.casca<=CASCA)pendente={tipo:"pagina",m};
+  else if(PROGRAMA_SOZINHO)pendente={tipo:"programa",m};
+  else pendente={tipo:"descarregar",m};
+  return Object.assign(base,{tipo:pendente.tipo});
+}
+/* A página nova monta-se numa pasta ao lado e só no fim toma o lugar da
+   anterior: uma falha a meio deixa tudo como estava. */
+async function instalarPagina(m){
+  avisarProgresso({fase:"pagina",pct:0});
+  const html=await buscar(ORIGEM_ATUALIZACOES+"pagina.html",60000);
+  if(html.length!==m.tamanho||crypto.createHash("sha256").update(html).digest("hex")!==m.sha256)
+    throw new Error("o ficheiro descarregado não confere — nada foi alterado");
+  const txt=html.toString("utf8");
+  if(!txt.includes('src="vendor/three.min.js"'))throw new Error("a página descarregada não é a da aplicação de secretária");
+  const tmp=PASTA_PAGINA+".nova",velha=PASTA_PAGINA+".anterior";
+  fs.rmSync(tmp,{recursive:true,force:true});
+  fs.mkdirSync(path.join(tmp,"vendor"),{recursive:true});
+  fs.copyFileSync(path.join(RECURSOS,"vendor","three.min.js"),path.join(tmp,"vendor","three.min.js"));
+  fs.cpSync(path.join(RECURSOS,"icons"),path.join(tmp,"icons"),{recursive:true});
+  fs.writeFileSync(path.join(tmp,"network-framework.html"),html);
+  fs.writeFileSync(path.join(tmp,"versao.json"),JSON.stringify({versao:m.versao,casca:m.casca,sha256:m.sha256,instalada:new Date().toISOString()},null,2));
+  fs.rmSync(velha,{recursive:true,force:true});
+  if(fs.existsSync(PASTA_PAGINA))fs.renameSync(PASTA_PAGINA,velha);
+  fs.renameSync(tmp,PASTA_PAGINA);
+  fs.rmSync(velha,{recursive:true,force:true});
+  avisarProgresso({fase:"pagina",pct:100});
+}
+async function descarregarPrograma(){
+  const u=obterAtualizador();
+  const r=await u.checkForUpdates();
+  if(!r||!r.updateInfo||compararVersoes(r.updateInfo.version,app.getVersion())<=0)
+    throw new Error("o programa novo ainda não está publicado — tente daqui a pouco");
+  await u.downloadUpdate();
+  programaPronto=true;
+}
+ipcMain.on("atualizacoes-info",e=>{
+  e.returnValue={versao:versaoAtual(),programa:app.getVersion(),casca:CASCA,modo:MODO,programaSozinho:PROGRAMA_SOZINHO};
+});
+ipcMain.handle("atualizacoes-procurar",async()=>{
+  try{return await procurar();}
+  catch(err){return {tipo:"erro",erro:String(err&&err.message||err),atual:versaoAtual()};}
+});
+/* Descarrega e prepara; não reinicia nada. A página grava o que tem e
+   depois chama "atualizacoes-concluir". */
+ipcMain.handle("atualizacoes-aplicar",async()=>{
+  if(!pendente)return {ok:false,erro:"procure primeiro"};
+  try{
+    if(pendente.tipo==="pagina")await instalarPagina(pendente.m);
+    else if(pendente.tipo==="programa")await descarregarPrograma();
+    else{await shell.openExternal(PAGINA_RELEASES);return {ok:true,tipo:"descarregar"};}
+    return {ok:true,tipo:pendente.tipo,versao:pendente.m.versao};
+  }catch(err){return {ok:false,erro:String(err&&err.message||err)};}
+});
+ipcMain.handle("atualizacoes-concluir",()=>{
+  if(!pendente)return false;
+  const tipo=pendente.tipo;pendente=null;
+  if(tipo==="programa"&&programaPronto){
+    aSair=true;
+    /* instalador silencioso e a aplicação volta a abrir sozinha */
+    setImmediate(()=>obterAtualizador().quitAndInstall(true,true));
+    return true;
+  }
+  if(tipo==="pagina"){
+    const html=htmlAtual();
+    if(janelaPalco&&!janelaPalco.isDestroyed())janelaPalco.loadFile(html,{hash:"palco"});
+    if(janelaPrincipal&&!janelaPrincipal.isDestroyed())janelaPrincipal.loadFile(html);
+    return true;
+  }
+  return false;
+});
+
 /* O motor gráfico (backend ANGLE) escolhe-se nas Definições e aplica-se ao
    arrancar: em alguns portáteis o Direct3D 11 dá a cada uma de duas janelas
    um vsync sim, outro não — trinta frames por janela, por mais leve que seja
@@ -219,6 +417,7 @@ else{
   app.on("second-instance",()=>{if(janelaPrincipal){if(janelaPrincipal.isMinimized())janelaPrincipal.restore();janelaPrincipal.focus();}});
   app.whenReady().then(()=>{
     garantePasta();
+    limparPaginaVelha();
     criaPrincipal();
     const avisaEcras=()=>{
       if(janelaPrincipal&&!janelaPrincipal.isDestroyed())

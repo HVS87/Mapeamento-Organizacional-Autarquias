@@ -3094,6 +3094,8 @@
           <span class="ib-ico" aria-hidden="true">⬇</span><span>Guardar como app</span>
         </button>
       </div>
+      <div class="mini-title" id="atualizTitulo">Atualizações</div>
+      <div id="atualizRow"></div>
       <div class="mini-title">Privacidade</div>
       <div class="privacidade-host"></div>
     </div>
@@ -6605,7 +6607,9 @@ function sparkBurst(el){
   }
 }
 addEventListener("beforeunload",e=>{
-  if(!dirty||ehDesktop)return;   // no .exe, sair passa pelo menu e pela pergunta própria
+  /* no .exe, sair passa pelo menu e pela pergunta própria; ao recarregar
+     para atualizar, o trabalho já foi gravado e volta sozinho */
+  if(!dirty||ehDesktop||recarregarSemPerguntar)return;
   e.preventDefault();
   e.returnValue="";
 });
@@ -13609,10 +13613,12 @@ if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0){
         if(!nw)return;
         nw.addEventListener("statechange",()=>{
           // Só é "atualização" se já havia uma versão a servir a página
-          if(nw.state==="installed"&&navigator.serviceWorker.controller){
+          if(nw.state==="installed"&&navigator.serviceWorker.controller&&!atualizEmCurso){
             flash("Há uma versão nova.",{duration:0,key:"sw",actions:[
-              {label:"Atualizar",fn:()=>{
+              {label:"Atualizar",fn:async()=>{
+                await guardarTudoAntesDeAtualizar(null);
                 try{nw.postMessage({type:"skip-waiting"});}catch(e){}
+                recarregarSemPerguntar=true;
                 location.reload();
               }}
             ]});
@@ -15447,17 +15453,8 @@ addEventListener("keydown",e=>{
   ACOES_ATALHO[id](e);
 });
 function offerSessionRestore(){
-  /* no .exe, o ficheiro da pasta "autosaves" é a fonte de verdade quando é
-     mais recente do que o que o armazenamento interno tem */
-  if(ehDesktop){
-    try{
-      const f=window.desktop.lerAutosave();
-      const l=storageGet(AUTOSAVE_KEY);
-      const at=s=>{try{return Date.parse(JSON.parse(s).at)||0;}catch(e){return 0;}};
-      if(f&&(!l||at(f)>at(l)))storageSet(AUTOSAVE_KEY,f);
-    }catch(e){}
-  }
-  const raw=storageGet(AUTOSAVE_KEY);
+  if(repostoNoArranque)return;   // já reposto ao arrancar (atualização ou sincronização)
+  const raw=autosaveMaisRecente();
   if(!raw)return;
   let d=null;
   try{d=JSON.parse(raw);}catch(e){return;}
@@ -17257,25 +17254,32 @@ let autosaveWarned=false;
 function scheduleAutosave(){
   sincAposMudar();
   clearTimeout(autosaveTimer);
-  autosaveTimer=setTimeout(()=>{
-    let gravou=false;
-    const dados=JSON.stringify({at:new Date().toISOString(),state:snapshotState()});
-    try{gravou=storageSet(AUTOSAVE_KEY,dados);}catch(e){}
-    /* no .exe o mesmo autosave vai para a pasta "autosaves" ao lado do
-       executável — fica sempre disponível localmente, mesmo sem browser */
-    if(ehDesktop&&!ehPalco){try{window.desktop.guardarAutosave(dados);}catch(e){}}
-    // Avisa-se uma vez. A promessa de "recuperar a sessão" deixou de valer, e
-    // quem está a trabalhar tem de saber disso enquanto ainda pode exportar.
-    if(!gravou&&!autosaveWarned){
-      autosaveWarned=true;
-      flash("O browser não está a guardar a sessão (armazenamento cheio ou desativado). "+
-            "Exporte o dataset para não perder o trabalho.",{type:"err",duration:0,key:"autosave",
-        actions:[{label:"Exportar",fn:()=>{const b=document.getElementById("exportBtn");if(b)b.click();}}]});
-    }else if(gravou&&autosaveWarned){
-      autosaveWarned=false;   // voltou a haver espaço
-    }
-  },1200);
+  autosaveTimer=setTimeout(gravarAutosaveJa,1200);
 }
+/* Grava já o que o autosave gravaria daqui a pouco: antes de recarregar para
+   uma atualização, e quando a página se fecha com uma gravação pendente. */
+function gravarAutosaveJa(){
+  clearTimeout(autosaveTimer);autosaveTimer=null;
+  let gravou=false;
+  const dados=JSON.stringify({at:new Date().toISOString(),state:snapshotState()});
+  try{gravou=storageSet(AUTOSAVE_KEY,dados);}catch(e){}
+  /* no .exe o mesmo autosave vai também para a pasta "autosaves" — fica
+     sempre disponível localmente, mesmo sem browser */
+  if(ehDesktop&&!ehPalco){try{window.desktop.guardarAutosave(dados);}catch(e){}}
+  // Avisa-se uma vez. A promessa de "recuperar a sessão" deixou de valer, e
+  // quem está a trabalhar tem de saber disso enquanto ainda pode exportar.
+  if(!gravou&&!autosaveWarned){
+    autosaveWarned=true;
+    flash("O browser não está a guardar a sessão (armazenamento cheio ou desativado). "+
+          "Exporte o dataset para não perder o trabalho.",{type:"err",duration:0,key:"autosave",
+      actions:[{label:"Exportar",fn:()=>{const b=document.getElementById("exportBtn");if(b)b.click();}}]});
+  }else if(gravou&&autosaveWarned){
+    autosaveWarned=false;   // voltou a haver espaço
+  }
+}
+/* Fechar a janela (ou o separador) a menos de 1,2 s de uma alteração não a
+   perde: o autosave pendente grava-se à saída. */
+addEventListener("pagehide",()=>{if(autosaveTimer&&booted&&!ehPalco)gravarAutosaveJa();});
 /* Called from markDirty() — pushes the state as it was *before* this mutation. */
 function recordHistory(){
   // Seed building calls markDirty() at module scope, before the history state
@@ -19902,7 +19906,7 @@ function renderPastaRow(){
     bRep.title=p.omissao;
     bRep.onclick=async()=>{
       try{await window.desktop.definir("pastaAutosaves",null);}catch(e){}
-      renderPastaRow();flash("Os autosaves voltam à pasta ao lado do executável.");
+      renderPastaRow();flash("Os autosaves voltam à pasta predefinida.");
     };
     btns.append(bRep);
   }
@@ -19912,6 +19916,12 @@ function renderPastaRow(){
 function initDesktop(){
   if(!ehDesktop||ehPalco)return;
   document.body.classList.add("desktop");
+  try{
+    if(window.desktop.onAtualizacaoProgresso)window.desktop.onAtualizacaoProgresso(p=>{
+      if(!atualizEmCurso||!p||p.pct==null||p.pct>=100)return;
+      flash((p.fase==="programa"?"A descarregar o programa novo… ":"A descarregar a versão nova… ")+p.pct+"%",{type:"work",key:"atualiz",duration:0});
+    });
+  }catch(e){}
   renderPastaRow();
   try{window.desktop.onPedirSair(()=>sairDesktop());}catch(e){}
   const ex=document.getElementById("exportBtn");
@@ -19925,7 +19935,7 @@ function initDesktop(){
   if(sb){
     const b=el("button","btn","Abrir pasta dos autosaves");
     b.id="autosavePastaBtn";
-    b.title="A pasta “autosaves”, ao lado do executável — o último estado e cópias datadas";
+    b.title="A pasta “autosaves” — o último estado e cópias datadas";
     b.onclick=()=>{try{window.desktop.abrirPasta();}catch(e){}};
     sb.append(b);
   }
@@ -20017,6 +20027,242 @@ applyTheme(THEMES[temaGuardado]?temaGuardado:temaDoSistema,{silent:true});
 syncThemeButtons();
 applyScene(0);
 syncPlay();
+/* ============================================================
+   ATUALIZAÇÕES
+   Uma versão nova chega sem reinstalar nada. Na versão web (e na app
+   instalada no telemóvel ou no tablet) basta saber que existe — o
+   versao.json, lido sempre da rede — e recarregar com a página nova. Na
+   aplicação de secretária, o programa descarrega a página nova da Release,
+   confere-a e recarrega; se a versão nova precisar de um programa mais
+   recente, o instalador do Windows e o AppImage atualizam-se sozinhos, e os
+   outros abrem a página de download.
+   Antes de recarregar grava-se tudo (autosave, alterações por enviar à
+   sincronização) e deixa-se uma marca; ao arrancar, a marca diz para repor o
+   último estado sem perguntar. Os dados e as preferências vivem no
+   armazenamento deste aparelho, que uma atualização não toca.
+============================================================ */
+const VERSAO_APP="1.1.0";
+const ATUALIZ_KEY="of.atualizacoes.v1",ATUALIZ_FEITA_KEY="of.atualizacoes.feita.v1";
+let repostoNoArranque=false,atualizEmCurso=false,atualizUltima=null;
+/* recarregar para atualizar não pergunta «sair do site?»: o trabalho já está gravado e volta sozinho */
+let recarregarSemPerguntar=false;
+function atualizPrefs(){
+  let p=null;try{p=JSON.parse(storageGet(ATUALIZ_KEY)||"null");}catch(e){}
+  return Object.assign({auto:true,verificada:0,resultado:""},(p&&typeof p==="object")?p:{});
+}
+function atualizGravar(o){storageSet(ATUALIZ_KEY,JSON.stringify(Object.assign(atualizPrefs(),o)));}
+function compararVersoesApp(a,b){
+  const pa=String(a).split(".").map(n=>parseInt(n,10)||0),pb=String(b).split(".").map(n=>parseInt(n,10)||0);
+  for(let i=0;i<3;i++){if((pa[i]||0)!==(pb[i]||0))return (pa[i]||0)>(pb[i]||0)?1:-1;}
+  return 0;
+}
+function fecharAviso(k){
+  const r=keyedToasts.get(k);
+  if(!r)return;
+  clearTimeout(r.timer);removeToast(r.node);keyedToasts.delete(k);
+}
+/** Há onde procurar: na aplicação de secretária, ou na versão web servida por http(s). */
+function atualizPossivel(){
+  if(ehDesktop)return !!(window.desktop&&window.desktop.procurarAtualizacoes);
+  return location.protocol.indexOf("http")===0;
+}
+async function procurarVersaoNova(){
+  if(ehDesktop)return await window.desktop.procurarAtualizacoes();
+  const r=await fetch("./versao.json?t="+Date.now(),{cache:"no-store"});
+  if(!r.ok)throw new Error(r.status===404?"o servidor não tem informação de versões":"o servidor respondeu "+r.status);
+  const j=await r.json();
+  if(!j||!/^\d+\.\d+\.\d+$/.test(String(j.versao||"")))throw new Error("resposta inesperada do servidor");
+  const novidades=Array.isArray(j.novidades)?j.novidades.filter(x=>typeof x==="string").slice(0,6):[];
+  return {tipo:compararVersoesApp(j.versao,VERSAO_APP)>0?"pagina":"atual",versao:j.versao,atual:VERSAO_APP,novidades};
+}
+/** `manual`: do botão das Definições (diz sempre o resultado); sem ele, do
+    arranque (só fala se houver versão nova). */
+async function procurarAtualizacoes(manual){
+  if(ehPalco||atualizEmCurso)return null;
+  if(!atualizPossivel()){
+    if(manual)flash("Esta cópia abre-se a partir de um ficheiro: as atualizações chegam pela versão web ou pela aplicação de secretária.",{key:"atualiz",duration:7000});
+    return null;
+  }
+  if(navigator.onLine===false){
+    if(manual)flash("Sem ligação à internet — procure outra vez quando houver rede.",{type:"err",key:"atualiz"});
+    return null;
+  }
+  if(manual)flash("A procurar atualizações…",{type:"work",key:"atualiz",duration:0});
+  let r=null;
+  try{r=await procurarVersaoNova();}catch(e){r={tipo:"erro",erro:String(e&&e.message||e)};}
+  if(!r||typeof r!=="object")r={tipo:"erro",erro:"sem resposta"};
+  atualizUltima=r;
+  atualizGravar({verificada:Date.now(),resultado:r.tipo==="erro"?"erro":(r.tipo==="atual"?"atual":"nova:"+r.versao)});
+  renderAtualizRow();
+  if(r.tipo==="erro"){
+    if(manual)flash("Não foi possível procurar atualizações: "+r.erro+".",{type:"err",key:"atualiz",duration:7000});
+  }else if(r.tipo==="atual"){
+    if(manual)flash("Está na versão mais recente ("+(r.atual||VERSAO_APP)+").",{key:"atualiz"});
+  }else{
+    if(manual)fecharAviso("atualiz");
+    oferecerAtualizacao(r,manual);
+  }
+  return r;
+}
+async function oferecerAtualizacao(r,perguntar){
+  const desc=r.tipo==="descarregar";
+  if(!perguntar){
+    flash("Há uma versão nova: "+r.versao+".",{key:"atualiz",duration:0,actions:[
+      {label:desc?"Descarregar":"Atualizar",fn:()=>oferecerAtualizacao(r,true)},
+      {label:"Mais tarde",fn:()=>{}}]});
+    return;
+  }
+  const novid=(r.novidades||[]).slice(0,3).map(s=>s.replace(/[.:;]\s.*$/,"").replace(/[.:]$/,"")).join(" · ");
+  const sub=desc
+    ?"Esta versão precisa de um programa mais recente do que o que está instalado: abre-se a página de download. Os dados e as preferências ficam onde estão e a versão nova encontra-os."
+    :(novid?"Novidades: "+novid+". ":"")+"Os dados, as preferências e a sincronização mantêm-se; "+
+      (r.tipo==="programa"?"a aplicação fecha e volta a abrir sozinha.":"a "+(ehDesktop?"aplicação":"página")+" recarrega sozinha.");
+  const k=await askOpcoes("Versão "+r.versao+" disponível",sub,[
+    {k:"sim",label:desc?"Abrir a página de download":"Atualizar agora",primary:true},
+    {k:"nao",label:"Mais tarde"}]);
+  if(k==="sim")await aplicarAtualizacao(r);
+}
+async function aplicarAtualizacao(r){
+  if(atualizEmCurso||!r)return false;
+  atualizEmCurso=true;renderAtualizRow();
+  try{
+    if(ehDesktop){
+      flash(r.tipo==="programa"?"A descarregar o programa novo…":"A descarregar a versão "+r.versao+"…",{type:"work",key:"atualiz",duration:0});
+      let a=null;try{a=await window.desktop.aplicarAtualizacao();}catch(e){a={ok:false,erro:String(e&&e.message||e)};}
+      if(!a||!a.ok){
+        flash("A atualização não foi feita: "+((a&&a.erro)||"erro desconhecido")+". Nada foi alterado.",{type:"err",key:"atualiz",duration:9000});
+        return false;
+      }
+      if(a.tipo==="descarregar"){flash("A página de download abriu-se no browser.",{key:"atualiz"});return true;}
+    }else{
+      flash("A preparar a versão "+r.versao+"…",{type:"work",key:"atualiz",duration:0});
+      await prepararPaginaNova();
+    }
+    flash("A guardar o trabalho antes de "+(r.tipo==="programa"?"reiniciar":"recarregar")+"…",{type:"work",key:"atualiz",duration:0});
+    await guardarTudoAntesDeAtualizar(r.versao);
+    await recarregarParaAtualizar();
+    return true;
+  }finally{atualizEmCurso=false;renderAtualizRow();}
+}
+/* O HTML novo entra na cache do browser e na do service worker antes de
+   recarregar: sem isto, a cópia guardada (o GitHub Pages deixa-a valer dez
+   minutos) podia voltar a servir a versão antiga. */
+async function prepararPaginaNova(){
+  try{await fetch(location.pathname,{cache:"reload"});}catch(e){}
+  try{
+    const reg=navigator.serviceWorker&&await navigator.serviceWorker.getRegistration();
+    if(reg)await reg.update();
+  }catch(e){}
+}
+/* Tudo o que só existe em memória passa para o armazenamento: o rascunho de
+   um diagrama aplica-se, o autosave grava-se já, e a sincronização envia o
+   que tiver por enviar (com um limite, para não ficar à espera de uma rede
+   que não responde: o que não seguir agora segue ao arrancar, porque as
+   versões já ficaram registadas). */
+async function guardarTudoAntesDeAtualizar(versao){
+  if(rascunho)aplicarRascunho(true);
+  gravarAutosaveJa();
+  if(SINC&&SINC.estado&&SINC.estado.ligado){
+    try{await Promise.race([SINC.agora(false),new Promise(r=>setTimeout(r,6000))]);}catch(e){}
+  }
+  storageSet(ATUALIZ_FEITA_KEY,JSON.stringify({de:VERSAO_APP,para:versao||null,dirty:!!dirty,em:Date.now()}));
+}
+/* `let`: a QA troca-a para não recarregar a meio dos testes */
+let recarregarParaAtualizar=async()=>{
+  sincParar();
+  if(ehDesktop){
+    let ok=false;try{ok=await window.desktop.concluirAtualizacao();}catch(e){}
+    if(!ok){try{localStorage.removeItem(ATUALIZ_FEITA_KEY);}catch(e){}sincArrancar();}
+    return;
+  }
+  try{
+    const reg=navigator.serviceWorker&&await navigator.serviceWorker.getRegistration();
+    if(reg&&reg.waiting)reg.waiting.postMessage({type:"skip-waiting"});
+  }catch(e){}
+  recarregarSemPerguntar=true;
+  location.reload();
+};
+/** O autosave mais recente: no .exe, o ficheiro da pasta "autosaves" ganha
+    quando é mais novo do que o que o armazenamento interno tem. */
+function autosaveMaisRecente(){
+  if(ehDesktop){
+    try{
+      const f=window.desktop.lerAutosave();
+      const l=storageGet(AUTOSAVE_KEY);
+      const at=s=>{try{return Date.parse(JSON.parse(s).at)||0;}catch(e){return 0;}};
+      if(f&&(!l||at(f)>at(l)))storageSet(AUTOSAVE_KEY,f);
+    }catch(e){}
+  }
+  return storageGet(AUTOSAVE_KEY);
+}
+/* Ao arrancar, o projeto em cena é o de exemplo. Depois de uma atualização,
+   ou com a sincronização ligada, o último estado deste aparelho volta já,
+   sem perguntar — antes de a sincronização olhar para ele. Sem isto, a
+   sincronização tomaria o exemplo por alterações feitas agora, e enviá-lo-ia
+   por cima do projeto dos outros aparelhos. */
+function reporAoArrancar(){
+  if(ehPalco)return false;
+  let feita=null;try{feita=JSON.parse(storageGet(ATUALIZ_FEITA_KEY)||"null");}catch(e){}
+  if(feita){try{localStorage.removeItem(ATUALIZ_FEITA_KEY);}catch(e){}}
+  let comSinc=false;try{comSinc=!!sincCfg().codigo;}catch(e){}
+  if(!feita&&!comSinc)return false;
+  let d=null;try{d=JSON.parse(autosaveMaisRecente()||"null");}catch(e){}
+  if(d&&typeof d.state==="string"&&restoreState(d.state)){
+    repostoNoArranque=true;
+    undoStack.length=0;redoStack.length=0;
+    lastSnap=snapshotState();
+    updateHistoryUI();
+    if(feita&&feita.dirty){dirty=true;updateDirtyUI();}
+  }
+  if(feita)setTimeout(()=>{
+    if(feita.para&&compararVersoesApp(VERSAO_APP,feita.para)<0)
+      flash("A versão "+feita.para+" ainda está a chegar a este endereço. Dentro de alguns minutos, procure outra vez em Definições › Atualizações.",{type:"err",key:"atualiz",duration:9000});
+    else flash("Atualizado para a versão "+VERSAO_APP+". Os dados e as preferências mantêm-se.",{key:"atualiz",duration:6000});
+  },1400);
+  return repostoNoArranque;
+}
+/* Definições › Atualizações */
+function renderAtualizRow(){
+  const host=document.getElementById("atualizRow");
+  if(!host)return;
+  host.innerHTML="";
+  const p=atualizPrefs();
+  let info=null;
+  if(ehDesktop){try{info=window.desktop.atualizacoes?window.desktop.atualizacoes():null;}catch(e){}}
+  const ver=el("div","row");
+  ver.append(el("span","row-name","Versão "+VERSAO_APP+(info&&info.programa&&info.programa!==VERSAO_APP?" · programa "+info.programa:"")));
+  const b=el("button","btn tiny","Procurar atualizações");
+  b.id="procurarAtualizBtn";b.type="button";b.disabled=atualizEmCurso;
+  b.onclick=()=>procurarAtualizacoes(true);
+  ver.append(b);host.append(ver);
+  const rot="Procurar sempre atualizações ao iniciar";
+  const row=el("div","row");
+  row.append(el("span","row-name",rot));
+  const sw=el("button","switch"+(p.auto?" on":""));
+  sw.id="atualizAutoSw";
+  sw.setAttribute("role","switch");sw.setAttribute("aria-checked",String(!!p.auto));sw.setAttribute("aria-label",rot);
+  sw.onclick=()=>{atualizGravar({auto:!atualizPrefs().auto});renderAtualizRow();};
+  row.append(sw);host.append(row);
+  const nova=atualizUltima&&["pagina","programa","descarregar"].indexOf(atualizUltima.tipo)>=0?atualizUltima:null;
+  if(nova){
+    const a=el("button","btn primary tiny",nova.tipo==="descarregar"?"Descarregar a versão "+nova.versao:"Atualizar para a versão "+nova.versao);
+    a.id="atualizAgoraBtn";a.type="button";a.disabled=atualizEmCurso;
+    a.onclick=()=>oferecerAtualizacao(nova,true);
+    host.append(a);
+  }
+  const quando=p.verificada?new Date(p.verificada).toLocaleString("pt-PT",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}):"";
+  const res=String(p.resultado||"");
+  const estado=!p.verificada?"Ainda não se procurou neste aparelho."
+    :"Última verificação: "+quando+(res==="atual"?" — está na versão mais recente."
+      :res==="erro"?" — o servidor não respondeu."
+      :res.indexOf("nova:")===0?" — há a versão "+res.slice(5)+".":".");
+  const nota=el("div","foot-note",estado+" Atualizar não mexe nos dados, nas preferências nem na sincronização"+
+    (ehDesktop?"."
+      :"; no telemóvel e no tablet, a app instalada atualiza-se da mesma maneira."));
+  nota.id="atualizEstado";
+  host.append(nota);
+}
+
 /* ============================================================
    SINCRONIZAR DISPOSITIVOS
    O telemóvel, o tablet e o computador ficam com o mesmo projeto sem conta
@@ -21750,15 +21996,22 @@ function montaMovimento(){
   });
 }
 montaEstrutura();montaMovimento();
+/* As tarefas já ativas ganham a data de início desde o arranque, como ganham
+   ao repor um estado: assim guardar e repor dão sempre o mesmo, e a
+   sincronização não vê alterações onde não as há. */
+atualizaAtivas();
 booted=true;
 renderPerfilRow();renderAlertasRow();renderVisitaRow();
 aplicaPrefsA11y();
 if(!ehPalco){
   renderA11yRow();
   document.querySelectorAll(".privacidade-host").forEach(h=>{h.innerHTML="";h.append(avisoPrivacidade());});
+  reporAoArrancar();
   sincLerLigacao();
   renderSincRow();pintarEstadoSinc();
   sincArrancar();
+  renderAtualizRow();
+  if(atualizPrefs().auto&&atualizPossivel())setTimeout(()=>procurarAtualizacoes(false),5000);
 }
 setTimeout(avisaAlertas,2500);
 /* O histórico ancora aqui: com o lastSnap semeado no arranque, a PRIMEIRA
